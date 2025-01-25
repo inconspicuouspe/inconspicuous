@@ -19,12 +19,12 @@ class LoginData:
 class SessionData:
     data: str
 
-class Permissions(Flag):
+class Settings(Flag):
     VIEW_MEMBERS = auto()
-    _VIEW_MEMBER_PERMISSIONS = auto()
-    VIEW_MEMBER_PERMISSIONS = VIEW_MEMBERS | _VIEW_MEMBER_PERMISSIONS
-    _EDIT_MEMBER_PERMISSIONS = auto()
-    EDIT_MEMBER_PERMISSIONS = VIEW_MEMBER_PERMISSIONS | _EDIT_MEMBER_PERMISSIONS
+    _VIEW_MEMBER_SETTINGS = auto()
+    VIEW_MEMBER_SETTINGS = VIEW_MEMBERS | _VIEW_MEMBER_SETTINGS
+    _EDIT_MEMBER_SETTINGS = auto()
+    EDIT_MEMBER_SETTINGS = VIEW_MEMBER_SETTINGS | _EDIT_MEMBER_SETTINGS
     _CREATE_MEMBERS = auto()
     CREATE_MEMBERS = VIEW_MEMBERS | _CREATE_MEMBERS
     _DISABLE_MEMBERS = auto()
@@ -112,5 +112,6 @@ def login(database: Database, username: str, password: str, session_name: str) -
 
 create_account = make_user
 
-def create_user_slot(database: Database):
-    pass
+def create_user_slot(database: Database, settings: Settings, permission_group: int) -> int:
+    numeric_settings = settings.value
+    return database.create_user_slot(numeric_settings, permission_group)
