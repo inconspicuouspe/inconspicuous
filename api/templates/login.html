@@ -1,5 +1,33 @@
+<style>
+    .login-box {
+        display: grid;
+    }
+    .login-box button {
+        justify-self: right;
+    }
+    #login-content {
+        visibility: hidden;
+        border-style: solid;
+        border-radius: 10px;
+        border-width: 2px;
+        border-color: black;
+        padding: 0;
+        width: min-content;
+        justify-self: right;
+    }
+    #login-content h2 {
+        margin: 0;
+    }
+    #login-content form {
+        margin: 0;
+    }
+    #login-content p {
+        margin-top: 16px;
+        margin-bottom: 0;
+    }
+</style>
 <div class="login-box">
-    <div id="login-content" style="visibility: hidden; border-style: solid; border-radius: 10px;">
+    <div id="login-content">
         <h2>Login</h2>
         <form action="{{ url_for('login') }}" method="post">
             <label for="username">Username:</label>
