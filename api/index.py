@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, render_template, make_response, Request, jsonify
 from user_agents import parse
 from os import environ
+from json import loads
 from .database import MongoDB
 from .authentication import login as db_login
 from .authentication import modify_response
@@ -25,9 +26,9 @@ def home():
 
 @app.post("/login/")
 def login():
-    login_data = request.form
-    username = login_data.get("username")
-    password = login_data.get("password")
+    login_data = loads(request.data)
+    username = login_data["username"]
+    password = login_data["password"]
     session_data = db_login(db, username, password, session_name(request))
     if not session_data:
         return jsonify({"success": False})
