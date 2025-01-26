@@ -118,7 +118,8 @@ def check_session(database: _database.Database, session_data: SessionData) -> Op
 
 def login(database: _database.Database, username: str, password: str, session_name: str) -> Optional[SessionData]:
     if not database.has_username(username):
-        raise Exception("User does not exist.")
+        logging.debug("User does not exist.")
+        logging.debug(str(database.users.find_one({"username": username})))
         return None
     try:
         logging.debug("User exists.")
@@ -126,7 +127,7 @@ def login(database: _database.Database, username: str, password: str, session_na
         generated_login_data = create_login_data(username, password, user_login_data.login_token)
         success = compare_digest(user_login_data.data, generated_login_data.data)
         if not success:
-            raise Exception("Password is incorrect.")
+            logging.debug("Password is incorrect.")
             return None
         logging.debug("Password is correct")
         return make_session(database, username, session_name)
