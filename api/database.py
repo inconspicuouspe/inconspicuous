@@ -73,7 +73,7 @@ class MongoDB(Database):
                 "unfilled": False,
                 "username": username,
                 "login_data": login_data,
-                "login_token": login_token
+                "login_token": login_token,
             }
         })
 
