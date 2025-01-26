@@ -7,7 +7,7 @@ from collections.abc import Hashable
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from exceptions import NotFoundError, UserSlotTakenError
-import authentication
+from . import authentication
 
 class Database(ABC, Hashable):
     def __hash__(self) -> int:

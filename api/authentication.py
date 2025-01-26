@@ -9,8 +9,8 @@ from datetime import datetime
 import secrets, sys
 from cachetools import LRUCache, cached
 from flask import Response, Request
-from database import Database
-from exceptions import NotFoundError, AlreadyExistsError
+from .database import Database
+from .exceptions import NotFoundError, AlreadyExistsError
 
 @dataclass
 class LoginData:

@@ -1,9 +1,9 @@
 from flask import Flask, request, redirect, render_template, make_response, Request, jsonify
 from user_agents import parse
 from os import environ
-from database import MongoDB
-from authentication import login as db_login
-from authentication import modify_response
+from .database import MongoDB
+from .authentication import login as db_login
+from .authentication import modify_response
 
 MONGO_DB_CONNECTION_URI = environ["MONGO_DB_CONNECTION_URI"]
 MONGO_DB_PASSWORD = environ["MONGO_DB_PASSWORD"]
