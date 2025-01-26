@@ -120,6 +120,7 @@ def login(database: _database.Database, username: str, password: str, session_na
     if not database.has_username(username):
         logging.debug("User does not exist.")
         logging.debug(str(database.users.find_one({"username": username})))
+        logging.debug(username)
         return None
     try:
         logging.debug("User exists.")
