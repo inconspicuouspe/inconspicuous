@@ -10,7 +10,7 @@
         border-radius: 10px;
         border-width: 2px;
         border-color: black;
-        padding: 0;
+        padding: 8px;
         width: min-content;
         justify-self: right;
     }
@@ -58,7 +58,7 @@
             fetch("{{ url_for('login') }}", {
                 method: "POST",
                 body: JSON.stringify({ username: usernameBox.value, password: passwordBox.value })
-            }).then((response) => {response.json()}).then((json) => {loginSuccess(json.success)});
+            }).then((response) => response.json()).then((data) => loginSuccess(data.success));
         }, true);
     </script>
     <button onclick='if (loginBox.style.display === "none") {loginBox.style.display = "unset";} else {loginBox.style.display = "none";}'>Toggle login box</button>
