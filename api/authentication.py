@@ -76,7 +76,7 @@ def create_login_data(username: str, password: str, login_token: Optional[int] =
     unhashed_data.write(username.encode("utf-8"))
     unhashed_data.write(len(password).to_bytes(2))
     unhashed_data.write(password.encode("utf-8"))
-    login_token = login_token or secrets.randbits(64)
+    login_token = login_token or secrets.randbits(31)
     unhashed_data.write(login_token.to_bytes(8))
     hashed_data = sha3_512(unhashed_data.getbuffer()).digest()
     return LoginData(encode_b64(hashed_data).decode("utf-8"), login_token)
@@ -118,13 +118,17 @@ def check_session(database: _database.Database, session_data: SessionData) -> Op
 
 def login(database: _database.Database, username: str, password: str, session_name: str) -> Optional[SessionData]:
     if not database.has_username(username):
+        print("User does not exist.")
         return None
     try:
+        print("User exists.")
         user_login_data = lookup_user_login_data(database, username)
         generated_login_data = create_login_data(username, password, user_login_data.login_token)
         success = compare_digest(user_login_data.data, generated_login_data.data)
         if not success:
+            print("Password is incorrect.")
             return None
+        print("Password is correct")
         return make_session(database, username, session_name)
     except NotFoundError:
         return None
