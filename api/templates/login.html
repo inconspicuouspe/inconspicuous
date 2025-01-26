@@ -26,7 +26,7 @@
     }
 </style>
 <div class="login-box">
-    <div id="login-content" style="visibility: hidden;">
+    <div id="login-content" style="display: none;">
         <h2>Login</h2>
         <form>
             <label for="username">Username:</label>
@@ -61,5 +61,5 @@
             }).then((response) => {reponse.json()}).then((json) => {loginSuccess(json.success)});
         }, true);
     </script>
-    <button onclick='if (loginBox.style.visibility === "hidden") {loginBox.style.visibility = "visible";} else {loginBox.style.visibility = "hidden";}'>Toggle login box</button>
+    <button onclick='if (loginBox.style.display === "none") {loginBox.style.display = "unset";} else {loginBox.style.display = "none";}'>Toggle login box</button>
 </div>
