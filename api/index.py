@@ -25,7 +25,7 @@ def home():
 
 @app.post("/login/")
 def login():
-    login_data = request.json()
+    login_data = request.form
     username = login_data.get("username")
     password = login_data.get("password")
     session_data = db_login(db, username, password, session_name(request))
