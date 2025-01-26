@@ -28,18 +28,38 @@
 <div class="login-box">
     <div id="login-content" style="visibility: hidden;">
         <h2>Login</h2>
-        <form action="{{ url_for('login') }}" method="post">
+        <form>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             <button type="submit">Login</button>
+            <p style="visibility: hidden;" id="message"></p>
         </form>
         <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
-
     </div>
     <script>
         const loginBox = document.querySelector("#login-content");
+        const form = document.querySelector("#login-content form");
+        const usernameBox = document.querySelector("#username");
+        const passwordBox = document.querySelector("#password");
+        const messageBox = document.querySelector("#message");
+        function loginSuccess(success) {
+            if (success) {
+                messageBox.textContent = "Login credentials were correct."
+            }
+            else {
+                messageBox.textContent = "Login credentials were wrong."
+            }
+            messageBox.style.visibility = messageBox.style.visibility === "hidden" ? "visible" : "hidden";
+        }
+        form.onSubmit = (event) => {
+            event.preventDefault();
+            fetch("{{ url_for('login') }}", {
+                method: "POST",
+                body: JSON.stringify({ username: usernameBox.value, password: passwordBox.value })
+            }).then((response) => {reponse.json()}).then((json) => {loginSuccess(json.success)});
+        };
     </script>
     <button onclick='if (loginBox.style.visibility === "hidden") {loginBox.style.visibility = "visible";} else {loginBox.style.visibility = "hidden";}'>Toggle login box</button>
 </div>

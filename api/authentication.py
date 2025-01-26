@@ -1,14 +1,16 @@
 from hashlib import sha3_512
 from io import BytesIO
-from typing import Optional
+from typing import Optional, Self
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 from dataclasses import dataclass
 from hmac import compare_digest
 from enum import Flag, auto
+from datetime import datetime
 import secrets, sys
 from cachetools import LRUCache, cached
+from flask import Response, Request
 from database import Database
-from exceptions import NotFoundError
+from exceptions import NotFoundError, AlreadyExistsError
 
 @dataclass
 class LoginData:
@@ -18,6 +20,18 @@ class LoginData:
 @dataclass
 class SessionData:
     data: str
+    @classmethod
+    def from_request(cls, request: Request) -> Optional[Self]:
+        if SESSION_DATA_COOKIE_NAME not in request.cookies:
+            return None
+        return cls(request.cookies[SESSION_DATA_COOKIE_NAME])
+
+@dataclass
+class Session:
+    session_data: SessionData
+    creation_time: datetime
+    username: str
+    session_name: str
 
 class Settings(Flag):
     VIEW_MEMBERS = auto()
@@ -34,6 +48,7 @@ class Settings(Flag):
 encode_b64 = urlsafe_b64encode
 decode_b64 = urlsafe_b64decode
 
+SESSION_DATA_COOKIE_NAME = "session_data"
 VALID_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
 USERNAME_MAX_LENGTH = 32
 USERNAME_MIN_LENGTH = 3
@@ -82,6 +97,8 @@ def lookup_user_by_session_data(database: Database, session_data: str) -> str:
     return user
 
 def make_user(database: Database, username: str, password: str, session_name: str, user_slot: int) -> SessionData:
+    if database.has_username(username, except_user_id=user_slot):
+        raise AlreadyExistsError()
     login_data = create_login_data(username, password)
     database.create_user(username, login_data.data, login_data.login_token, user_slot)
     return make_session(database, username, session_name)
@@ -92,14 +109,16 @@ def make_session(database: Database, username: str, session_name: str) -> Sessio
     return session_data
 
 @cached(cache=LRUCache(1<<16, sys.getsizeof))
-def check_session(database: Database, session_data: str) -> Optional[str]:
+def check_session(database: Database, session_data: SessionData) -> Optional[str]:
     try:
-        user = lookup_user_by_session_data(database, session_data)
+        user = lookup_user_by_session_data(database, session_data.data)
         return user
     except NotFoundError:
         return None
 
 def login(database: Database, username: str, password: str, session_name: str) -> Optional[SessionData]:
+    if not database.has_username(username):
+        return None
     try:
         user_login_data = lookup_user_login_data(database, username)
         generated_login_data = create_login_data(username, password, user_login_data.login_token)
@@ -112,6 +131,19 @@ def login(database: Database, username: str, password: str, session_name: str) -
 
 create_account = make_user
 
-def create_user_slot(database: Database, settings: Settings, permission_group: int) -> int:
+def create_user_slot(database: Database, settings: Settings, permission_group: int, temp_name: str) -> int:
+    if database.has_username(temp_name):
+        raise AlreadyExistsError()
     numeric_settings = settings.value
-    return database.create_user_slot(numeric_settings, permission_group)
+    return database.create_user_slot(numeric_settings, permission_group, temp_name)
+
+def logout(response: Response):
+    response.set_cookie("session_data", "", expires=0)
+
+def modify_response(database: Database, response: Response, request: Request) -> Response:
+    session_data = SessionData.from_request(request)
+    if session_data is None:
+        return response
+    if not check_session(database, session_data):
+        logout(response)
+    return response

@@ -1,3 +1,7 @@
 requests
 Flask
 cachetools
+pyyaml
+ua-parser
+user-agents
+pymongo[srv]
