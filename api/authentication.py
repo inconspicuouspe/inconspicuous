@@ -9,7 +9,7 @@ from datetime import datetime
 import secrets, sys
 from cachetools import LRUCache, cached
 from flask import Response, Request
-from .database import Database
+from . import database as _database
 from .exceptions import NotFoundError, AlreadyExistsError
 
 @dataclass
@@ -81,7 +81,7 @@ def create_login_data(username: str, password: str, login_token: Optional[int] =
     hashed_data = sha3_512(unhashed_data.getbuffer()).digest()
     return LoginData(encode_b64(hashed_data).decode("utf-8"), login_token)
 
-def lookup_user_login_data(database: Database, username: str) -> LoginData:
+def lookup_user_login_data(database: _database.Database, username: str) -> LoginData:
     data = database.get_login_data_by_username(username)
     if data is None:
         raise NotFoundError()
@@ -90,33 +90,33 @@ def lookup_user_login_data(database: Database, username: str) -> LoginData:
 def create_session_data() -> SessionData:
     return SessionData(secrets.token_urlsafe(256))
 
-def lookup_user_by_session_data(database: Database, session_data: str) -> str:
+def lookup_user_by_session_data(database: _database.Database, session_data: str) -> str:
     user = database.get_username_by_session_data(session_data)
     if user is None:
         raise NotFoundError()
     return user
 
-def make_user(database: Database, username: str, password: str, session_name: str, user_slot: int) -> SessionData:
+def make_user(database: _database.Database, username: str, password: str, session_name: str, user_slot: int) -> SessionData:
     if database.has_username(username, except_user_id=user_slot):
         raise AlreadyExistsError()
     login_data = create_login_data(username, password)
     database.create_user(username, login_data.data, login_data.login_token, user_slot)
     return make_session(database, username, session_name)
 
-def make_session(database: Database, username: str, session_name: str) -> SessionData:
+def make_session(database: _database.Database, username: str, session_name: str) -> SessionData:
     session_data = create_session_data()
     database.add_session_data(session_data.data, username, session_name)
     return session_data
 
 @cached(cache=LRUCache(1<<16, sys.getsizeof))
-def check_session(database: Database, session_data: SessionData) -> Optional[str]:
+def check_session(database: _database.Database, session_data: SessionData) -> Optional[str]:
     try:
         user = lookup_user_by_session_data(database, session_data.data)
         return user
     except NotFoundError:
         return None
 
-def login(database: Database, username: str, password: str, session_name: str) -> Optional[SessionData]:
+def login(database: _database.Database, username: str, password: str, session_name: str) -> Optional[SessionData]:
     if not database.has_username(username):
         return None
     try:
@@ -131,7 +131,7 @@ def login(database: Database, username: str, password: str, session_name: str) -
 
 create_account = make_user
 
-def create_user_slot(database: Database, settings: Settings, permission_group: int, temp_name: str) -> int:
+def create_user_slot(database: _database.Database, settings: Settings, permission_group: int, temp_name: str) -> int:
     if database.has_username(temp_name):
         raise AlreadyExistsError()
     numeric_settings = settings.value
@@ -140,7 +140,7 @@ def create_user_slot(database: Database, settings: Settings, permission_group: i
 def logout(response: Response):
     response.set_cookie("session_data", "", expires=0)
 
-def modify_response(database: Database, response: Response, request: Request) -> Response:
+def modify_response(database: _database.Database, response: Response, request: Request) -> Response:
     session_data = SessionData.from_request(request)
     if session_data is None:
         return response
