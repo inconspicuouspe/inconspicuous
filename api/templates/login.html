@@ -53,13 +53,13 @@
             }
             messageBox.style.visibility = messageBox.style.visibility === "hidden" ? "visible" : "hidden";
         }
-        form.onSubmit = (event) => {
+        form.addEventListener("submit", (event) => {
             event.preventDefault();
             fetch("{{ url_for('login') }}", {
                 method: "POST",
                 body: JSON.stringify({ username: usernameBox.value, password: passwordBox.value })
             }).then((response) => {reponse.json()}).then((json) => {loginSuccess(json.success)});
-        };
+        }, true);
     </script>
     <button onclick='if (loginBox.style.visibility === "hidden") {loginBox.style.visibility = "visible";} else {loginBox.style.visibility = "hidden";}'>Toggle login box</button>
 </div>
