@@ -38,4 +38,4 @@ def login():
 
 @app.get("/register/")
 def register():
-    pass
+    return render_template("login.html")
