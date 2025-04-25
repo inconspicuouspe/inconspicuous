@@ -6,6 +6,5 @@ logoutButton.addEventListener("click", (event) => {
             'Content-Type': 'application/json'
         },
         method: "POST",
-    });
-    location.reload();
+    }).then(location.reload);
 })
