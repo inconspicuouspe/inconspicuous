@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from hmac import compare_digest
 from enum import Flag, auto
 from datetime import datetime
-import secrets, sys, logging
+import secrets, uuid, sys, logging
 from . import database as _database
 from .exceptions import (
     NotFoundError,
@@ -27,7 +27,7 @@ from .exceptions import (
 @dataclass(frozen=True)
 class LoginData:
     data: str
-    login_token: int
+    login_token: str
 
 @dataclass(frozen=True)
 class SessionData:
@@ -107,14 +107,14 @@ def password_constraints(password: str):
     if len(password) > PASSWORD_MAX_LENGTH:
         raise PasswordTooLong(f"Password must be between {PASSWORD_MIN_LENGTH} and {PASSWORD_MAX_LENGTH} characters long.")
 
-def create_login_data(username: str, password: str, login_token: Optional[int] = None) -> LoginData:
+def create_login_data(username: str, password: str, login_token: Optional[str] = None) -> LoginData:
     unhashed_data = BytesIO()
     unhashed_data.write(len(username).to_bytes(1))
     unhashed_data.write(username.encode("utf-8"))
     unhashed_data.write(len(password).to_bytes(2))
     unhashed_data.write(password.encode("utf-8"))
-    login_token = login_token or secrets.randbits(31)
-    unhashed_data.write(login_token.to_bytes(8))
+    login_token = login_token or str(uuid.uuid4())
+    unhashed_data.write(login_token.encode("utf-8"))
     hashed_data = sha3_512(unhashed_data.getbuffer()).digest()
     return LoginData(encode_b64(hashed_data).decode("utf-8"), login_token)
 
@@ -133,7 +133,7 @@ def lookup_user_by_session_data(database: _database.Database, session_data: str)
         raise NotFoundError()
     return user
 
-def make_user(database: _database.Database, username: str, password: str, session_name: str, user_slot: int) -> SessionData:
+def make_user(database: _database.Database, username: str, password: str, session_name: str, user_slot: str) -> SessionData:
     if database.has_username(username, except_user_id=user_slot):
         raise AlreadyExistsError()
     login_data = create_login_data(username, password)
@@ -160,11 +160,11 @@ def login(database: _database.Database, username: str, password: str, session_na
         raise InvalidCredentials()
     return make_session(database, username, session_name)
 
-def sign_up(database: _database.Database, username: str, password: str, session_name: str, user_slot: int) -> SessionData:
+def sign_up(database: _database.Database, username: str, password: str, session_name: str, user_slot: str) -> SessionData:
     validate_username_and_password(username, password)
     return make_user(database, username, password, session_name, user_slot)
 
-def create_user_slot(database: _database.Database, settings: Settings, permission_group: int, temp_name: str) -> int:
+def create_user_slot(database: _database.Database, settings: Settings, permission_group: int, temp_name: str) -> str:
     if database.has_username(temp_name):
         raise AlreadyExistsError()
     numeric_settings = settings.value

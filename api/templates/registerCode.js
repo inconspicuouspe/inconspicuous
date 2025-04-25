@@ -3,6 +3,7 @@ const form = document.querySelector("#signup-content form");
 const usernameBox = document.querySelector("#username");
 const passwordBox = document.querySelector("#password");
 const messageBox = document.querySelector("#message");
+const userSlot = new URLSearchParams(location.search).get("user_slot");
 function signupSuccess(data) {
     const success = data.success;
     if (success) {
@@ -50,6 +51,6 @@ form.addEventListener("submit", (event) => {
             'Content-Type': 'application/json'
         },
         method: "POST",
-        body: JSON.stringify({ username: usernameBox.value, password: passwordBox.value })
+        body: JSON.stringify({ username: usernameBox.value, password: passwordBox.value, user_slot: userSlot })
     }).then((response) => response.json()).then(signupSuccess);
 }, true);

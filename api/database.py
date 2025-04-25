@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional
-from secrets import randbits
+from uuid import uuid4
 from datetime import datetime
 from collections.abc import Hashable
 from pymongo.mongo_client import MongoClient
@@ -32,7 +32,7 @@ class Database(ABC, Hashable):
         pass
 
     @abstractmethod
-    def get_login_data_by_username(self, username: str) -> Optional[tuple[str, int]]:
+    def get_login_data_by_username(self, username: str) -> Optional[tuple[str, str]]:
         pass
 
     @abstractmethod
@@ -40,15 +40,15 @@ class Database(ABC, Hashable):
         pass
 
     @abstractmethod
-    def create_user(self, username: str, login_data: str, login_token: int, user_slot: int) -> None:
+    def create_user(self, username: str, login_data: str, login_token: str, user_slot: str) -> None:
         pass
 
     @abstractmethod
-    def create_user_slot(self, slot_settings: int, permission_group: int, temp_name: str) -> int:
+    def create_user_slot(self, slot_settings: int, permission_group: int, temp_name: str) -> str:
         pass
 
     @abstractmethod
-    def has_username(self, username: str, *, except_user_id: Optional[int] = None) -> bool:
+    def has_username(self, username: str, *, except_user_id: Optional[str] = None) -> bool:
         pass
     
     @abstractmethod
@@ -80,7 +80,7 @@ class MongoDB(Database):
         return client
 
     def create_user_slot(self, slot_settings, permission_group, temp_name):
-        user_id = randbits(32)
+        user_id = str(uuid4())
         self.users.insert_one({FIELD_USER_ID: user_id, FIELD_USERNAME: temp_name, FIELD_LOOKUP_USERNAME: temp_name.lower(), FIELD_UNFILLED: True, FIELD_SETTINGS: slot_settings, FIELD_PERMISSION_GROUP: permission_group})
         return user_id
     
@@ -111,7 +111,7 @@ class MongoDB(Database):
         login_data = user_data[FIELD_LOGIN_DATA]
         login_token = user_data[FIELD_LOGIN_TOKEN]
         assert isinstance(login_data, str)
-        assert isinstance(login_token, int)
+        assert isinstance(login_token, str)
         return (login_data, login_token)
 
     def has_username(self, username, *, except_user_id = None):
