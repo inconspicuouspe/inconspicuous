@@ -55,6 +55,12 @@ class Session:
         if session is None:
             raise NoSession
         return session
+    
+    def is_empty(self) -> bool:
+        return not self
+    
+    def __bool__(self) -> bool:
+        return self.username != ANONYMOUS_USERNAME
 
 class Settings(Flag):
     NONE = 0

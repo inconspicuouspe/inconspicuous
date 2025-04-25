@@ -1,0 +1,5 @@
+{% if not session %}
+    {% include 'login.html' %}  
+{% else %}
+    Logged in as {{ session.username }}.
+{% endif %}

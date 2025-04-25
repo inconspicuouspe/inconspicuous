@@ -2,7 +2,7 @@ from os import environ
 from json import loads
 from .database import MongoDB
 from .authentication import login as auth_login
-from .authentication import extract_session
+from .authentication import extract_session, extract_session_or_empty
 from .authentication import sign_up as auth_sign_up
 from .exceptions import (
     MyError
@@ -39,7 +39,8 @@ def session_name(__request: Request) -> str:
 
 @app.get("/")
 def home():
-    return render_template("login.html", exceptions=exceptions)
+    session = extract_session_or_empty(db, request)
+    return render_template("home.html", exceptions=exceptions, session=session)
 
 @app.post("/login/")
 def login():
