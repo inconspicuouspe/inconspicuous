@@ -146,14 +146,14 @@ class MongoDB(Database):
     
     def list_sessions(self, username):
         account = self.users.find_one({FIELD_LOOKUP_USERNAME: username.lower()})
-        return [authentication.Session(document.get(FIELD_SESSION_DATA), document.get(FIELD_CREATION_TIME), username, document.get(FIELD_SESSION_NAME), authentication.Settings(account.get(FIELD_SETTINGS))) for document in self.sessions.find({FIELD_LOOKUP_USERNAME: username.lower()})]
+        return [authentication.Session(document.get(FIELD_SESSION_DATA), document.get(FIELD_CREATION_TIME), username, document.get(FIELD_SESSION_NAME), authentication.Settings(account.get(FIELD_SETTINGS)), account.get(FIELD_PERMISSION_GROUP)) for document in self.sessions.find({FIELD_LOOKUP_USERNAME: username.lower()})]
 
     def get_session(self, session_data):
         session = self.sessions.find_one({FIELD_SESSION_DATA: session_data})
         account = self.users.find_one({FIELD_LOOKUP_USERNAME: session.get(FIELD_LOOKUP_USERNAME)})
         if not session:
             return None
-        return authentication.Session(session.get(FIELD_SESSION_DATA), session.get(FIELD_CREATION_TIME), session.get(FIELD_USERNAME), session.get(FIELD_SESSION_NAME), authentication.Settings(account.get(FIELD_SETTINGS)))
+        return authentication.Session(session.get(FIELD_SESSION_DATA), session.get(FIELD_CREATION_TIME), session.get(FIELD_USERNAME), session.get(FIELD_SESSION_NAME), authentication.Settings(account.get(FIELD_SETTINGS)), account.get(FIELD_PERMISSION_GROUP))
     
     def delete_session(self, session_data):
         self.sessions.delete_one({FIELD_SESSION_DATA: session_data})
