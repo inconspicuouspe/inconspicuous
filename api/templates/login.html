@@ -39,27 +39,7 @@
         <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
     </div>
     <script>
-        const loginBox = document.querySelector("#login-content");
-        const form = document.querySelector("#login-content form");
-        const usernameBox = document.querySelector("#username");
-        const passwordBox = document.querySelector("#password");
-        const messageBox = document.querySelector("#message");
-        function loginSuccess(success) {
-            if (success) {
-                messageBox.textContent = "Login credentials were correct."
-            }
-            else {
-                messageBox.textContent = "Login credentials were wrong."
-            }
-            messageBox.style.visibility = "visible";
-        }
-        form.addEventListener("submit", (event) => {
-            event.preventDefault();
-            fetch("{{ url_for('login') }}", {
-                method: "POST",
-                body: JSON.stringify({ username: usernameBox.value, password: passwordBox.value })
-            }).then((response) => response.json()).then((data) => loginSuccess(data.success));
-        }, true);
+        {% include 'loginCode.js' %}
     </script>
     <button onclick='if (loginBox.style.display === "none") {loginBox.style.display = "unset";} else {loginBox.style.display = "none";}'>Toggle login box</button>
 </div>

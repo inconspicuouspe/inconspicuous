@@ -30,29 +30,8 @@
             <button type="submit">Login</button>
             <p style="visibility: hidden;" id="message"></p>
         </form>
-        <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
     </div>
     <script>
-        const loginBox = document.querySelector("#signup-content");
-        const form = document.querySelector("#signup-content form");
-        const usernameBox = document.querySelector("#username");
-        const passwordBox = document.querySelector("#password");
-        const messageBox = document.querySelector("#message");
-        function signupSuccess(success) {
-            if (success) {
-                messageBox.textContent = "Signup credentials were correct."
-            }
-            else {
-                messageBox.textContent = "Signup credentials were wrong."
-            }
-            messageBox.style.visibility = "visible";
-        }
-        form.addEventListener("submit", (event) => {
-            event.preventDefault();
-            fetch("{{ url_for('login') }}", {
-                method: "POST",
-                body: JSON.stringify({ username: usernameBox.value, password: passwordBox.value })
-            }).then((response) => response.json()).then((data) => loginSuccess(data.success));
-        }, true);
+        {% include 'registerCode.js' %}
     </script>
 </div>
