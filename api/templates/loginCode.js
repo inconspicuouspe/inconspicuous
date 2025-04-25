@@ -7,6 +7,7 @@ function loginSuccess(data) {
     const success = data.success;
     if (success) {
         messageBox.textContent = "Credentials were correct.";
+        location.reload();
     }
     else {
         switch (data.reason) {

@@ -2,4 +2,8 @@
     {% include 'login.html' %}  
 {% else %}
     Logged in as {{ session.username }}.
+    <button id="logout-button">Logout</button>
+    <script>
+        {% include 'homeCode.js' %}
+    </script>
 {% endif %}

@@ -58,6 +58,10 @@ class Database(ABC, Hashable):
     @abstractmethod
     def get_session(self, session_data: str) -> Optional[authentication.Session]:
         pass
+    
+    @abstractmethod
+    def delete_session(self, session_data: str) -> None:
+        pass
 
 class MongoDB(Database):
     client: MongoClient
@@ -148,3 +152,6 @@ class MongoDB(Database):
         if not session:
             return None
         return authentication.Session(session.get(FIELD_SESSION_DATA), session.get(FIELD_CREATION_TIME), session.get(FIELD_USERNAME), session.get(FIELD_SESSION_NAME), session.get(FIELD_SETTINGS))
+    
+    def delete_session(self, session_data):
+        self.sessions.delete_one({FIELD_SESSION_DATA: session_data})

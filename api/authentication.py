@@ -170,8 +170,13 @@ def create_user_slot(database: _database.Database, settings: Settings, permissio
     numeric_settings = settings.value
     return database.create_user_slot(numeric_settings, permission_group, temp_name)
 
-def logout(response: Response):
+def logout(database: _database.Database, response: Response, request: Request) -> Response:
+    session_data = SessionData.from_request(request)
+    if session_data is None:
+        return response
+    database.delete_session(session_data.data)
     response.set_cookie("session_data", "", expires=0)
+    return response
 
 def extract_session(database: _database.Database, request: Request) -> Session:
     session_data = SessionData.from_request(request)

@@ -7,6 +7,7 @@ function signupSuccess(data) {
     const success = data.success;
     if (success) {
         messageBox.textContent = "Signup credentials were correct.";
+        location.replace("{{ url_for('home') }}")
     }
     else {
         switch (data.reason) {

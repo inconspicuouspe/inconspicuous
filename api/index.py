@@ -2,8 +2,9 @@ from os import environ
 from json import loads
 from .database import MongoDB
 from .authentication import login as auth_login
-from .authentication import extract_session, extract_session_or_empty
 from .authentication import sign_up as auth_sign_up
+from .authentication import logout as auth_logout
+from .authentication import extract_session, extract_session_or_empty, SESSION_DATA_COOKIE_NAME
 from .exceptions import (
     MyError
 )
@@ -52,7 +53,7 @@ def login():
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     response = jsonify({FIELD_SUCCESS: True})
-    response.set_cookie("session_data", session_data.data)
+    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data)
     return response
 
 @app.get("/register/")
@@ -69,4 +70,10 @@ def register():
         session_data = auth_sign_up(db, username, password, session_name(request), user_slot)
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
-    return jsonify({FIELD_SUCCESS: True})
+    response = jsonify({FIELD_SUCCESS: True})
+    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data)
+    return response
+
+@app.post("/logout/")
+def logout():
+    return auth_logout(db, jsonify({FIELD_SUCCESS: True}), request)
