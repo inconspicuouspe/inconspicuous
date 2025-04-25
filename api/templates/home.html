@@ -8,7 +8,7 @@
         {% else %}
             Logged in as {{ session.username }}.
             <button id="logout-button">Logout</button>
-            {% if Settings.SYS_ADMIN in session.settings %}
+            {% if has_settings(session.settings, Settings.SYS_ADMIN) %}
                 Hello sysadmin.
             {% endif %}
             <script>

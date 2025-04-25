@@ -32,6 +32,9 @@ db = MongoDB(MONGO_DB_CONNECTION_URI, MONGO_DB_USERNAME, MONGO_DB_PASSWORD)
 
 app = Flask(__name__, template_folder="templates")
 
+def has_settings(settings_a: Settings, settings_b: Settings):
+    return settings_b in settings_a
+
 def session_name(__request: Request) -> str:
     parsed_user_agent = parse(__request.user_agent.string)
     browser = parsed_user_agent.browser.family
@@ -41,7 +44,7 @@ def session_name(__request: Request) -> str:
 @app.get("/")
 def home():
     session = extract_session_or_empty(db, request)
-    return render_template("home.html", exceptions=exceptions, session=session, Settings=Settings)
+    return render_template("home.html", exceptions=exceptions, session=session, Settings=Settings, has_settings=has_settings)
 
 @app.post("/login/")
 def login():
