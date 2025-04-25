@@ -33,7 +33,6 @@ db = MongoDB(MONGO_DB_CONNECTION_URI, MONGO_DB_USERNAME, MONGO_DB_PASSWORD)
 app = Flask(__name__, template_folder="templates")
 
 def has_settings(settings_a: Settings, settings_b: Settings):
-    print(settings_a, settings_b)
     return settings_b in settings_a
 
 def session_name(__request: Request) -> str:
