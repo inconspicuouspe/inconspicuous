@@ -4,16 +4,23 @@
     </head>
     <body>
         {% if not session %}
-            {% include 'login.html' %}  
+        {% include 'login.html' %}  
         {% else %}
-            Logged in as {{ session.username }}.
-            <button id="logout-button">Logout</button>
-            {% if Settings.SYS_ADMIN in session.settings %}
-                Hello sysadmin.
-            {% endif %}
-            <script>
-                {% include 'homeCode.js' %}
-            </script>
+        Logged in as {{ session.username }}.
+        <button id="logout-button">Logout</button>
+        {% if Settings.CREATE_MEMBERS in session.settings %}
+        <form>
+            <label for="username">Temporary username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="pgroup">Permission group:</label>
+            <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" onbeforeinput="return event.value < {{ session.permission_group }};" required>
+            <button type="submit">Login</button>
+            <p style="visibility: hidden;" id="message"></p>
+        </form>
+        {% endif %}
+        <script>
+            {% include 'homeCode.js' %}
+        </script>
         {% endif %}
     </body>
 </html>

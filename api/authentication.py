@@ -1,6 +1,4 @@
 from __future__ import annotations
-from cachetools import LRUCache, cached
-from flask import Response, Request
 from hashlib import sha3_512
 from io import BytesIO
 from typing import Optional, Self
@@ -10,6 +8,8 @@ from hmac import compare_digest
 from enum import Flag, auto
 from datetime import datetime
 import secrets, uuid, sys, logging
+from cachetools import LRUCache, cached
+from flask import Response, Request
 from . import database as _database
 from .exceptions import (
     NotFoundError,
@@ -45,9 +45,10 @@ class Session:
     username: str
     session_name: str
     settings: Settings
+    permission_group: int
     @classmethod
     def create_empty_session(cls) -> Self:
-        return cls(SessionData(""), datetime.now(), ANONYMOUS_USERNAME, ANONYMOUS_USERNAME, Settings.NONE)
+        return cls(SessionData(""), datetime.now(), ANONYMOUS_USERNAME, ANONYMOUS_USERNAME, Settings.NONE, 1 - (1 << 31))
     
     @staticmethod
     def from_session_data(database: _database.Database, session_data: SessionData) -> Session:
