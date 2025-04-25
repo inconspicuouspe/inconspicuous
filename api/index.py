@@ -4,7 +4,7 @@ from .database import MongoDB
 from .authentication import login as auth_login
 from .authentication import sign_up as auth_sign_up
 from .authentication import logout as auth_logout
-from .authentication import extract_session, extract_session_or_empty, SESSION_DATA_COOKIE_NAME
+from .authentication import extract_session, extract_session_or_empty, SESSION_DATA_COOKIE_NAME, Settings
 from .exceptions import (
     MyError
 )
@@ -41,7 +41,7 @@ def session_name(__request: Request) -> str:
 @app.get("/")
 def home():
     session = extract_session_or_empty(db, request)
-    return render_template("home.html", exceptions=exceptions, session=session)
+    return render_template("home.html", exceptions=exceptions, session=session, Settings=Settings)
 
 @app.post("/login/")
 def login():

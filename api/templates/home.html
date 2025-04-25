@@ -8,6 +8,9 @@
         {% else %}
             Logged in as {{ session.username }}.
             <button id="logout-button">Logout</button>
+            {% if Settings.SYS_ADMIN in session.settings %}
+                Hello sysadmin.
+            {% endif %}
             <script>
                 {% include 'homeCode.js' %}
             </script>
