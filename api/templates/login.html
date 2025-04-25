@@ -1,15 +1,9 @@
 <style>
     .login-box {
         display: grid;
-    }
-    .login-box button {
-        justify-self: right;
+        justify-content: center;
     }
     #login-content {
-        border-style: solid;
-        border-radius: 10px;
-        border-width: 2px;
-        border-color: black;
         padding: 8px;
         width: min-content;
         justify-self: right;
@@ -26,7 +20,7 @@
     }
 </style>
 <div class="login-box">
-    <div id="login-content" style="display: none;">
+    <div id="login-content">
         <h2>Login</h2>
         <form>
             <label for="username">Username:</label>
@@ -41,5 +35,4 @@
     <script>
         {% include 'loginCode.js' %}
     </script>
-    <button onclick='if (loginBox.style.display === "none") {loginBox.style.display = "unset";} else {loginBox.style.display = "none";}'>Toggle login box</button>
 </div>

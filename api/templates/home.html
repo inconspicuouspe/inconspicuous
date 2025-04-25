@@ -1,9 +1,16 @@
-{% if not session %}
-    {% include 'login.html' %}  
-{% else %}
-    Logged in as {{ session.username }}.
-    <button id="logout-button">Logout</button>
-    <script>
-        {% include 'homeCode.js' %}
-    </script>
-{% endif %}
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        {% if not session %}
+            {% include 'login.html' %}  
+        {% else %}
+            Logged in as {{ session.username }}.
+            <button id="logout-button">Logout</button>
+            <script>
+                {% include 'homeCode.js' %}
+            </script>
+        {% endif %}
+    </body>
+</html>

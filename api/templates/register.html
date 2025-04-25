@@ -1,37 +1,44 @@
-<style>
-    .signup-box {
-        display: grid;
-        justify-content: center;
-    }
-    #signup-content {
-        padding: 8px;
-        width: min-content;
-        justify-self: right;
-    }
-    #signup-content h2 {
-        margin: 0;
-    }
-    #signup-content form {
-        margin: 0;
-    }
-    #signup-content p {
-        margin-top: 16px;
-        margin-bottom: 0;
-    }
-</style>
-<div class="signup-box">
-    <div id="signup-content">
-        <h2>Sign up</h2>
-        <form>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">Login</button>
-            <p style="visibility: hidden;" id="message"></p>
-        </form>
-    </div>
-    <script>
-        {% include 'registerCode.js' %}
-    </script>
-</div>
+<html>
+    <head>
+        <title>Register</title>
+    </head>
+    <body>
+        <style>
+            .signup-box {
+                display: grid;
+                justify-content: center;
+            }
+            #signup-content {
+                padding: 8px;
+                width: min-content;
+                justify-self: right;
+            }
+            #signup-content h2 {
+                margin: 0;
+            }
+            #signup-content form {
+                margin: 0;
+            }
+            #signup-content p {
+                margin-top: 16px;
+                margin-bottom: 0;
+            }
+        </style>
+        <div class="signup-box">
+            <div id="signup-content">
+                <h2>Sign up</h2>
+                <form>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <button type="submit">Login</button>
+                    <p style="visibility: hidden;" id="message"></p>
+                </form>
+            </div>
+            <script>
+                {% include 'registerCode.js' %}
+            </script>
+        </div>
+    </body>
+</html>
