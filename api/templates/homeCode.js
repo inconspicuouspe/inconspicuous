@@ -23,6 +23,9 @@ function addUserSuccess(data) {
     if (success) {
         addUserMessageBox.textContent = lastUsername+" was added. The signup link is: https://"+location.host+"{{ url_for('register') }}?user_slot="+data.{{ consts.FIELD_DATA }};
     }
+    else {
+        addUserMessageBox.textContent = "That username is already taken."
+    }
     addUserMessageBox.style.visibility = "visible";
 }
 addUserButton.addEventListener("submit", (event) => {

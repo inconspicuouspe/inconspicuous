@@ -101,6 +101,7 @@ def add_user():
             raise Unauthorized()
         if permission_group >= session.permission_group:
             raise Unauthorized()
+        user_slot = auth_create_user_slot(db, settings, permission_group, username)
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
-    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: auth_create_user_slot(db, settings, permission_group, username)})
+    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: user_slot})
