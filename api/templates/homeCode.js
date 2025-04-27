@@ -13,7 +13,7 @@ const settingsValues = {
     {% for setting in Settings.__members__.values() %}
     {% if setting in session.settings %}
     setting_{{ setting.name }}: {{ setting.value }},
-    {% endfor %}
+    {% endif %}
     {% endfor %}
 };
 const addUserButton = document.querySelector("#addUserForm");
