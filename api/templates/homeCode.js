@@ -22,7 +22,7 @@ const addUserMessageBox = document.querySelector("#addUserForm #message");
 function addUserSuccess(data) {
     const success = data.success;
     if (success) {
-        messageBox.textContent = lastUsername+" was added. The signup link is: {{ url_for('register') }}?user_slot="+data.{{ consts.FIELD_DATA }};
+        addUserMessageBox.textContent = lastUsername+" was added. The signup link is: {{ url_for('register') }}?user_slot="+data.{{ consts.FIELD_DATA }};
     }
     addUserMessageBox.style.visibility = "visible";
 }
