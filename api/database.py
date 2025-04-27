@@ -9,18 +9,8 @@ from pymongo.server_api import ServerApi
 from pymongo import DESCENDING
 from .exceptions import NotFoundError, UserSlotTakenError
 from . import authentication
+from .consts import *
 
-FIELD_USER_ID = "user_id"
-FIELD_LOOKUP_USERNAME = "_username"
-FIELD_USERNAME = "username"
-FIELD_UNFILLED = "unfilled"
-FIELD_SETTINGS = "settings"
-FIELD_PERMISSION_GROUP = "permission_group"
-FIELD_LOGIN_DATA = "login_data"
-FIELD_LOGIN_TOKEN = "login_token"
-FIELD_SESSION_DATA = "session_data"
-FIELD_SESSION_NAME = "session_name"
-FIELD_CREATION_TIME = "creation_time"
 MAX_SESSIONS = 10
 
 class Database(ABC, Hashable):

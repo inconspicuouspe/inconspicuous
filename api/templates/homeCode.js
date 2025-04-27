@@ -8,6 +8,7 @@ logoutButton.addEventListener("click", (event) => {
         method: "POST",
     }).then(()=>{location.reload();});
 })
+window.lastUsername = null;
 {% if Settings._CREATE_MEMBERS in session.settings %}
 const settingsValues = {
     {% for setting in Settings.__members__.values() %}
@@ -17,21 +18,36 @@ const settingsValues = {
     {% endfor %}
 };
 const addUserButton = document.querySelector("#addUserForm");
-const settingsDiv = document.querySelector("div.settings-box");
+const addUserUsernameInput = document.querySelector("#addUserForm #username");
+const addUserPgroupInput = document.querySelector("#addUserForm #pgroup");
+const addUserSettingsDiv = document.querySelector("#addUserForm div.settings-box");
+const addUserMessageBox = document.querySelector("#addUserForm #message");
+function addUserSuccess(data) {
+    const success = data.success;
+    if (success) {
+        messageBox.textContent = lastUsername+" was added. The signup link is: {{ url_for('register') }}?user_slot="+data.{{ consts.FIELD_DATA }};
+    }
+    addUserMessageBox.style.visibility = "visible";
+}
 addUserButton.addEventListener("submit", (event) => {
     event.preventDefault();
+    window.lastUsername = addUserUsernameInput.value
     let settingsValue = 0;
-    for (const child of settingsDiv.children) {
+    for (const child of addUserSettingsDiv.children) {
         settingsValue |= settingsValues[child.children[0].name] * child.children[0].checked;
     }
     console.log(settingsValue);
-    /*fetch("{{ url_for('add_user') }}" {
+    fetch("{{ url_for('add_user') }}" {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         method: "POST",
-        body: JSON.stringify()
-    });*/
+        body: JSON.stringify({
+            {{ consts.FIELD_USERNAME }}: lastUsername,
+            {{ consts.FIELD_PERMISSION_GROUP }}: addUserPgroupInput.value,
+            {{ consts.FIELD_SETTINGS }}: settingsValue
+        })
+    }).then((response) => response.json()).then(addUserSuccess);
 })
 {% endif %}

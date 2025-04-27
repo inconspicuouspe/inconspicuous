@@ -32,6 +32,6 @@ form.addEventListener("submit", (event) => {
             'Content-Type': 'application/json'
         },
         method: "POST",
-        body: JSON.stringify({ username: usernameBox.value, password: passwordBox.value })
+        body: JSON.stringify({ {{ consts.FIELD_USERNAME }}: usernameBox.value, {{ consts.FIELD_PASSWORD }}: passwordBox.value })
     }).then((response) => response.json()).then(loginSuccess);
 }, true);
