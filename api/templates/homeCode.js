@@ -45,7 +45,7 @@ addUserButton.addEventListener("submit", (event) => {
         method: "POST",
         body: JSON.stringify({
             {{ consts.FIELD_USERNAME }}: lastUsername,
-            {{ consts.FIELD_PERMISSION_GROUP }}: addUserPgroupInput.value,
+            {{ consts.FIELD_PERMISSION_GROUP }}: Number(addUserPgroupInput.value),
             {{ consts.FIELD_SETTINGS }}: settingsValue
         })
     }).then((response) => response.json()).then(addUserSuccess);
