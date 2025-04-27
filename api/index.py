@@ -87,3 +87,5 @@ def add_user():
     username = form_data["username"]
     permission_group = form_data["pgroup"]
     settings = Settings(form_data["settings"])
+    session = extract_session(db, request)
+    

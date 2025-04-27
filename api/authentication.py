@@ -8,7 +8,7 @@ from hmac import compare_digest
 from enum import Flag, auto
 from datetime import datetime
 import secrets, uuid, sys, logging
-from cachetools import LRUCache, cached
+from cachetools import LRUCache, cached, TTLCache
 from flask import Response, Request
 from . import database as _database
 from .exceptions import (
@@ -50,6 +50,7 @@ class Session:
     def create_empty_session(cls) -> Self:
         return cls(SessionData(""), datetime.now(), ANONYMOUS_USERNAME, ANONYMOUS_USERNAME, Settings.NONE, 1 - (1 << 31))
     
+    @cached(TTLCache(256, 60))
     @staticmethod
     def from_session_data(database: _database.Database, session_data: SessionData) -> Session:
         session = database.get_session(session_data.data)
