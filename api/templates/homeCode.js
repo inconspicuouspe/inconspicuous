@@ -11,11 +11,8 @@ logoutButton.addEventListener("click", (event) => {
 window.lastUsername = null;
 {% if Settings._CREATE_MEMBERS in session.settings %}
 const settingsValues = {
-    {% for setting in Settings.__members__.values() %}
-    {% if setting in session.settings %}
-    setting_{{ setting.name }}: {{ setting.value }},
-    {% endif %}
-    {% endfor %}
+    {% for setting in Settings.__members__.values() %}{% if setting in session.settings %}setting_{{ setting.name }}: {{ setting.value }},
+    {% endif %}{% endfor %}
 };
 const addUserButton = document.querySelector("#addUserForm");
 const addUserUsernameInput = document.querySelector("#addUserForm #username");
