@@ -21,7 +21,7 @@ const addUserMessageBox = document.querySelector("#addUserForm #message");
 function addUserSuccess(data) {
     const success = data.success;
     if (success) {
-        addUserMessageBox.textContent = lastUsername+" was added. The signup link is: "+location.host+"{{ url_for('register') }}?user_slot="+data.{{ consts.FIELD_DATA }};
+        addUserMessageBox.textContent = lastUsername+" was added. The signup link is: https://"+location.host+"{{ url_for('register') }}?user_slot="+data.{{ consts.FIELD_DATA }};
     }
     addUserMessageBox.style.visibility = "visible";
 }
