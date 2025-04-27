@@ -74,6 +74,7 @@ class Settings(Flag):
     CREATE_MEMBERS = VIEW_MEMBERS | _CREATE_MEMBERS
     _DISABLE_MEMBERS = auto()
     DISABLE_MEMBERS = VIEW_MEMBERS | _DISABLE_MEMBERS
+    ADMIN = (1 << 20) - 1
     SYS_ADMIN = (1 << 31) - 1 # Has to be last
 
 encode_b64 = urlsafe_b64encode

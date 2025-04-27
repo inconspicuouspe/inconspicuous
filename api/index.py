@@ -80,3 +80,10 @@ def register():
 @app.post("/logout/")
 def logout():
     return auth_logout(db, jsonify({FIELD_SUCCESS: True}), request)
+
+@app.post("/add_user/")
+def add_user():
+    form_data = request.json
+    username = form_data["username"]
+    permission_group = form_data["pgroup"]
+    settings = Settings(form_data["settings"])
