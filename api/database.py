@@ -145,8 +145,7 @@ class MongoDB(Database):
         })
         sessions = list(self.sessions.find({FIELD_LOOKUP_USERNAME: username.lower()}).sort(FIELD_CREATION_TIME, DESCENDING).limit(MAX_SESSIONS + 1))
         if len(sessions) == MAX_SESSIONS + 1:
-            print("logout")
-            self.sessions.delete_many({"_id": {"$not": {"$in": [sess["_id"] for sess in sessions[:MAX_SESSIONS]]}}})
+            self.sessions.delete_many({"_id": {"$not": {"$in": [sess["_id"] for sess in sessions[:MAX_SESSIONS]]}}, FIELD_LOOKUP_USERNAME: username.lower()})
     
     def list_sessions(self, username):
         account = self.users.find_one({FIELD_LOOKUP_USERNAME: username.lower()})
@@ -160,7 +159,6 @@ class MongoDB(Database):
         return authentication.Session(session.get(FIELD_SESSION_DATA), session.get(FIELD_CREATION_TIME), session.get(FIELD_USERNAME), session.get(FIELD_SESSION_NAME), authentication.Settings(account.get(FIELD_SETTINGS)), account.get(FIELD_PERMISSION_GROUP))
     
     def delete_session(self, session_data):
-        print("logout")
         self.sessions.delete_one({FIELD_SESSION_DATA: session_data})
     
     def list_users(self):
