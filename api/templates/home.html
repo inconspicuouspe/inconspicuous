@@ -17,7 +17,6 @@
             border-color: black;
             border-width: 2px;
             border-style: solid;
-            display: grid;
         }
         form .settings-box {
             border-radius: 4px;
@@ -28,18 +27,34 @@
         form .settings-box * {
             margin: 4px;
         }
+        label {
+            border:1px solid #ccc;
+            padding:10px;
+            margin:0 0 10px;
+            display:block; 
+        }
+
+        label:hover {
+            background:#eee;
+            cursor:pointer;
+        }
         </style>
         <form>
             <label for="username">Temporary username:</label>
             <input type="text" id="username" name="username" required>
+            <br>
             <label for="pgroup">Permission group:</label>
             <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" max="{{ session.permission_group - 1 }}" required>
+            <br>
             Settings:
             <div class="settings-box">
             {% for setting in Settings.__members__.values() %}
                 {% if setting in session.settings and not setting.name.startswith("_") and setting.name != "NONE" %}
-                <label for="setting_{{ setting.name }}_">{{ setting.name.replace("_", " ").title() }}</label>
-                <input name="setting_{{ setting.name }}_" id="setting_{{ setting.name }}_" type="checkbox">
+                <label>
+                    <input name="setting_{{ setting.name }}" id="setting_{{ setting.name }}" type="checkbox">
+                    {{ setting.name.replace("_", " ").title() }}
+                </label>
+                <br>
                 {% endif %}
             {% endfor %}
             </div>
