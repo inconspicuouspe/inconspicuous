@@ -6,8 +6,6 @@
         {% if not session %}
         {% include 'login.html' %}  
         {% else %}
-        <style>
-        </style>
         Logged in as {{ session.username }}.
         <button id="logout-button">Logout</button>
         {% if Settings._CREATE_MEMBERS in session.settings %}
@@ -17,24 +15,29 @@
             border-color: black;
             border-width: 2px;
             border-style: solid;
+            width: min-content;
+            white-space: nowrap;
+        }
+        form * {
+            margin: 4px;
         }
         form .settings-box {
             border-radius: 4px;
             border-color: black;
             border-width: 2px;
             border-style: solid;
+            width: min-content;
         }
         form .settings-box * {
             margin: 4px;
         }
-        label {
+        .settings-box label {
             border:1px solid #ccc;
-            padding:10px;
-            margin:0 0 10px;
-            display:block; 
+            padding:5px;
+            display: block;
         }
 
-        label:hover {
+        .settings-box label:hover {
             background:#eee;
             cursor:pointer;
         }
