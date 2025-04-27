@@ -49,7 +49,7 @@
             <label for="pgroup">Permission group:</label>
             <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" max="{{ session.permission_group - 1 }}" required>
             <br>
-            Settings:
+            <label>Settings:</label>
             <div class="settings-box">
             {% for setting in Settings.__members__.values() %}
                 {% if setting in session.settings and not setting.name.startswith("_") and setting.name != "NONE" %}
