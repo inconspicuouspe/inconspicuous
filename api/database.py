@@ -4,6 +4,7 @@ from typing import Optional
 from uuid import uuid4
 from datetime import datetime
 from collections.abc import Hashable
+from dataclasses import dataclass
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from pymongo import DESCENDING
@@ -12,6 +13,14 @@ from . import authentication
 from .consts import *
 
 MAX_SESSIONS = 10
+
+@dataclass(frozen=True)
+class UserProfile:
+    username: str
+    user_id: str
+    settings: authentication.Settings
+    permission_group: int
+    unfilled: bool
 
 class Database(ABC, Hashable):
     def __hash__(self) -> int:
@@ -51,6 +60,10 @@ class Database(ABC, Hashable):
     
     @abstractmethod
     def delete_session(self, session_data: str) -> None:
+        pass
+    
+    @abstractmethod
+    def list_users(self) -> list[UserProfile]:
         pass
 
 class MongoDB(Database):
@@ -147,3 +160,9 @@ class MongoDB(Database):
     
     def delete_session(self, session_data):
         self.sessions.delete_one({FIELD_SESSION_DATA: session_data})
+    
+    def list_users(self):
+        return [
+            UserProfile(document.get(FIELD_USERNAME, "???"), document.get(FIELD_USER_ID, "???"), authentication.Settings(document.get(FIELD_SETTINGS, 0)), document.get(FIELD_PERMISSION_GROUP), document.get(FIELD_UNFILLED))
+            for document in self.users.find()
+        ]

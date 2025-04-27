@@ -30,7 +30,8 @@ from .consts import (
     FIELD_PASSWORD,
     FIELD_SUCCESS,
     FIELD_REASON,
-    FIELD_DATA
+    FIELD_DATA,
+    FIELD_USER_ID
 )
 
 MONGO_DB_CONNECTION_URI = environ["MONGO_DB_CONNECTION_URI"]
@@ -105,3 +106,25 @@ def add_user():
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     return jsonify({FIELD_SUCCESS: True, FIELD_DATA: user_slot})
+
+@app.get("/user_list/")
+def get_user_list():
+    try:
+        session = extract_session(db, request)
+        if Settings.VIEW_MEMBERS not in session.settings:
+            raise Unauthorized()
+        view_member_settings = Settings._VIEW_MEMBER_SETTINGS in session.settings
+        view_invited_members = Settings._VIEW_INVITED_MEMBERS in session.settings
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    users = [
+        {
+            FIELD_USERNAME: user.username,
+            FIELD_SETTINGS: user.settings.value if view_member_settings and user.permission_group <= session.permission_group else -1,
+            FIELD_PERMISSION_GROUP: user.permission_group if view_member_settings and user.permission_group <= session.permission_group else -1,
+            FIELD_USER_ID: user.user_id if not user.unfilled else "???"
+        }
+        for user in db.list_users()
+        if not user.unfilled or view_invited_members
+    ]
+    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: users})
