@@ -33,3 +33,6 @@ class NoSession(MyError):
 
 class CannotBeNamedAnonymous(MyError):
     identifier = "CANNOT_BE_NAMED_ANONYMOUS"
+
+class Unauthorized(MyError):
+    identifier = "UNAUTHORIZED"

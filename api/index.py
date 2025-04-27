@@ -4,9 +4,11 @@ from .database import MongoDB
 from .authentication import login as auth_login
 from .authentication import sign_up as auth_sign_up
 from .authentication import logout as auth_logout
+from .authentication import create_user_slot as auth_create_user_slot
 from .authentication import extract_session, extract_session_or_empty, SESSION_DATA_COOKIE_NAME, Settings
 from .exceptions import (
-    MyError
+    MyError,
+    Unauthorized
 )
 from . import exceptions
 from flask import (
@@ -23,6 +25,7 @@ from user_agents import parse
 
 FIELD_REASON = "reason"
 FIELD_SUCCESS = "success"
+FIELD_DATA = "data"
 
 MONGO_DB_CONNECTION_URI = environ["MONGO_DB_CONNECTION_URI"]
 MONGO_DB_PASSWORD = environ["MONGO_DB_PASSWORD"]
@@ -87,5 +90,12 @@ def add_user():
     username = form_data["username"]
     permission_group = form_data["pgroup"]
     settings = Settings(form_data["settings"])
-    session = extract_session(db, request)
-    
+    try:
+        session = extract_session(db, request)
+        if Settings._CREATE_MEMBERS not in session.settings:
+            raise Unauthorized()
+        if settings not in session.settings:
+            raise Unauthorized()
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: auth_create_user_slot(db, settings, permission_group, username)})
