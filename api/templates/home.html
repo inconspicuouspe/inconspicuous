@@ -24,9 +24,11 @@
             <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" max="{{ session.permission_group - 1 }}" required>
             Settings:
             <div class="settings-box">
-            {% for setting in session.settings %}
-                <label for="setting_{{ setting.name }}">{{ setting.name }}</label>
-                <input name="setting_{{ setting.name }}" id="setting_{{ setting.name }}" type="checkbox">
+            {% for setting in Settings %}
+                {% if setting in session.settings and not setting.name.startswith("_") %}
+                <label for="setting_{{ setting.name }}_">{{ setting.name }}</label>
+                <input name="setting_{{ setting.name }}_" id="setting_{{ setting.name }}_" type="checkbox">
+                {% endif %}
             {% endfor %}
             </div>
             <button type="submit">Send</button>
