@@ -20,7 +20,7 @@ const addUserButton = document.querySelector("#addUserForm");
 const settingsDiv = document.querySelector("div.settings-box");
 addUserButton.addEventListener("submit", (event) => {
     event.preventDefault();
-    const settingsValue = 0;
+    let settingsValue = 0;
     for (const child of settingsDiv.children) {
         settingsValue |= settingsValues[child.children[0].name] * child.children[0].checked;
     }
