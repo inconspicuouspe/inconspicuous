@@ -37,7 +37,7 @@ addUserButton.addEventListener("submit", (event) => {
         settingsValue |= settingsValues[child.children[0].name] * child.children[0].checked;
     }
     console.log(settingsValue);
-    fetch("{{ url_for('add_user') }}" {
+    fetch("{{ url_for('add_user') }}", {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
