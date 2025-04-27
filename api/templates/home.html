@@ -6,6 +6,11 @@
         {% if not session %}
         {% include 'login.html' %}  
         {% else %}
+        <style>
+        body {
+            display: grid;
+        }
+        </style>
         Logged in as {{ session.username }}.
         <button id="logout-button">Logout</button>
         {% if Settings._CREATE_MEMBERS in session.settings %}
@@ -16,6 +21,9 @@
             border-width: 2px;
             border-style: solid;
         }
+        .settings-box * {
+            margin: 4px;
+        }
         </style>
         <form>
             <label for="username">Temporary username:</label>
@@ -24,7 +32,7 @@
             <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" max="{{ session.permission_group - 1 }}" required>
             Settings:
             <div class="settings-box">
-            {% for setting in Settings.__members__ %}
+            {% for setting in Settings.__members__.values() %}
                 {% if setting in session.settings and not setting.name.startswith("_") %}
                 <label for="setting_{{ setting.name }}_">{{ setting.name.replace("_", " ").title() }}</label>
                 <input name="setting_{{ setting.name }}_" id="setting_{{ setting.name }}_" type="checkbox">
