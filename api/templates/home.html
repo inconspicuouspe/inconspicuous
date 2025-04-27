@@ -7,21 +7,21 @@
         {% include 'login.html' %}  
         {% else %}
         <style>
-        body {
-            display: grid;
-        }
         </style>
         Logged in as {{ session.username }}.
         <button id="logout-button">Logout</button>
         {% if Settings._CREATE_MEMBERS in session.settings %}
         <style>
-        .settings-box {
+        form {
+            display: grid;
+        }
+        form .settings-box {
             border-radius: 4px;
             border-color: black;
             border-width: 2px;
             border-style: solid;
         }
-        .settings-box * {
+        form .settings-box * {
             margin: 4px;
         }
         </style>
