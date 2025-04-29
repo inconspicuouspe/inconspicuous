@@ -172,5 +172,5 @@ class MongoDB(Database):
         ]
     
     def get_correctly_cased_username(self, username):
-        document = self.users.find_one({FIELD_LOOKUP_USERNAME: username})
+        document = self.users.find_one({FIELD_LOOKUP_USERNAME: username.lower()})
         return document[FIELD_USERNAME]
