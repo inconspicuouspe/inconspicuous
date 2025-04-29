@@ -228,7 +228,7 @@ def get_user(username):
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     return jsonify({FIELD_SUCCESS: True, FIELD_DATA: {
-        FIELD_USERNAME: username,
+        FIELD_USERNAME: user_profile.username,
         FIELD_SETTINGS: settings_value,
         FIELD_PERMISSION_GROUP: permission_group,
         FIELD_USER_ID: user_id
