@@ -8,8 +8,8 @@
         {% include 'login.html' %}  
         {% else %}
         {% include 'boxedSectionHead.html' %}
-        Logged in as {{ session.username }}.
-        <button id="logout-button">Logout</button>
+        Eingeloggt als {{ session.username }}.
+        <button id="logout-button">Ausloggen</button>
         {% if Settings._CREATE_MEMBERS in session.settings %}
         <style>
         input {
@@ -42,10 +42,10 @@
         </style>
         {% include 'openBoxedSection.html' %}
         <form id="addUserForm">
-            <label for="username">Temporary username:</label>
+            <label for="username">Temporärer Nutzername:</label>
             <input type="text" id="username" name="username" required>
             <br>
-            <label for="pgroup">Permission group:</label>
+            <label for="pgroup">Berechtigungsgruppe:</label>
             <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" max="{{ session.permission_group - 1 }}" required>
             <br>
             <label>Settings:</label>
@@ -55,7 +55,7 @@
                 {% if setting in session.settings and not setting.name.startswith("_") and setting.name != "NONE" %}
                 <label>
                     <input name="setting_{{ setting.name }}" id="setting_{{ setting.name }}" type="checkbox">
-                    {{ setting.name.replace("_", " ").title() }}
+                    {{ setting.name.translated_name }}
                 </label>
                 {% endif %}
             {% endfor %}

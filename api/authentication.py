@@ -11,6 +11,7 @@ import secrets, uuid, sys, logging
 from cachetools import LRUCache, cached, TTLCache
 from flask import Response, Request
 from . import database as _database
+from . import consts
 from .exceptions import (
     NotFoundError,
     AlreadyExistsError,
@@ -79,6 +80,9 @@ class Settings(Flag):
     VIEW_INVITED_USERS = VIEW_MEMBERS | _VIEW_INVITED_MEMBERS
     ADMIN = (1 << 20) - 1
     SYS_ADMIN = (1 << 31) - 1 # Has to be last
+    @property
+    def translated_name(self):
+        return consts.SETTINGS_NAME_TRANSLATIONS[self.name]
 
 encode_b64 = urlsafe_b64encode
 decode_b64 = urlsafe_b64decode

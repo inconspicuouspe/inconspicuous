@@ -21,16 +21,15 @@
 </style>
 <div class="login-box">
     <div id="login-content">
-        <h2>Login</h2>
+        <h2>Einloggen</h2>
         <form>
-            <label for="username">Username:</label>
+            <label for="username">Nutzername:</label>
             <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
+            <label for="password">Passwort:</label>
             <input type="password" id="password" name="password" required>
-            <button type="submit">Login</button>
+            <button type="submit">Einloggen</button>
             <p style="visibility: hidden;" id="message"></p>
         </form>
-        <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
     </div>
     <script>
         {% include 'loginCode.js' %}
