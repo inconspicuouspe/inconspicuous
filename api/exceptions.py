@@ -36,3 +36,6 @@ class CannotBeNamedAnonymous(MyError):
 
 class Unauthorized(MyError):
     identifier = "UNAUTHORIZED"
+
+class Unimplemented(MyError):
+    identifier = "UNIMPLEMENTED"

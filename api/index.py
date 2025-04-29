@@ -16,10 +16,18 @@ from .authentication import login as auth_login
 from .authentication import sign_up as auth_sign_up
 from .authentication import logout as auth_logout
 from .authentication import create_user_slot as auth_create_user_slot
-from .authentication import extract_session, extract_session_or_empty, SESSION_DATA_COOKIE_NAME, Settings, username_constraints
+from .authentication import (
+    extract_session,
+    extract_session_or_empty,
+    SESSION_DATA_COOKIE_NAME,
+    Settings,
+    username_constraints,
+    remove_unfilled_user
+)
 from .exceptions import (
     MyError,
-    Unauthorized
+    Unauthorized,
+    Unimplemented
 )
 from . import exceptions, consts
 from .consts import (
@@ -132,3 +140,40 @@ def get_user_list():
         if not user.unfilled or view_invited_members
     ]
     return jsonify({FIELD_SUCCESS: True, FIELD_DATA: users})
+
+@app.post("/remove_user/")
+def remove_user():
+    form_data = request.json
+    username = form_data[FIELD_USERNAME]
+    try:
+        session = extract_session(db, request)
+        if Settings._UNINVITE_MEMBERS not in session.settings:
+            raise Unauthorized()
+        remove_unfilled_user(db, username)
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    return jsonify({FIELD_SUCCESS: True})
+
+@app.post("/deactivate_user/")
+def deactivate_user():
+    try:
+        raise Unimplemented()
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    return jsonify({FIELD_SUCCESS: True})
+
+@app.post("/edit_user_permission_group/")
+def edit_user_permission_group():
+    try:
+        raise Unimplemented()
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    return jsonify({FIELD_SUCCESS: True})
+
+@app.post("/edit_user_settings/")
+def edit_user_settings():
+    try:
+        raise Unimplemented()
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    return jsonify({FIELD_SUCCESS: True})

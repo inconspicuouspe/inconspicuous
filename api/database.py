@@ -69,6 +69,10 @@ class Database(ABC, Hashable):
     @abstractmethod
     def get_correctly_cased_username(self, username: str) -> Optional[str]:
         pass
+    
+    @abstractmethod
+    def remove_unfilled_user(self, username: str) -> bool:
+        pass
 
 class MongoDB(Database):
     client: MongoClient
@@ -176,3 +180,7 @@ class MongoDB(Database):
         if document is None:
             return None
         return document.get(FIELD_USERNAME)
+    
+    def remove_unfilled_user(self, username):
+        document = self.users.find_one_and_delete({FIELD_UNFILLED: True, FIELD_LOOKUP_USERNAME: username.lower()})
+        return document is not None

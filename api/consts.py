@@ -19,16 +19,12 @@ FIELD_USER_SLOT = "user_slot"
 SETTINGS_NAME_TRANSLATIONS = {
     "NONE": "Keine",
     "VIEW_MEMBERS": "Benutzer ansehen",
-    "_VIEW_MEMBER_SETTINGS": "intern: _VIEW_MEMBER_SETTINGS",
     "VIEW_MEMBER_SETTINGS": "Benutzereinstellungen ansehen",
-    "_EDIT_MEMBER_SETTINGS": "intern: _EDIT_MEMBER_SETTINGS",
     "EDIT_MEMBER_SETTINGS": "Benutzereinstellungen bearbeiten",
-    "_CREATE_MEMBERS": "intern: _CREATE_MEMBERS",
     "CREATE_MEMBERS": "Benutzer erstellen",
-    "_DISABLE_MEMBERS": "intern: _DISABLE_MEMBERS",
     "DISABLE_MEMBERS": "Benutzer deaktivieren",
-    "_VIEW_INVITED_MEMBERS": "intern: _VIEW_INVITED_MEMBERS",
-    "VIEW_INVITED_USERS": "Eingeladene Nutzer ansehen",
+    "VIEW_INVITED_MEMBERS": "Eingeladene Nutzer ansehen",
+    "UNINVITE_MEMBERS": "Eingeladene Nutzer entfernen",
     "ADMIN": "Administrator",
     "SYS_ADMIN": "Systemadministrator"
 }

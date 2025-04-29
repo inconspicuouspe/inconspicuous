@@ -77,11 +77,13 @@ class Settings(Flag):
     _DISABLE_MEMBERS = auto()
     DISABLE_MEMBERS = VIEW_MEMBERS | _DISABLE_MEMBERS
     _VIEW_INVITED_MEMBERS = auto()
-    VIEW_INVITED_USERS = VIEW_MEMBERS | _VIEW_INVITED_MEMBERS
+    VIEW_INVITED_MEMBERS = VIEW_MEMBERS | _VIEW_INVITED_MEMBERS
+    _UNINVITE_MEMBERS = auto()
+    UNINVITE_MEMBERS = VIEW_INVITED_MEMBERS | _UNINVITE_MEMBERS
     ADMIN = (1 << 20) - 1
     SYS_ADMIN = (1 << 31) - 1 # Has to be last
     def get_translated_name(self):
-        return consts.SETTINGS_NAME_TRANSLATIONS[self.name]
+        return consts.SETTINGS_NAME_TRANSLATIONS.get(self.name) or "intern: " + self.name
 
 encode_b64 = urlsafe_b64encode
 decode_b64 = urlsafe_b64decode
@@ -152,6 +154,11 @@ def make_session(database: _database.Database, username: str, session_name: str)
     session_data = create_session_data()
     database.add_session(session_data.data, username, session_name)
     return session_data
+
+def remove_unfilled_user(database: _database.Database, username: str) -> None:
+    success = database.remove_unfilled_user(username)
+    if not success:
+        raise NotFoundError()
 
 @cached(cache=LRUCache(1<<16, sys.getsizeof))
 def check_session(database: _database.Database, session_data: SessionData) -> str:
