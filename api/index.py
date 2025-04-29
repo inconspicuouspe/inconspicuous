@@ -103,7 +103,7 @@ def add_user():
         if permission_group >= session.permission_group:
             raise Unauthorized()
         if username.startswith("TEST_USERNAME_USING_THIS_NAME_WILL_NOT_CREATE_A_USER"):
-            pass
+            user_slot = "NO_USER_SLOT_GENERATED"
         else:
             username_constraints(username)
             user_slot = auth_create_user_slot(db, settings, permission_group, username)
