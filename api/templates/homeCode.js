@@ -27,8 +27,8 @@ function copyAddUserMessageLink(event) {
 function addUserSuccess(data) {
     const success = data.success;
     if (success) {
-        addUserMessageBoxText.textContent = lastUsername+" was added."
-        addUserMessageBoxLinkElm.style.visibility = "visible";
+        addUserMessageBoxText.textContent = lastUsername+" was added.";
+        addUserMessageBoxLinkElm.style.display = "";
         window.addUserMessageBoxLink = "https://"+location.host+"{{ url_for('register') }}?user_slot="+data.{{ consts.FIELD_DATA }};
     }
     else {
@@ -52,11 +52,12 @@ function addUserSuccess(data) {
                 addUserMessageBoxText.textContent = "Konnte nicht erstellt werden.";
         }
     }
-    addUserMessageBox.style.visibility = "visible";
+    addUserMessageBox.style.display = "";
 }
 addUserButton.addEventListener("submit", (event) => {
+    addUserMessageBoxText.textContent = "...";
     event.preventDefault();
-    window.lastUsername = addUserUsernameInput.value
+    window.lastUsername = addUserUsernameInput.value;
     let settingsValue = 0;
     for (const child of addUserSettingsDiv.children) {
         settingsValue |= settingsValues[child.children[0].name] * child.children[0].checked;
