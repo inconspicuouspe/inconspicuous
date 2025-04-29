@@ -13,31 +13,34 @@ function signupSuccess(data) {
     else {
         switch (data.reason) {
             case "{{ exceptions.CannotBeNamedAnonymous.identifier }}":
-                messageBox.textContent = "Username cannot be Anonymous in any case.";
+                messageBox.textContent = "Dein Nutzername kann nicht 'Anonymous' sein.";
                 break;
             case "{{ exceptions.UsernameInvalidCharacters.identifier }}":
-                messageBox.textContent = "Username must consist of characters a-z, A-Z, 0-9, _ and -.";
+                messageBox.textContent = "Nutzername muss aus den Zeichen a-z, A-Z, 0-9, _ und - bestehen.";
                 break;
             case "{{ exceptions.PasswordTooLong.identifier }}":
-                messageBox.textContent = "Password has to have a reasonable length.";
+                messageBox.textContent = "Passwort muss kürzer sein.";
                 break;
             case "{{ exceptions.PasswordTooShort.identifier }}":
-                messageBox.textContent = "Password has to be longer.";
+                messageBox.textContent = "Passwort muss länger sein.";
                 break;
             case "{{ exceptions.UsernameTooLong.identifier }}":
-                messageBox.textContent = "Username has to have a reasonable length.";
+                messageBox.textContent = "Nutzername muss kürzer sein.";
                 break;
             case "{{ exceptions.UsernameTooShort.identifier }}":
-                messageBox.textContent = "Username has to be longer.";
+                messageBox.textContent = "Nutzername muss länger sein.";
                 break;
             case "{{ exceptions.UserSlotTakenError.identifier }}":
-                messageBox.textContent = "That user slot is already taken.";
+                messageBox.textContent = "Dieser User Slot wird bereits verwendet.";
                 break;
             case "{{ exceptions.AlreadyExistsError.identifier }}":
-                messageBox.textContent = "That username is already taken.";
+                messageBox.textContent = "Der Nutzername wird bereits verwendet.";
+                break;
+            case "{{ exceptions.NotFoundError.identifier }}":
+                messageBox.textContent = "Du hast keinen angegeben oder dieser User Slot existiert nicht."
                 break;
             default:
-                messageBox.textContent = "Your account couldn't be created.";
+                messageBox.textContent = "Dein Konto konnte nicht erstellt werden.";
         }
         
     }

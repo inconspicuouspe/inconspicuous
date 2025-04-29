@@ -13,13 +13,13 @@ function loginSuccess(data) {
     else {
         switch (data.reason) {
             case "{{ exceptions.NotFoundError.identifier }}":
-                messageBox.textContent = "User not found.";
+                messageBox.textContent = "Nutzername nicht gefunden.";
                 break;
             case "{{ exceptions.InvalidCredentials.identifier }}":
-                messageBox.textContent = "Bad credentials.";
+                messageBox.textContent = "Falsche Einlogdaten.";
                 break;
             default:
-                messageBox.textContent = "Couldn't log in.";
+                messageBox.textContent = "Konnte nicht eingeloggt werden.";
         }
         
     }
