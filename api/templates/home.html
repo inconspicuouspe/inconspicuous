@@ -48,14 +48,14 @@
             <label for="pgroup">Berechtigungsgruppe:</label>
             <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" max="{{ session.permission_group - 1 }}" required>
             <br>
-            <label>Settings:</label>
+            <label>Einstellungen:</label>
             {% include 'openBoxedSection.html' %}
             <div class="settings-box">
             {% for setting in Settings.__members__.values() %}
                 {% if setting in session.settings and not setting.name.startswith("_") and setting.name != "NONE" %}
                 <label>
                     <input name="setting_{{ setting.name }}" id="setting_{{ setting.name }}" type="checkbox">
-                    {{ setting.name.translated_name }}
+                    {{ setting.name.get_translated_name() }}
                 </label>
                 {% endif %}
             {% endfor %}

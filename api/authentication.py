@@ -80,8 +80,7 @@ class Settings(Flag):
     VIEW_INVITED_USERS = VIEW_MEMBERS | _VIEW_INVITED_MEMBERS
     ADMIN = (1 << 20) - 1
     SYS_ADMIN = (1 << 31) - 1 # Has to be last
-    @property
-    def translated_name(self):
+    def get_translated_name(self):
         return consts.SETTINGS_NAME_TRANSLATIONS[self.name]
 
 encode_b64 = urlsafe_b64encode
