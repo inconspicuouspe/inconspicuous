@@ -25,12 +25,12 @@
 <script>
 function handleBoxedSectionOpenerButton(event) {
     event.target.parentNode.style.visibility = "hidden";
-    event.target.parentNode.parentNode.firstChild.style.visibility = "visible";
+    event.target.parentNode.parentNode.firstElementChild.style.visibility = "visible";
     console.log(event);
 }
 function handleBoxedSectionCloserButton(event) {
     console.log(event);
     event.target.parentNode.parentNode.style.visibility = "hidden";
-    event.target.parentNode.parentNode.parentNode.lastChild.style.visibility = "visible";
+    event.target.parentNode.parentNode.parentNode.lastElementChild.style.visibility = "visible";
 }
 </script>
