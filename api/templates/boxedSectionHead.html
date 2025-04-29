@@ -9,4 +9,20 @@
     width: min-content;
     white-space: nowrap;
 }
+.boxed-section-button {
+  border: none;
+  background: inherit;
+  width: min-content;
+  height: min-content;
+}
 </style>
+<script>
+function handleBoxedSectionOpenerButton(event) {
+    event.target.parentNode.style.visibility = "hidden";
+    event.target.parentNode.parentNode.firstChild.style.visibility = "visible";
+}
+function handleBoxedSectionCloserButton(event) {
+    event.target.parentNode.parentNode.style.visibility = "hidden";
+    event.target.parentNode.parentNode.lastChild.style.visibility = "visible";
+}
+</script>
