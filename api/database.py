@@ -67,7 +67,7 @@ class Database(ABC, Hashable):
         pass
     
     @abstractmethod
-    def get_correctly_cased_username(self, username: str) -> str:
+    def get_correctly_cased_username(self, username: str) -> Optional[str]:
         pass
 
 class MongoDB(Database):
@@ -173,4 +173,6 @@ class MongoDB(Database):
     
     def get_correctly_cased_username(self, username):
         document = self.users.find_one({FIELD_LOOKUP_USERNAME: username.lower()})
-        return document[FIELD_USERNAME]
+        if document is None:
+            return None
+        return document.get(FIELD_USERNAME)
