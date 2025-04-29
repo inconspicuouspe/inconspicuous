@@ -16,7 +16,7 @@ from .authentication import login as auth_login
 from .authentication import sign_up as auth_sign_up
 from .authentication import logout as auth_logout
 from .authentication import create_user_slot as auth_create_user_slot
-from .authentication import extract_session, extract_session_or_empty, SESSION_DATA_COOKIE_NAME, Settings
+from .authentication import extract_session, extract_session_or_empty, SESSION_DATA_COOKIE_NAME, Settings, username_constraints
 from .exceptions import (
     MyError,
     Unauthorized
@@ -102,7 +102,11 @@ def add_user():
             raise Unauthorized()
         if permission_group >= session.permission_group:
             raise Unauthorized()
-        user_slot = auth_create_user_slot(db, settings, permission_group, username)
+        if username.startswith("TEST_USERNAME_USING_THIS_NAME_WILL_NOT_CREATE_A_USER"):
+            pass
+        else:
+            username_constraints(username)
+            user_slot = auth_create_user_slot(db, settings, permission_group, username)
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     return jsonify({FIELD_SUCCESS: True, FIELD_DATA: user_slot})

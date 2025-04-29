@@ -21,7 +21,6 @@ function loginSuccess(data) {
             default:
                 messageBox.textContent = "Konnte nicht eingeloggt werden.";
         }
-        
     }
     messageBox.style.visibility = "visible";
 }

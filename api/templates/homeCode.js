@@ -28,11 +28,29 @@ function addUserSuccess(data) {
     const success = data.success;
     if (success) {
         addUserMessageBoxText.textContent = lastUsername+" was added."
-        addUserMessageBoxLinkElm.visibility = "visible";
+        addUserMessageBoxLinkElm.style.visibility = "visible";
         window.addUserMessageBoxLink = "https://"+location.host+"{{ url_for('register') }}?user_slot="+data.{{ consts.FIELD_DATA }};
     }
     else {
-        addUserMessageBoxText.textContent = "That username is already taken."
+        switch (data.reason) {
+            case "{{ exceptions.AlreadyExistsError.identifier }}":
+                addUserMessageBoxText.textContent = "Nutzername wird bereits verwendet.";
+                break;
+            case "{{ exceptions.UsernameTooLong.identifier }}":
+                addUserMessageBoxText.textContent = "Nutzername muss kürzer sein.";
+                break;
+            case "{{ exceptions.UsernameTooShort.identifier }}":
+                addUserMessageBoxText.textContent = "Nutzername muss länger sein.";
+                break;
+            case "{{ exceptions.CannotBeNamedAnonymous.identifier }}":
+                addUserMessageBoxText.textContent = "Dein Nutzername kann nicht 'Anonymous' sein.";
+                break;
+            case "{{ exceptions.UsernameInvalidCharacters.identifier }}":
+                addUserMessageBoxText.textContent = "Nutzername muss aus den Zeichen a-z, A-Z, 0-9, _ und - bestehen.";
+                break;
+            default:
+                addUserMessageBoxText.textContent = "Konnte nicht erstellt werden.";
+        }
     }
     addUserMessageBox.style.visibility = "visible";
 }
