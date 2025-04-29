@@ -3,6 +3,7 @@ const form = document.querySelector("#login-content form");
 const usernameBox = document.querySelector("#username");
 const passwordBox = document.querySelector("#password");
 const messageBox = document.querySelector("#message");
+messageBox.textContent = document.cookie;
 function loginSuccess(data) {
     const success = data.success;
     if (success) {
