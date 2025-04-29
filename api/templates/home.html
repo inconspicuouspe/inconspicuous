@@ -12,27 +12,6 @@
         <button id="logout-button">Logout</button>
         {% if Settings._CREATE_MEMBERS in session.settings %}
         <style>
-        form {
-            border-radius: 4px;
-            border-color: black;
-            border-width: 2px;
-            border-style: solid;
-            width: min-content;
-            white-space: nowrap;
-        }
-        form * {
-            margin: 4px;
-        }
-        form .settings-box {
-            border-radius: 4px;
-            border-color: black;
-            border-width: 2px;
-            border-style: solid;
-            width: min-content;
-        }
-        form .settings-box * {
-            margin: 4px;
-        }
         .settings-box label {
             border:1px solid #ccc;
             padding:5px;
@@ -48,6 +27,7 @@
             cursor:pointer;
         }
         </style>
+        {% include 'openBoxedSection.html' %}
         <form id="addUserForm">
             <label for="username">Temporary username:</label>
             <input type="text" id="username" name="username" required>
@@ -56,6 +36,7 @@
             <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" max="{{ session.permission_group - 1 }}" required>
             <br>
             <label>Settings:</label>
+            {% include 'openBoxedSection.html' %}
             <div class="settings-box">
             {% for setting in Settings.__members__.values() %}
                 {% if setting in session.settings and not setting.name.startswith("_") and setting.name != "NONE" %}
@@ -66,16 +47,15 @@
                 {% endif %}
             {% endfor %}
             </div>
+            {% include 'closeBoxedSection.html' %}
             <button type="submit">Send</button>
             <p style="visibility: hidden;" id="message"></p>
         </form>
+        {% include 'closeBoxedSection.html' %}
         {% endif %}
         <script>
             {% include 'homeCode.js' %}
         </script>
-        {% include 'openBoxedSection.html' %}
-            Hi!
-        {% include 'closeBoxedSection.html' %}
         {% endif %}
     </body>
 </html>

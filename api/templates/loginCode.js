@@ -24,7 +24,6 @@ function loginSuccess(data) {
         
     }
     messageBox.style.visibility = "visible";
-    messageBox.textContent += " Cookie: " + document.cookie;
 }
 form.addEventListener("submit", (event) => {
     event.preventDefault();
