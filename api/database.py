@@ -73,6 +73,22 @@ class Database(ABC, Hashable):
     @abstractmethod
     def remove_unfilled_user(self, username: str) -> bool:
         pass
+    
+    @abstractmethod
+    def get_user_profile(self, username: str) -> Optional[UserProfile]:
+        pass
+    
+    @abstractmethod
+    def set_permission_group(self, username: str, permission_group: int) -> bool:
+        pass
+    
+    @abstractmethod
+    def set_settings(self, username: str, settings: int) -> bool:
+        pass
+    
+    @abstractmethod
+    def disable_user(self, username: str) -> bool:
+        pass
 
 class MongoDB(Database):
     client: MongoClient
@@ -183,4 +199,20 @@ class MongoDB(Database):
     
     def remove_unfilled_user(self, username):
         document = self.users.find_one_and_delete({FIELD_UNFILLED: True, FIELD_LOOKUP_USERNAME: username.lower()})
+        return document is not None
+    
+    def get_user_profile(self, username):
+        document = self.users.find_one({FIELD_LOOKUP_USERNAME: username.lower()})
+        return UserProfile(document.get(FIELD_USERNAME, "???"), document.get(FIELD_USER_ID, "???"), authentication.Settings(document.get(FIELD_SETTINGS, 0)), document.get(FIELD_PERMISSION_GROUP), document.get(FIELD_UNFILLED))
+    
+    def set_permission_group(self, username, permission_group):
+        document = self.users.find_one_and_update({FIELD_LOOKUP_USERNAME: username.lower()}, {"$set": {FIELD_PERMISSION_GROUP: permission_group}})
+        return document is not None
+    
+    def set_settings(self, username, settings):
+        document = self.users.find_one_and_update({FIELD_LOOKUP_USERNAME: username.lower()}, {"$set": {FIELD_SETTINGS: settings}})
+        return document is not None
+    
+    def disable_user(self, username):
+        document = self.users.find_one_and_update({FIELD_LOOKUP_USERNAME: username.lower(), FIELD_UNFILLED: True}, {"$set": {FIELD_UNFILLED: False}})
         return document is not None

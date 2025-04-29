@@ -160,6 +160,21 @@ def remove_unfilled_user(database: _database.Database, username: str) -> None:
     if not success:
         raise NotFoundError()
 
+def set_permission_group(database: _database.Database, username: str, permission_group: int) -> None:
+    success = database.set_permission_group(username, permission_group)
+    if not success:
+        raise NotFoundError()
+
+def set_settings(database: _database.Database, username: str, settings: Settings) -> None:
+    success = database.set_settings(username, settings.value)
+    if not success:
+        raise NotFoundError()
+
+def disable_user(database: _database.Database, username: str):
+    success = database.disable_user(username)
+    if not success:
+        raise NotFoundError()
+
 @cached(cache=LRUCache(1<<16, sys.getsizeof))
 def check_session(database: _database.Database, session_data: SessionData) -> str:
     user = lookup_user_by_session_data(database, session_data.data)
@@ -169,14 +184,14 @@ def login(database: _database.Database, username: str, password: str, session_na
     if not database.has_username(username):
         raise NotFoundError()
     user_login_data = lookup_user_login_data(database, username)
-    username = database.get_correctly_cased_username(username)
-    if username is None:
+    corrected_username = database.get_correctly_cased_username(username)
+    if corrected_username is None:
         raise NotFoundError()
-    generated_login_data = create_login_data(username, password, user_login_data.login_token)
+    generated_login_data = create_login_data(corrected_username, password, user_login_data.login_token)
     success = compare_digest(user_login_data.data, generated_login_data.data)
     if not success:
         raise InvalidCredentials()
-    return make_session(database, username, session_name)
+    return make_session(database, corrected_username, session_name)
 
 def sign_up(database: _database.Database, username: str, password: str, session_name: str, user_slot: str) -> SessionData:
     validate_username_and_password(username, password)

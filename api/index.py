@@ -16,13 +16,16 @@ from .authentication import login as auth_login
 from .authentication import sign_up as auth_sign_up
 from .authentication import logout as auth_logout
 from .authentication import create_user_slot as auth_create_user_slot
+from .authentication import disable_user as auth_disable_user
 from .authentication import (
     extract_session,
     extract_session_or_empty,
     SESSION_DATA_COOKIE_NAME,
     Settings,
     username_constraints,
-    remove_unfilled_user
+    remove_unfilled_user,
+    set_permission_group,
+    set_settings
 )
 from .exceptions import (
     MyError,
@@ -156,24 +159,52 @@ def remove_user():
 
 @app.post("/deactivate_user/")
 def deactivate_user():
+    form_data = request.json
+    username = form_data[FIELD_USERNAME]
     try:
-        raise Unimplemented()
+        session = extract_session(db, request)
+        if Settings._DISABLE_MEMBERS not in session.settings:
+            raise Unauthorized()
+        user_profile = db.get_user_profile(username)
+        if user_profile.permission_group >= session.permission_group:
+            raise Unauthorized()
+        auth_disable_user(db, username)
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     return jsonify({FIELD_SUCCESS: True})
 
 @app.post("/edit_user_permission_group/")
 def edit_user_permission_group():
+    form_data = request.json
+    username = form_data[FIELD_USERNAME]
+    new_permission_group = form_data[FIELD_PERMISSION_GROUP]
     try:
-        raise Unimplemented()
+        session = extract_session(db, request)
+        if Settings._EDIT_MEMBER_SETTINGS not in session.settings:
+            raise Unauthorized()
+        user_profile = db.get_user_profile(username)
+        if user_profile.permission_group >= session.permission_group:
+            raise Unauthorized()
+        if new_permission_group >= session.permission_group:
+            raise Unauthorized()
+        set_permission_group(db, username, new_permission_group)
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     return jsonify({FIELD_SUCCESS: True})
 
 @app.post("/edit_user_settings/")
 def edit_user_settings():
+    form_data = request.json
+    username = form_data[FIELD_USERNAME]
+    new_settings = form_data[FIELD_SETTINGS]
     try:
-        raise Unimplemented()
+        session = extract_session(db, request)
+        if Settings._EDIT_MEMBER_SETTINGS not in session.settings:
+            raise Unauthorized()
+        user_profile = db.get_user_profile(username)
+        if user_profile.permission_group >= session.permission_group:
+            raise Unauthorized()
+        set_settings(db, username, Settings(new_settings))
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     return jsonify({FIELD_SUCCESS: True})
