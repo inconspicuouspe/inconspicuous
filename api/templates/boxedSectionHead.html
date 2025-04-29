@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=keyboard_arrow_down" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=keyboard_arrow_up" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=keyboard_arrow_down,keyboard_arrow_up" />
 <style>
 .boxed-section {
     border-style: solid;
@@ -15,14 +14,23 @@
   width: min-content;
   height: min-content;
 }
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
 </style>
 <script>
 function handleBoxedSectionOpenerButton(event) {
     event.target.parentNode.style.visibility = "hidden";
     event.target.parentNode.parentNode.firstChild.style.visibility = "visible";
+    console.log(event);
 }
 function handleBoxedSectionCloserButton(event) {
+    console.log(event);
     event.target.parentNode.parentNode.style.visibility = "hidden";
-    event.target.parentNode.parentNode.lastChild.style.visibility = "visible";
+    event.target.parentNode.parentNode.parentNode.lastChild.style.visibility = "visible";
 }
 </script>
