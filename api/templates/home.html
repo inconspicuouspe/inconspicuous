@@ -43,7 +43,12 @@
         .copy-link {
             border-radius: 4px;
             border-style: none;
-            background-color: lightblue;
+            background-color: darkblue;
+            color: white;
+            cursor: pointer;
+        }
+        .copy-link .copy-link-text {
+            vertical-align: super;
         }
         </style>
         {% include 'openBoxedSection.html' %}
@@ -71,12 +76,12 @@
             <button type="submit">Erstellen</button>
             <div class="message" style="visibility: hidden;">
                 <p></p>
-                <div class="copy-link" onclick="copyAddUserMessageLink(event);">
-                    <span class="material-symbols-outlined" style="visibility: hidden;">
+                <button class="copy-link" onclick="copyAddUserMessageLink(event);" style="visibility: hidden;">
+                    <span class="material-symbols-outlined">
                         content_copy
                     </span>
-                    <span>Copy link</span>
-                </div>
+                    <span class="copy-link-text">Copy link</span>
+                </button>
             </div>
         </form>
         {% include 'closeBoxedSection.html' %}
