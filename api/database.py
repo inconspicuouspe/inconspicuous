@@ -65,6 +65,10 @@ class Database(ABC, Hashable):
     @abstractmethod
     def list_users(self) -> list[UserProfile]:
         pass
+    
+    @abstractmethod
+    def get_correctly_cased_username(self, username: str) -> str:
+        pass
 
 class MongoDB(Database):
     client: MongoClient
@@ -166,3 +170,7 @@ class MongoDB(Database):
             UserProfile(document.get(FIELD_USERNAME, "???"), document.get(FIELD_USER_ID, "???"), authentication.Settings(document.get(FIELD_SETTINGS, 0)), document.get(FIELD_PERMISSION_GROUP), document.get(FIELD_UNFILLED))
             for document in self.users.find()
         ]
+    
+    def get_correctly_cased_username(self, username):
+        document = self.users.find_one({FIELD_LOOKUP_USERNAME: username})
+        return document[FIELD_USERNAME]

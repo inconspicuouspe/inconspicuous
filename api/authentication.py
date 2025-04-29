@@ -162,6 +162,7 @@ def login(database: _database.Database, username: str, password: str, session_na
     if not database.has_username(username):
         raise NotFoundError()
     user_login_data = lookup_user_login_data(database, username)
+    username = database.get_correctly_cased_username(username)
     generated_login_data = create_login_data(username, password, user_login_data.login_token)
     success = compare_digest(user_login_data.data, generated_login_data.data)
     if not success:
