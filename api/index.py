@@ -171,7 +171,7 @@ def deactivate_user():
         auth_disable_user(db, username)
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
-    return jsonify({FIELD_SUCCESS: True})
+    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: user_profile.user_id})
 
 @app.post("/edit_user_permission_group/")
 def edit_user_permission_group():
@@ -208,3 +208,28 @@ def edit_user_settings():
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     return jsonify({FIELD_SUCCESS: True})
+
+@app.get("/get_user/<username>/")
+def get_user(username):
+    try:
+        session = extract_session(db, request)
+        if Settings.VIEW_MEMBERS not in session.settings:
+            raise Unauthorized()
+        user_profile = db.get_user_profile(username)
+        if user_profile.unfilled and Settings._VIEW_INVITED_MEMBERS not in session.settings:
+            raise Unauthorized()
+        if Settings._VIEW_MEMBER_SETTINGS not in session.settings or user_profile > session.permission_group:
+            permission_group = -1
+            settings_value = -1
+        else:
+            permission_group = user_profile.permission_group
+            settings_value = user_profile.settings.value
+        user_id = user_profile.user_id if not user_profile.unfilled else "???"
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: {
+        FIELD_USERNAME: username,
+        FIELD_SETTINGS: settings_value,
+        FIELD_PERMISSION_GROUP: permission_group,
+        FIELD_USER_ID: user_id
+    }})
