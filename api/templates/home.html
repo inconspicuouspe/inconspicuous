@@ -55,7 +55,7 @@
                 {% if setting in session.settings and not setting.name.startswith("_") and setting.name != "NONE" %}
                 <label>
                     <input name="setting_{{ setting.name }}" id="setting_{{ setting.name }}" type="checkbox">
-                    {{ setting.name.get_translated_name() }}
+                    {{ setting.get_translated_name() }}
                 </label>
                 {% endif %}
             {% endfor %}
