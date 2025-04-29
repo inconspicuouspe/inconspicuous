@@ -28,12 +28,12 @@
 <script>
 function handleBoxedSectionOpenerButton(event) {
     event.target.parentNode.style.display = "none";
-    event.target.parentNode.parentNode.firstElementChild.style.display = "unset";
+    event.target.parentNode.parentNode.firstElementChild.style.display = "inherit";
     console.log(event);
 }
 function handleBoxedSectionCloserButton(event) {
     console.log(event);
     event.target.parentNode.parentNode.style.display = "none";
-    event.target.parentNode.parentNode.parentNode.lastElementChild.style.display = "unset";
+    event.target.parentNode.parentNode.parentNode.lastElementChild.style.display = "inherit";
 }
 </script>
