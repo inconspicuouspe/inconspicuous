@@ -39,6 +39,12 @@
             background:#eee;
             cursor:pointer;
         }
+
+        .copy-link {
+            border-radius: 4px;
+            border-style: none;
+            background-color: lightblue;
+        }
         </style>
         {% include 'openBoxedSection.html' %}
         <form id="addUserForm">
@@ -61,8 +67,17 @@
             {% endfor %}
             </div>
             {% include 'closeBoxedSection.html' %}
+            <br>
             <button type="submit">Erstellen</button>
-            <p style="visibility: hidden;" id="message"></p>
+            <div class="message" style="visibility: hidden;">
+                <p></p>
+                <div class="copy-link" onclick="copyAddUserMessageLink(event);">
+                    <span class="material-symbols-outlined" style="visibility: hidden;">
+                        content_copy
+                    </span>
+                    <span>Copy link</span>
+                </div>
+            </div>
         </form>
         {% include 'closeBoxedSection.html' %}
         {% endif %}

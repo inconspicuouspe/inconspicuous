@@ -17,14 +17,22 @@ const addUserButton = document.querySelector("#addUserForm");
 const addUserUsernameInput = document.querySelector("#addUserForm #username");
 const addUserPgroupInput = document.querySelector("#addUserForm #pgroup");
 const addUserSettingsDiv = document.querySelector("#addUserForm div.settings-box");
-const addUserMessageBox = document.querySelector("#addUserForm #message");
+const addUserMessageBox = document.querySelector("#addUserForm .message");
+const addUserMessageBoxText = document.querySelector("#addUserForm .message p");
+const addUserMessageBoxLinkElm = document.querySelector("#addUserForm .message .copy-link");
+window.addUserMessageBoxLink = "";
+function copyAddUserMessageLink(event) {
+    navigator.clipboard.writeText(addUserMessageBoxLink);
+}
 function addUserSuccess(data) {
     const success = data.success;
     if (success) {
-        addUserMessageBox.textContent = lastUsername+" was added. The signup link is: https://"+location.host+"{{ url_for('register') }}?user_slot="+data.{{ consts.FIELD_DATA }};
+        addUserMessageBoxText.textContent = lastUsername+" was added."
+        addUserMessageBoxLinkElm.visibility = "visible";
+        window.addUserMessageBoxLink = "https://"+location.host+"{{ url_for('register') }}?user_slot="+data.{{ consts.FIELD_DATA }};
     }
     else {
-        addUserMessageBox.textContent = "That username is already taken."
+        addUserMessageBoxText.textContent = "That username is already taken."
     }
     addUserMessageBox.style.visibility = "visible";
 }
