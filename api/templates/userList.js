@@ -6,7 +6,7 @@ function userListSuccess(data){
     }
 }
 
-const userListDiv = document.querySelector(".userList");
+const userListDiv = document.querySelector("#userList");
 
 function userListLoad() {
     fetch("{{ url_for('get_user_list') }}")
