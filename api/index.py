@@ -180,7 +180,23 @@ def deactivate_user():
         user_slot = auth_disable_user(db, username)
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
-    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: user_slot})
+    return jsonify({FIELD_SUCCESS: True})
+
+@app.get("/get_user_id/<username>/")
+def get_user_id(username):
+    try:
+        session = extract_session(db, request)
+        if Settings.VIEW_MEMBERS not in session.settings:
+            raise Unauthorized()
+        user_profile = db.get_user_profile(username)
+        if user_profile.unfilled and Settings._RETRIEVE_INVITATION not in session.settings:
+            raise Unauthorized()
+        if user_profile.permission_group >= session.permission_group or user_profile.settings not in session.settings:
+            raise Unauthorized()
+        user_id = user_profile.user_id
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: user_id})
 
 @app.post("/edit_user_permission_group/")
 def edit_user_permission_group():
