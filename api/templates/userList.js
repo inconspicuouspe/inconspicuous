@@ -19,7 +19,9 @@ function userListSuccess(data){
         const username = user.{{ consts.FIELD_USERNAME }};
         const pgroup = user.{{ consts.FIELD_PERMISSION_GROUP }};
         const settings = user.{{ consts.FIELD_SETTINGS }};
+        const unfilled = user.{{ consts.FIELD_USER_ID }} === "???";
         const currentLine = createUserListLine();
+        currentLine.classList.add("username-"+username)
         currentLine.querySelector(".username-column").textContent = username;
         currentLine.querySelector(".pgroup-column").textContent = pgroup !== -1 ? pgroup : "?";
         const settingsList = currentLine.querySelector(".settings-column .settings-list")
@@ -38,9 +40,60 @@ function userListSuccess(data){
             }
         }
         if (pgroup < ownPgroup) {
-            const optionButton = createUserListButton();
-            optionButton.textContent = "Option";
-            currentLine.querySelector(".options-column").appendChild(optionButton);
+            {% if Settings._DISABLE_MEMBERS in session.settings %}
+            const disableButton = createUserListButton();
+            disableButton.textContent = "Entregristrieren";
+            disableButton.classList.add("disable-button");
+            disableButton.targetUsername = username;
+            disableButton.onclick = (event) => {
+                event.target.textContent = "...";
+                fetch("{{ url_for('deactivate_user') }}", {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify({ {{ consts.FIELD_USERNAME }}: event.target.targetUsername })
+                }).then((response) => response.json()).then((data) => {
+                    event.target.textContent = "Entregristrieren";
+                    if (data.success) {
+                        event.target.style.display = "none";
+                        const deleteButton = document.querySelector("#userList .username-"+event.target.targetUsername+" .delete-button")
+                        if (deleteButton) deleteButton.style.display = "";
+                    }
+                });
+            }
+            if (!unfilled) {
+                disableButton.style.display = "none";
+            }
+            currentLine.querySelector(".options-column").appendChild(disableButton);
+            {% endif %}
+            {% if Settings._UNINVITE_MEMBERS in session.settings %}
+            const deleteButton = createUserListButton();
+            deleteButton.textContent = "Löschen";
+            deleteButton.classList.add("delete-button");
+            deleteButton.targetUsername = username;
+            deleteButton.onclick = (event) => {
+                event.target.textContent = "...";
+                fetch("{{ url_for('remove_user') }}", {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify({ {{ consts.FIELD_USERNAME }}: event.target.targetUsername })
+                }).then((response) => response.json()).then((data) => {
+                    event.target.textContent = "Löschen";
+                    if (data.success) {
+                        event.target.parentNode.parentNode.remove()
+                    }
+                });
+            }
+            if (unfilled) {
+                deleteButton.style.display = "none";
+            }
+            currentLine.querySelector(".options-column").appendChild(deleteButton);
+            {% endif %}
         }
         userListTable.appendChild(currentLine);
     }

@@ -175,10 +175,10 @@ def deactivate_user():
         user_profile = db.get_user_profile(username)
         if user_profile.permission_group >= session.permission_group:
             raise Unauthorized()
-        auth_disable_user(db, username)
+        user_slot = auth_disable_user(db, username)
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
-    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: user_profile.user_id})
+    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: user_slot})
 
 @app.post("/edit_user_permission_group/")
 def edit_user_permission_group():

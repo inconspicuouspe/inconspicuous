@@ -87,7 +87,7 @@ class Database(ABC, Hashable):
         pass
     
     @abstractmethod
-    def disable_user(self, username: str) -> bool:
+    def disable_user(self, username: str) -> Optional[str]:
         pass
 
 class MongoDB(Database):
@@ -214,5 +214,8 @@ class MongoDB(Database):
         return document is not None
     
     def disable_user(self, username):
-        document = self.users.find_one_and_update({FIELD_LOOKUP_USERNAME: username.lower(), FIELD_UNFILLED: True}, {"$set": {FIELD_UNFILLED: False}})
-        return document is not None
+        user_id = str(uuid4())
+        document = self.users.find_one_and_update({FIELD_LOOKUP_USERNAME: username.lower(), FIELD_UNFILLED: True}, {"$set": {FIELD_UNFILLED: False, FIELD_USER_SLOT: user_id}, "$unset": {FIELD_LOGIN_DATA: ""}})
+        if document is not None:
+            self.sessions.delete_many({FIELD_LOOKUP_USERNAME: username.lower()})
+        return user_id if document is not None else None

@@ -170,10 +170,11 @@ def set_settings(database: _database.Database, username: str, settings: Settings
     if not success:
         raise NotFoundError()
 
-def disable_user(database: _database.Database, username: str):
+def disable_user(database: _database.Database, username: str) -> str:
     success = database.disable_user(username)
     if not success:
         raise NotFoundError()
+    return success
 
 @cached(cache=LRUCache(1<<16, sys.getsizeof))
 def check_session(database: _database.Database, session_data: SessionData) -> str:
