@@ -1,5 +1,6 @@
 from os import environ
 from json import loads
+from traceback import format_exc
 from flask import (
     Flask,
     request,
@@ -79,6 +80,7 @@ def login():
     try:
         session_data = auth_login(db, username, password, session_name(request))
     except MyError as exc:
+        print(format_exc())
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     response = jsonify({FIELD_SUCCESS: True})
     response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data)
