@@ -45,6 +45,7 @@ function userListSuccess(data){
             disableButton.classList.add("disable-button");
             disableButton.targetUsername = username;
             disableButton.onclick = (event) => {
+                if (event.target.textContent === "...") return;
                 event.target.textContent = "...";
                 fetch("{{ url_for('deactivate_user') }}", {
                     headers: {
@@ -73,6 +74,7 @@ function userListSuccess(data){
             deleteButton.classList.add("delete-button");
             deleteButton.targetUsername = username;
             deleteButton.onclick = (event) => {
+                if (event.target.textContent === "...") return;
                 event.target.textContent = "...";
                 fetch("{{ url_for('remove_user') }}", {
                     headers: {
