@@ -16,7 +16,7 @@
                 setting_{{ setting.name }}: {{ setting.value }},{% endfor %}
             };
             const settingsNames = { {% for setting in Settings.__members__.values() %}
-                setting_{{ setting.name }}: {{ setting.get_translated_name() }},{% endfor %}
+                setting_{{ setting.name }}: "{{ setting.get_translated_name() }}",{% endfor %}
             };
         </script>
         {% if Settings._CREATE_MEMBERS in session.settings %}
