@@ -24,7 +24,8 @@ function userListSuccess(data){
         currentLine.querySelector(".pgroup-column").textContent = pgroup;
         const settingsList = currentLine.querySelector(".settings-column .settings-list")
         for (const name in settingsValues) {
-            if (settingsValues[name] & settings === settingsValues[name]) {
+            if (!name.startsWith("setting__") && name != "setting_NONE" && (settingsValues[name] & settings) === settingsValues[name]) {
+                console.log(name, username);
                 const settingElm = document.createElement("li");
                 settingElm.textContent = settingsNames[name];
                 settingsList.appendChild(settingElm);
