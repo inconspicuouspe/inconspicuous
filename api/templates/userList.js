@@ -38,7 +38,7 @@ function userListSuccess(data){
                 }
             }
         }
-        if (pgroup < ownPgroup) {
+        if (pgroup !== -1 && pgroup < ownPgroup) {
             {% if Settings._DISABLE_MEMBERS in session.settings %}
             const disableButton = createUserListButton();
             disableButton.textContent = "Entregristrieren";
