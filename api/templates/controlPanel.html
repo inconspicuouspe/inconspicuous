@@ -89,7 +89,7 @@
         {% if Settings.VIEW_MEMBERS in session.settings %}
         {% include 'openBoxedSection.html' %}
         <div id="userList">...</div>
-        {% include 'closeBoxedSection.html' onFirstOpen="userListLoad" %}
+        {% include 'closeBoxedSection.html' with onFirstOpen="userListLoad" %}
         <script>
             {% include 'userList.js' %}
         </script>
