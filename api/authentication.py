@@ -90,7 +90,7 @@ class Settings(Flag):
 encode_b64 = urlsafe_b64encode
 decode_b64 = urlsafe_b64decode
 
-SESSION_DATA_COOKIE_NAME = "session_data"
+SESSION_DATA_COOKIE_NAME = "session"
 VALID_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-"
 ANONYMOUS_USERNAME = "anonymous"
 USERNAME_MAX_LENGTH = 32
