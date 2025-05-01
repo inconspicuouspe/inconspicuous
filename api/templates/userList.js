@@ -62,7 +62,7 @@ function userListSuccess(data){
                     }
                 });
             }
-            if (!unfilled) {
+            if (unfilled) {
                 disableButton.style.display = "none";
             }
             currentLine.querySelector(".options-column").appendChild(disableButton);
@@ -88,7 +88,7 @@ function userListSuccess(data){
                     }
                 });
             }
-            if (unfilled) {
+            if (!unfilled) {
                 deleteButton.style.display = "none";
             }
             currentLine.querySelector(".options-column").appendChild(deleteButton);
