@@ -26,9 +26,9 @@ function userListSuccess(data){
         currentLine.querySelector(".pgroup-column").textContent = pgroup !== -1 ? pgroup : "?";
         const settingsList = currentLine.querySelector(".settings-column .settings-list");
         if (settings === -1){
-            const settingElm = document.createElement("li");
-            settingElm.textContent = "?";
-            settingsList.appendChild(settingElm);
+            const settingsColumn = currentLine.querySelector(".settings-column");
+            settingsColumn.firstElementChild.remove();
+            settingsColumn.textContent = "?";
         } else {
             for (const name in settingsValues) {
                 if (!name.startsWith("setting__") && name !== "setting_NONE" && (settingsValues[name] & settings) === settingsValues[name]) {
