@@ -5,13 +5,13 @@ const passwordBox = document.querySelector("#password");
 const messageBox = document.querySelector("#message");
 
 function loginSuccess(data) {
-    const success = data.success;
+    const success = data.{{ FIELD_SUCCESS }};
     if (success) {
         messageBox.textContent = "Credentials were correct.";
         location.reload();
     }
     else {
-        switch (data.reason) {
+        switch (data.{{ FIELD_REASON }}) {
             case "{{ exceptions.NotFoundError.identifier }}":
                 messageBox.textContent = "Nutzername nicht gefunden.";
                 break;
