@@ -1,6 +1,6 @@
 </div>
 </div>
-<div onclick="handleBoxedSectionOpenerButton(event);" class="boxed-section-button">
+<div onclick="handleBoxedSectionOpenerButton(event{% if onFirstOpen %}, {{ onFirstOpen }}{% endif %});" class="boxed-section-button">
     <span class="material-symbols-outlined">
         keyboard_arrow_down
     </span>

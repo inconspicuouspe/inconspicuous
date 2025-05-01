@@ -64,6 +64,11 @@ def home():
     session = extract_session_or_empty(db, request)
     return render_template("home.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts)
 
+@app.get("/")
+def control_panel():
+    session = extract_session_or_empty(db, request)
+    return render_template("controlPanel.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts)
+
 @app.post("/login/")
 def login():
     login_data = request.json
