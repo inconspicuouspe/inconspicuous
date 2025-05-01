@@ -44,7 +44,7 @@ function userListSuccess(data){
         }
         userListTable.appendChild(currentLine);
     }
-    userListTable.style.display = "";
+    userListTable.parentNode.style.display = "";
 }
 
 function userListLoad() {
