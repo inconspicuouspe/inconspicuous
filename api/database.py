@@ -142,9 +142,7 @@ class MongoDB(Database):
         return (login_data, login_token)
 
     def has_username(self, username, *, except_user_id = None):
-        user = self.users.find_one({FIELD_LOOKUP_USERNAME: username.lower()})
-        if user and user.get(FIELD_USER_ID) == except_user_id:
-            return False
+        user = self.users.find_one({FIELD_LOOKUP_USERNAME: username.lower(), FIELD_USER_SLOT: {"$ne": except_user_id}})
         return bool(user)
     
     def get_username_by_session_data(self, session_data):
