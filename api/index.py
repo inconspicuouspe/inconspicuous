@@ -67,6 +67,8 @@ def home():
 @app.get("/control_panel/")
 def control_panel():
     session = extract_session_or_empty(db, request)
+    if not session:
+        return redirect(url_for("home"))
     return render_template("controlPanel.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts)
 
 @app.post("/login/")

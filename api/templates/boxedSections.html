@@ -1,3 +1,4 @@
+{% macro sectionHead() -%}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 <style>
 .boxed-section {
@@ -47,3 +48,26 @@ function handleBoxedSectionCloserButton(event) {
     event.target.parentNode.parentNode.parentNode.lastElementChild.style.display = "";
 }
 </script>
+{%- endmacro %}
+
+{% macro openSection() -%}
+<div class="boxed-section">
+<div class="boxed-section-closeable" style="display: none;">
+<div onclick="handleBoxedSectionCloserButton(event);" class="boxed-section-button">
+    <span class="material-symbols-outlined">
+        keyboard_arrow_up
+    </span>
+</div>
+<div class="boxed-content"> 
+{%- endmacro %}
+
+{% macro closeSection(onFirstOpen="") -%}
+</div>
+</div>
+<div onclick="handleBoxedSectionOpenerButton(event{% if onFirstOpen %}, {{ onFirstOpen }}{% endif %});" class="boxed-section-button">
+    <span class="material-symbols-outlined">
+        keyboard_arrow_down
+    </span>
+</div>
+</div>
+{%- endmacro %}

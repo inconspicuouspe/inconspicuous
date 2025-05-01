@@ -1,3 +1,4 @@
+{% import 'boxedSections.html' as boxedSections %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,6 +6,7 @@
     <body>
         <a href="{{ url_for('home') }}"><button type="button">Zurück zum Hauptmenu</button></a>
         {% if Settings._CREATE_MEMBERS in session.settings %}
+        {{ boxedSections.sectionHead() }}
         <style>
         input {
             border-color: darkgray;
@@ -48,7 +50,7 @@
             vertical-align: super;
         }
         </style>
-        {% include 'openBoxedSection.html' %}
+        {{ boxedSections.openSection() }}
         <form id="addUserForm">
             <label for="username">Temporärer Nutzername:</label>
             <input type="text" id="username" name="username" required>
@@ -57,7 +59,7 @@
             <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" max="{{ session.permission_group - 1 }}" required>
             <br>
             <label>Einstellungen/Berechtigungen:</label>
-            {% include 'openBoxedSection.html' %}
+            {{ boxedSections.openSection() }}
             <div class="settings-box">
             {% for setting in Settings.__members__.values() %}
                 {% if setting in session.settings and not setting.name.startswith("_") and setting.name != "NONE" %}
@@ -68,7 +70,7 @@
                 {% endif %}
             {% endfor %}
             </div>
-            {% include 'closeBoxedSection.html' %}
+            {{ boxedSections.closeSection() }}
             <br>
             <button type="submit">Erstellen</button>
             <div class="message" style="display: none;">
@@ -81,15 +83,15 @@
                 </button>
             </div>
         </form>
-        {% include 'closeBoxedSection.html' %}
+        {{ boxedSections.closeSection() }}
         <script>
             {% include 'addUserForm.js' %}
         </script>
         {% endif %}
         {% if Settings.VIEW_MEMBERS in session.settings %}
-        {% include 'openBoxedSection.html' %}
+        {{ boxedSections.openSection() }}
         <div id="userList">...</div>
-        {% include 'closeBoxedSection.html' with onFirstOpen="userListLoad" %}
+        {{ boxedSections.closeSection("userListLoad") }}
         <script>
             {% include 'userList.js' %}
         </script>
