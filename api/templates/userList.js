@@ -13,6 +13,7 @@ function createUserListButton() {
 function userListSuccess(data){
     const success = data.{{ consts.FIELD_SUCCESS }};
     if (!success) return;
+    const userListTable = userListDiv.querySelector("table");
     userListDiv.firstChild.remove();
     for (const user of data.{{ consts.FIELD_DATA }}) {
         const username = user.{{ consts.FIELD_USERNAME }};
@@ -32,9 +33,9 @@ function userListSuccess(data){
         const optionButton = createUserListButton();
         optionButton.textContent = "Option";
         currentLine.querySelector(".options-column").appendChild(optionButton);
-        userListDiv.appendChild(currentLine);
+        userListTable.appendChild(currentLine);
     }
-    userListDiv.style.display = "";
+    userListTable.style.display = "";
 }
 
 function userListLoad() {
