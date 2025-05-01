@@ -9,6 +9,16 @@
     </head>
     <body>
         <a href="{{ url_for('home') }}"><button type="button">Zurück zum Hauptmenu</button></a>
+        <script>
+            const ownSettings = {{ session.settings.value }};
+            const ownPgroup = {{ session.permission_group }};
+            const settingsValues = { {% for setting in Settings.__members__.values() %}
+                setting_{{ setting.name }}: {{ setting.value }},{% endfor %}
+            };
+            const settingsNames = { {% for setting in Settings.__members__.values() %}
+                setting_{{ setting.name }}: {{ setting.get_translated_name() }},{% endfor %}
+            };
+        </script>
         {% if Settings._CREATE_MEMBERS in session.settings %}
         
         <style>
@@ -87,15 +97,40 @@
                 </button>
             </div>
         </form>
-        {{ boxedSections.closeSection() }}
+        {{ boxedSections.closeSection("Nutzer hinzufügen") }}
         <script>
             {% include 'addUserForm.js' %}
         </script>
         {% endif %}
         {% if Settings.VIEW_MEMBERS in session.settings %}
         {{ boxedSections.openSection() }}
-        <div id="userList">...</div>
-        {{ boxedSections.closeSection("userListLoad") }}
+        <div id="userList">
+            ...
+            <table style="display: none;">
+                <tr>
+                    <th>Nutzername</th>
+                    <th>Berechtigungsgruppe</th>
+                    <th>Einstellungen/Berechtigungen</th>
+                    <th>Optionen</th>
+                </tr>
+            </table>
+        </div>
+        {{ boxedSections.closeSection("Nutzerliste", "userListLoad") }}
+        <template id="user-table-line-template">
+            <tr>
+                <td class="username-column"></td>
+                <td class="pgroup-column"></td>
+                <td class="settings-column">
+                    {{ boxedSections.openSection() }}
+                    <ul class="settings-list"></ul>
+                    {{ boxedSections.closeSection() }}
+                </td>
+                <td class="options-column"></td>
+            </tr>
+        </template>
+        <template id="user-table-option-button-template">
+            <button type="button" class="user-table-option-button"></button>
+        </template>
         <script>
             {% include 'userList.js' %}
         </script>

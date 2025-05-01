@@ -14,15 +14,14 @@
 .boxed-section-button {
     border: none;
     background: inherit;
-    width: min-content;
     height: min-content;
-    aspect-ratio: 1/1;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 0;
     user-select: none;
     cursor: pointer;
+}
+.boxed-section-button .material-symbols-outlined {
+    aspect-ratio: 1/1;
 }
 .material-symbols-outlined {
     font-variation-settings:
@@ -37,13 +36,12 @@ boxedSectionOpenButtonsClicked = [];
 function handleBoxedSectionOpenerButton(event, onFirstOpen) {
     if (!boxedSectionOpenButtonsClicked.includes(event.target) && onFirstOpen) {
         onFirstOpen();
+        boxedSectionOpenButtonsClicked.push(event.target);
     }
     event.target.parentNode.style.display = "none";
     event.target.parentNode.parentNode.firstElementChild.style.display = "";
-    console.log(event);
 }
 function handleBoxedSectionCloserButton(event) {
-    console.log(event);
     event.target.parentNode.parentNode.style.display = "none";
     event.target.parentNode.parentNode.parentNode.lastElementChild.style.display = "";
 }
@@ -53,21 +51,22 @@ function handleBoxedSectionCloserButton(event) {
 {% macro openSection() -%}
 <div class="boxed-section">
 <div class="boxed-section-closeable" style="display: none;">
-<div onclick="handleBoxedSectionCloserButton(event);" class="boxed-section-button">
-    <span class="material-symbols-outlined">
+<div class="boxed-section-button">
+    <span onclick="handleBoxedSectionCloserButton(event);" class="material-symbols-outlined">
         keyboard_arrow_up
     </span>
 </div>
 <div class="boxed-content"> 
 {%- endmacro %}
 
-{% macro closeSection(onFirstOpen="") -%}
+{% macro closeSection(title="", onFirstOpen="") -%}
 </div>
 </div>
-<div onclick="handleBoxedSectionOpenerButton(event{% if onFirstOpen %}, {{ onFirstOpen }}{% endif %});" class="boxed-section-button">
-    <span class="material-symbols-outlined">
+<div class="boxed-section-button">
+    <span onclick="handleBoxedSectionOpenerButton(event{% if onFirstOpen %}, {{ onFirstOpen }}{% endif %});" class="material-symbols-outlined">
         keyboard_arrow_down
     </span>
+    {{ title }}
 </div>
 </div>
 {%- endmacro %}

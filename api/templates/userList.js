@@ -1,12 +1,41 @@
+const userListDiv = document.querySelector("#userList");
+const userListLineTemplate = document.querySelector("template#user-table-line-template");
+const userListButtonTemplate = document.querySelector("template#user-table-option-button-template");
+
+function createUserListLine() {
+    return document.importNode(userListLineTemplate.content.querySelector("tr"));
+}
+
+function createUserListButton() {
+    return document.importNode(userListButtonTemplate.content.querySelector("button"));
+}
+
 function userListSuccess(data){
     const success = data.{{ consts.FIELD_SUCCESS }};
     if (!success) return;
-    for (user of data.{{ consts.FIELD_DATA }}) {
-        userListDiv.append(user.username + "  ");
+    userListDiv.firstChild.remove();
+    for (const user of data.{{ consts.FIELD_DATA }}) {
+        const username = user.{{ consts.FIELD_USERNAME }};
+        const pgroup = user.{{ consts.FIELD_PERMISSION_GROUP }};
+        const settings = user.{{ consts.FIELD_SETTINGS }};
+        const currentLine = createUserListLine();
+        currentLine.querySelector(".username-column").textContent = username;
+        currentLine.querySelector(".pgroup-column").textContent = pgroup;
+        const settingsList = currentLine.querySelector(".settings-column .settings-list")
+        for (const name in settingsValues) {
+            if (settingsValues[name] & settings === settingsValues[name]) {
+                const settingElm = document.createElement("li");
+                settingElm.textContent = settingsNames[name];
+                settingsList.appendChild(settingElm);
+            }
+        }
+        const optionButton = createUserListButton();
+        optionButton.textContent = "Option";
+        currentLine.querySelector(".options-column").appendChild(optionButton);
+        userListDiv.appendChild(currentLine);
     }
+    userListDiv.style.display = "";
 }
-
-const userListDiv = document.querySelector("#userList");
 
 function userListLoad() {
     fetch("{{ url_for('get_user_list') }}")
