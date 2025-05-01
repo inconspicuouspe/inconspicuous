@@ -7,7 +7,7 @@ const userSlot = new URLSearchParams(location.search).get("user_slot");
 function signupSuccess(data) {
     const success = data.{{ consts.FIELD_SUCCESS }};
     if (success) {
-        messageBox.textContent = "Signup credentials were correct.";
+        messageBox.textContent = "Konto erstellt.";
         location.replace("{{ url_for('home') }}")
     }
     else {

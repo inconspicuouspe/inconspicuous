@@ -7,7 +7,7 @@ const messageBox = document.querySelector("#message");
 function loginSuccess(data) {
     const success = data.{{ consts.FIELD_SUCCESS }};
     if (success) {
-        messageBox.textContent = "Credentials were correct.";
+        messageBox.textContent = "Eingeloggt.";
         location.reload();
     }
     else {
