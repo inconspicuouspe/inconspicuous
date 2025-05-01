@@ -112,12 +112,12 @@ class MongoDB(Database):
         return user_id
     
     def create_user(self, username, login_data, login_token, user_slot):
-        user_slot_data = self.users.find_one({"user_id": user_slot})
-        if not user_slot:
+        user_slot_data = self.users.find_one({FIELD_USER_SLOT: user_slot})
+        if not user_slot_data:
             raise NotFoundError()
-        if not user_slot_data.get("unfilled"):
+        if not user_slot_data.get(FIELD_UNFILLED):
             raise UserSlotTakenError()
-        self.users.update_one({"user_id": user_slot}, {"$set":
+        self.users.update_one({FIELD_USER_SLOT: user_slot}, {"$set":
             {
                 FIELD_UNFILLED: False,
                 FIELD_USERNAME: username,
