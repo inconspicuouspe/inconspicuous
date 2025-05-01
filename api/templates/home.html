@@ -10,7 +10,9 @@
         Eingeloggt als {{ session.username }}.
         <button id="logout-button">Ausloggen</button>
         <a href="{{ url_for('control_panel') }}"><button type="button">Kontrollpanel</button></a>
-        {% include 'homeCode.js' %}
+        <script>
+            {% include 'homeCode.js' %}
+        </script>
         {% endif %}
     </body>
 </html>
