@@ -14,7 +14,7 @@ FIELD_SESSION_DATA = "session_data"
 FIELD_SESSION_NAME = "session_name"
 FIELD_CREATION_TIME = "creation_time"
 FIELD_PASSWORD = "password"
-FIELD_USER_SLOT = "user_slot"
+FIELD_USER_SLOT = "user_id"
 
 SETTINGS_NAME_TRANSLATIONS = {
     "NONE": "Keine",
