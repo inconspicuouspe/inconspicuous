@@ -21,7 +21,7 @@ function userListSuccess(data){
         const settings = user.{{ consts.FIELD_SETTINGS }};
         const currentLine = createUserListLine();
         currentLine.querySelector(".username-column").textContent = username;
-        currentLine.querySelector(".pgroup-column").textContent = pgroup ? pgroup !== -1 : "?";
+        currentLine.querySelector(".pgroup-column").textContent = pgroup !== -1 ? pgroup : "?";
         const settingsList = currentLine.querySelector(".settings-column .settings-list")
         if (settings === -1){
             const settingElm = document.createElement("li");
