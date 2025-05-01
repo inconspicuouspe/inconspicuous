@@ -21,10 +21,10 @@ function userListSuccess(data){
         const settings = user.{{ consts.FIELD_SETTINGS }};
         const unfilled = user.{{ consts.FIELD_USER_ID }} === "???";
         const currentLine = createUserListLine();
-        currentLine.classList.add("username-"+username)
+        console.log("username-"+username);//currentLine.classList.add("username-"+username);
         currentLine.querySelector(".username-column").textContent = username;
         currentLine.querySelector(".pgroup-column").textContent = pgroup !== -1 ? pgroup : "?";
-        const settingsList = currentLine.querySelector(".settings-column .settings-list")
+        const settingsList = currentLine.querySelector(".settings-column .settings-list");
         if (settings === -1){
             const settingElm = document.createElement("li");
             settingElm.textContent = "?";
@@ -32,7 +32,6 @@ function userListSuccess(data){
         } else {
             for (const name in settingsValues) {
                 if (!name.startsWith("setting__") && name !== "setting_NONE" && (settingsValues[name] & settings) === settingsValues[name]) {
-                    console.log(name, username);
                     const settingElm = document.createElement("li");
                     settingElm.textContent = settingsNames[name];
                     settingsList.appendChild(settingElm);
