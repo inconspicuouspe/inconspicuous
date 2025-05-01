@@ -103,17 +103,25 @@
         </script>
         {% endif %}
         {% if Settings.VIEW_MEMBERS in session.settings %}
+        <style>
+            #userList ul {
+                margin: 0;
+            }
+            #userList th {
+                text-align: left;
+            }
+        </style>
         {{ boxedSections.openSection() }}
         <div id="userList">
             ...
-            <table style="display: none;">
+            <table style="display: none;"><tbody>
                 <tr>
                     <th>Nutzername</th>
                     <th>Berechtigungsgruppe</th>
                     <th>Einstellungen/Berechtigungen</th>
                     <th>Optionen</th>
                 </tr>
-            </table>
+            </tbody></table>
         </div>
         {{ boxedSections.closeSection("Nutzerliste", "userListLoad") }}
         <template id="user-table-line-template">

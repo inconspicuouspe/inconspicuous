@@ -13,7 +13,7 @@ function createUserListButton() {
 function userListSuccess(data){
     const success = data.{{ consts.FIELD_SUCCESS }};
     if (!success) return;
-    const userListTable = userListDiv.querySelector("table");
+    const userListTable = userListDiv.querySelector("tbody");
     userListDiv.firstChild.remove();
     for (const user of data.{{ consts.FIELD_DATA }}) {
         const username = user.{{ consts.FIELD_USERNAME }};
