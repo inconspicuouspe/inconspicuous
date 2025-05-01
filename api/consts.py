@@ -25,7 +25,7 @@ SETTINGS_NAME_TRANSLATIONS = {
     "DISABLE_MEMBERS": "Benutzer deaktivieren",
     "VIEW_INVITED_MEMBERS": "Eingeladene Nutzer ansehen",
     "UNINVITE_MEMBERS": "Eingeladene Nutzer entfernen",
+    "RETRIEVE_INVITATION": "Einladungen wiederherstellen",
     "ADMIN": "Administrator",
-    "SYS_ADMIN": "Systemadministrator",
-    "RETRIEVE_INVITATION": "Einladungen wiederherstellen"
+    "SYS_ADMIN": "Systemadministrator"
 }

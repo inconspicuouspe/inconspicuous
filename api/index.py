@@ -83,7 +83,7 @@ def login():
         print(format_exc())
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     response = jsonify({FIELD_SUCCESS: True})
-    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data)
+    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data, max_age=86400*30)
     return response
 
 @app.get("/register/")
@@ -101,7 +101,7 @@ def register():
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     response = jsonify({FIELD_SUCCESS: True})
-    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data)
+    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data, max_age=86400*30)
     return response
 
 @app.post("/logout/")
