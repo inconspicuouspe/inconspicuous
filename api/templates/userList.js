@@ -21,7 +21,7 @@ function userListSuccess(data){
         const settings = user.{{ consts.FIELD_SETTINGS }};
         const unfilled = user.{{ consts.FIELD_USER_ID }} === "???";
         const currentLine = createUserListLine();
-        console.log("username-"+username);//currentLine.classList.add("username-"+username);
+        currentLine.classList.add("username-"+username);
         currentLine.querySelector(".username-column").textContent = username;
         currentLine.querySelector(".pgroup-column").textContent = pgroup !== -1 ? pgroup : "?";
         const settingsList = currentLine.querySelector(".settings-column .settings-list");
