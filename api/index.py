@@ -191,7 +191,7 @@ def get_user_id(username):
         user_profile = db.get_user_profile(username)
         if user_profile.unfilled and Settings._RETRIEVE_INVITATION not in session.settings:
             raise Unauthorized()
-        if user_profile.permission_group >= session.permission_group or user_profile.settings not in session.settings:
+        if user_profile.unfilled and (user_profile.permission_group >= session.permission_group or user_profile.settings not in session.settings):
             raise Unauthorized()
         user_id = user_profile.user_id
     except MyError as exc:
