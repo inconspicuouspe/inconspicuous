@@ -5,13 +5,13 @@ const passwordBox = document.querySelector("#password");
 const messageBox = document.querySelector("#message");
 const userSlot = new URLSearchParams(location.search).get("user_slot");
 function signupSuccess(data) {
-    const success = data.{{ FIELD_SUCCESS }};
+    const success = data.{{ consts.FIELD_SUCCESS }};
     if (success) {
         messageBox.textContent = "Signup credentials were correct.";
         location.replace("{{ url_for('home') }}")
     }
     else {
-        switch (data.{{ FIELD_REASON }}) {
+        switch (data.{{ consts.FIELD_REASON }}) {
             case "{{ exceptions.CannotBeNamedAnonymous.identifier }}":
                 messageBox.textContent = "Dein Nutzername kann nicht 'Anonymous' sein.";
                 break;

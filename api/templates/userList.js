@@ -1,7 +1,7 @@
 function userListSuccess(data){
-    const success = data.{{ const.FIELD_SUCCESS }};
+    const success = data.{{ consts.FIELD_SUCCESS }};
     if (!success) return;
-    for (user of data.{{ const.FIELD_DATA }}) {
+    for (user of data.{{ consts.FIELD_DATA }}) {
         userListDiv.append(user.username + "  ");
     }
 }
