@@ -3,11 +3,11 @@ const userListLineTemplate = document.querySelector("template#user-table-line-te
 const userListButtonTemplate = document.querySelector("template#user-table-option-button-template");
 
 function createUserListLine() {
-    return document.importNode(userListLineTemplate.content.querySelector("tr", true));
+    return document.importNode(userListLineTemplate.content.querySelector("tr"), true);
 }
 
 function createUserListButton() {
-    return document.importNode(userListButtonTemplate.content.querySelector("button", true));
+    return document.importNode(userListButtonTemplate.content.querySelector("button"), true);
 }
 
 function userListSuccess(data){
