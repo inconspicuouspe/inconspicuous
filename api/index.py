@@ -64,7 +64,7 @@ def home():
     session = extract_session_or_empty(db, request)
     return render_template("home.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts)
 
-@app.get("/")
+@app.get("/control_panel/")
 def control_panel():
     session = extract_session_or_empty(db, request)
     return render_template("controlPanel.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts)
