@@ -1,13 +1,3 @@
-const logoutButton = document.querySelector("#logout-button");
-logoutButton.addEventListener("click", (event) => {
-    fetch("{{ url_for('logout') }}", {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: "POST",
-    }).then(()=>{location.reload();});
-})
 window.lastUsername = null;
 {% if Settings._CREATE_MEMBERS in session.settings %}
 const settingsValues = { {% for setting in Settings.__members__.values() %}{% if setting in session.settings %}

@@ -2,11 +2,15 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>
+        Kontrollpanel
+        </title>
+        {{ boxedSections.sectionHead() }}
     </head>
     <body>
         <a href="{{ url_for('home') }}"><button type="button">Zurück zum Hauptmenu</button></a>
         {% if Settings._CREATE_MEMBERS in session.settings %}
-        {{ boxedSections.sectionHead() }}
+        
         <style>
         input {
             border-color: darkgray;
