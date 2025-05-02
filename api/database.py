@@ -175,9 +175,9 @@ class MongoDB(Database):
 
     def get_session(self, session_data):
         session = self.sessions.find_one({FIELD_SESSION_DATA: session_data})
-        account = self.users.find_one({FIELD_LOOKUP_USERNAME: session.get(FIELD_LOOKUP_USERNAME)})
         if not session:
             return None
+        account = self.users.find_one({FIELD_LOOKUP_USERNAME: session.get(FIELD_LOOKUP_USERNAME)})
         return authentication.Session(session.get(FIELD_SESSION_DATA), session.get(FIELD_CREATION_TIME), session.get(FIELD_USERNAME), session.get(FIELD_SESSION_NAME), authentication.Settings(account.get(FIELD_SETTINGS)), account.get(FIELD_PERMISSION_GROUP))
     
     def delete_session(self, session_data):
