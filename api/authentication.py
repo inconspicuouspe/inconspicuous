@@ -211,7 +211,7 @@ def logout(database: _database.Database, response: Response, request: Request) -
     if session_data is None:
         return response
     database.delete_session(session_data.data)
-    response.set_cookie("session_data", "", expires=0)
+    response.set_cookie(SESSION_DATA_COOKIE_NAME, "", expires=0)
     return response
 
 def extract_session(database: _database.Database, request: Request) -> Session:
