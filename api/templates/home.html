@@ -37,7 +37,7 @@
                 </style>
                 <p>Eingeloggt als {{ session.username }}.</p>
                 <button class="login_button" id="logout-button">Ausloggen</button>
-                <a class="login_button" href="{{ url_for('control_panel') }}"><button type="button">Kontrollpanel</button></a>
+                <a href="{{ url_for('control_panel') }}"><button class="login_button" type="button">Kontrollpanel</button></a>
                 <a class="login_button" href="https://leanderkafemann.github.io/LK-Regeln/">Abstimmungsregeln</a>
                 <script>
                     {% include 'homeCode.js' %}
