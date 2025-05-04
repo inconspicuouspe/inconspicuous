@@ -1,6 +1,6 @@
 {
     "rewrites": [
-        { "source": "/static/images/:path", "destination": "https://thecommcraft.de/inconspicuousimages/:path"}
+        { "source": "/static/images/:path", "destination": "https://thecommcraft.de/inconspicuousimages/:path"},
         { "source": "/(.*)", "destination": "/api/index" }
     ]
 }
