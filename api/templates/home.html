@@ -3,7 +3,6 @@
 <head>
     <title>Home</title>
     <link rel="manifest" href="manifest" />
-    <link rel="stylesheet" href="https://leanderkafemann.github.io/bueroWebsite/styling/forms.css" />
     <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
 </head>
     <body>
@@ -34,9 +33,9 @@
                     }
                 </style>
                 <p>Eingeloggt als {{ session.username }}.</p>
-                <button id="logout-button" class="login_button">Ausloggen</button>
-                <a href="{{ url_for('control_panel') }}"><button class="login_button" type="button">Kontrollpanel</button></a>
-                <a href="https://leanderkafemann.github.io/LK-Regeln/" class="login_button">Abstimmungsregeln</a>
+                <button id="logout-button">Ausloggen</button>
+                <a href="{{ url_for('control_panel') }}"><button type="button">Kontrollpanel</button></a>
+                <a href="https://leanderkafemann.github.io/LK-Regeln/">Abstimmungsregeln</a>
                 <script>
                     {% include 'homeCode.js' %}
                 </script>
