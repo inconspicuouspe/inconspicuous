@@ -9,7 +9,8 @@ from flask import (
     make_response,
     Request,
     jsonify,
-    url_for
+    url_for,
+    send_from_directory
 )
 from user_agents import parse
 from .database import MongoDB
@@ -265,18 +266,12 @@ def get_manifest():
 
 @app.get("/controlpanelstyle.css/")
 def get_style_control_panel():
-    response = render_template("controlpanelstyle.css")
-    response.headers["Content-Type"] = "text/css"
-    return response
+    return send_from_directory("static", "controlpanelstyle.css")
 
 @app.get("/homestyle.css/")
 def get_style_home():
-    response = render_template("homestyle.css")
-    response.headers["Content-Type"] = "text/css"
-    return response
+    return send_from_directory("static", "homestyle.css")
 
 @app.get("/registerstyle.css/")
 def get_style_register():
-    response = render_template("registerstyle.css")
-    response.headers["Content-Type"] = "text/css"
-    return response
+    return send_from_directory("static", "registerstyle.css")
