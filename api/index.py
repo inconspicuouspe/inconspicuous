@@ -265,12 +265,18 @@ def get_manifest():
 
 @app.get("/controlpanelstyle.css/")
 def get_style_control_panel():
-    return render_template("controlpanelstyle.css")
+    response = render_template("controlpanelstyle.css")
+    response.headers["Content-Type"] = "text/css"
+    return response
 
 @app.get("/homestyle.css/")
 def get_style_home():
-    return render_template("homestyle.css")
+    response = render_template("homestyle.css")
+    response.headers["Content-Type"] = "text/css"
+    return response
 
 @app.get("/registerstyle.css/")
 def get_style_register():
-    return render_template("registerstyle.css")
+    response = render_template("registerstyle.css")
+    response.headers["Content-Type"] = "text/css"
+    return response
