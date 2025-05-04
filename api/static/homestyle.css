@@ -20,7 +20,7 @@
     border-radius: 4px;
     border-color: darkgray;
 }
-#home-content * {
+#home-content>* {
     margin: 4px;
 }
 #container {
