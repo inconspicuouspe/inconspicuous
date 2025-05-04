@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Home</title>
-    <link rel="manifest" href="manifest" />
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
-</head>
+    <head>
+        <title>Home</title>
+        <link rel="manifest" href="manifest" />
+        {% if session and session.username="KingLele" %}
+        <link rel="stylesheet" href="https://leanderkafemann.github.io/bueroWebsite/styling/forms.css" />
+        {% endif %}
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
+    </head>
     <body>
         <div id="container">
             <div id="home-content">
@@ -33,9 +36,9 @@
                     }
                 </style>
                 <p>Eingeloggt als {{ session.username }}.</p>
-                <button id="logout-button">Ausloggen</button>
-                <a href="{{ url_for('control_panel') }}"><button type="button">Kontrollpanel</button></a>
-                <a href="https://leanderkafemann.github.io/LK-Regeln/">Abstimmungsregeln</a>
+                <button class="login_button" id="logout-button">Ausloggen</button>
+                <a class="login_button" href="{{ url_for('control_panel') }}"><button type="button">Kontrollpanel</button></a>
+                <a class="login_button" href="https://leanderkafemann.github.io/LK-Regeln/">Abstimmungsregeln</a>
                 <script>
                     {% include 'homeCode.js' %}
                 </script>

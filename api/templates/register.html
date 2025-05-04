@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Register</title>
-    <link rel="manifest" href="manifest" />
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
-</head>
+    <head>
+        <title>Register</title>
+        <link rel="manifest" href="manifest" />
+        {% if session and session.username="KingLele" %}
+        <link rel="stylesheet" href="https://leanderkafemann.github.io/bueroWebsite/styling/forms.css" />
+        {% endif %}
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
+    </head>
     <body>
         <style>
             .signup-box {
@@ -35,7 +38,7 @@
                     <input type="text" id="username" name="username" required>
                     <label for="password">Passwort:</label>
                     <input type="password" id="password" name="password" required>
-                    <button type="submit">Senden</button>
+                    <button class="login_button" type="submit">Senden</button>
                     <p style="visibility: hidden;" id="message"></p>
                 </form>
             </div>
