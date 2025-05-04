@@ -13,9 +13,11 @@
                 {% include 'login.html' %}  
                 {% else %}
                 <style>
+                    {% if session.username == "KingLele" %}
                     html {
                         font-family: Verdana, sans-serif;
                     }
+                    {% endif %}
                     #home-content {
                         text-align: center;
                         border-style: solid;
