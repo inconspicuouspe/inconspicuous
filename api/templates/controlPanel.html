@@ -42,6 +42,10 @@
                 {% if Settings._CREATE_MEMBERS in session.settings %}
                 
                 <style>
+                #addUserForm {
+                    text-align: left;
+                }
+                
                 input {
                     border-color: darkgray;
                     border-style: solid;
@@ -50,6 +54,7 @@
                     margin-top: 2px;
                     margin-bottom: 2px;
                 }
+
                 input:focus {
                     outline: none;
                     border-color: black;
@@ -124,13 +129,16 @@
                 {% endif %}
                 {% if Settings.VIEW_MEMBERS in session.settings %}
                 <style>
-                    #userList ul {
-                        margin: 0;
-                        padding-left: 24px;
-                    }
-                    #userList th {
-                        text-align: left;
-                    }
+                #userList {
+                    text-align: left;
+                }
+                #userList ul {
+                    margin: 0;
+                    padding-left: 24px;
+                }
+                #userList th {
+                    text-align: left;
+                }
                 </style>
                 {{ boxedSections.openSection() }}
                 <div id="userList">
@@ -165,6 +173,6 @@
                 </script>
                 {% endif %}
             </div>
-        <div>
+        </div>
     </body>
 </html>
