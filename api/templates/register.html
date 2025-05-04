@@ -3,48 +3,13 @@
     <head>
         <title>Register</title>
         <link rel="manifest" href="manifest" />
+        <link rel="stylesheet" href="{{ url_for('get_style_register') }}" />
         {% if session and session.username == "KingLele" %}
         <link rel="stylesheet" href="https://leanderkafemann.github.io/bueroWebsite/styling/forms.css" />
         {% endif %}
         <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
     </head>
     <body>
-        <style>
-            .login_button {
-                text-decoration: none;
-                color: black;
-                background: none;
-                border-style: solid;
-                border-radius: 4px;
-                border-color: darkgray;
-                border-width: 2px;
-                cursor: pointer;
-                font-size: 16px;
-                font-family: serif;
-                padding: 1px;
-                line-height: 18px;
-                user-select: none;
-            }
-            .signup-box {
-                display: grid;
-                justify-content: center;
-            }
-            #signup-content {
-                padding: 8px;
-                width: min-content;
-                justify-self: right;
-            }
-            #signup-content h2 {
-                margin: 0;
-            }
-            #signup-content form {
-                margin: 0;
-            }
-            #signup-content p {
-                margin-top: 16px;
-                margin-bottom: 0;
-            }
-        </style>
         <div class="signup-box">
             <div id="signup-content">
                 <h2>Registrieren</h2>

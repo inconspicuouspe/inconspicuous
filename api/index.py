@@ -262,3 +262,15 @@ def get_user(username):
 @app.get("/manifest/")
 def get_manifest():
     return render_template("manifest.json")
+
+@app.get("/controlpanelstyle.css/")
+def get_style_control_panel():
+    return render_template("controlpanelstyle.css")
+
+@app.get("/homestyle.css/")
+def get_style_home():
+    return render_template("homestyle.css")
+
+@app.get("/registerstyle.css/")
+def get_style_register():
+    return render_template("registerstyle.css")

@@ -1,0 +1,29 @@
+.login_button {
+    text-decoration: none;
+    color: black;
+    background: none;
+    border-style: solid;
+    border-radius: 4px;
+    border-color: darkgray;
+    border-width: 2px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: serif;
+    padding: 1px;
+    line-height: 18px;
+    user-select: none;
+}
+#home-content {
+    text-align: center;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 4px;
+    border-color: darkgray;
+}
+#home-content * {
+    margin: 4px;
+}
+#container {
+    display: grid;
+    justify-content: center;
+}

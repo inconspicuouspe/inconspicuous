@@ -5,6 +5,7 @@
         <title>
         Kontrollpanel
         </title>
+        <link rel="stylesheet" href="{{ url_for('get_style_control_panel') }}" />
         {{ boxedSections.sectionHead() }}
         <link rel="manifest" href="manifest" />
         <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
@@ -12,42 +13,13 @@
     <body>
         <div id="container">
             <div id="home-content">
+                {% if session.username == "KingLele" %}
                 <style>
-                    {% if session.username == "KingLele" %}
                     html {
                         font-family: Verdana, sans-serif;
                     }
-                    {% endif %}
-                    .login_button {
-                        text-decoration: none;
-                        color: black;
-                        background: none;
-                        border-style: solid;
-                        border-radius: 4px;
-                        border-color: darkgray;
-                        border-width: 2px;
-                        cursor: pointer;
-                        font-size: 16px;
-                        font-family: serif;
-                        padding: 1px;
-                        line-height: 18px;
-                        user-select: none;
-                    }
-                    #home-content {
-                        text-align: center;
-                        border-style: solid;
-                        border-width: 2px;
-                        border-radius: 4px;
-                        border-color: darkgray;
-                    }
-                    #home-content * {
-                        margin: 4px;
-                    }
-                    #container {
-                        display: grid;
-                        justify-content: center;
-                    }
                 </style>
+                {% endif %}
                 <a href="{{ url_for('home') }}"><button type="button">Zurück zum Hauptmenu</button></a>
                 <script>
                     const ownSettings = {{ session.settings.value }};
@@ -61,54 +33,6 @@
                 </script>
                 {% if Settings._CREATE_MEMBERS in session.settings %}
                 
-                <style>
-                #addUserForm {
-                    text-align: left;
-                }
-                
-                input {
-                    border-color: darkgray;
-                    border-style: solid;
-                    border-width: 1px;
-                    border-radius: 4px;
-                    margin-top: 2px;
-                    margin-bottom: 2px;
-                }
-
-                input:focus {
-                    outline: none;
-                    border-color: black;
-                }
-
-                .settings-box label {
-                    border-width:1px;
-                    border-style: solid;
-                    border-color: lightgray;
-                    border-radius: 4px;
-                    padding:5px;
-                    display: block;
-                    user-select: none;
-                }
-
-                .settings-box label:hover {
-                    background:#eee;
-                    cursor:pointer;
-                }
-
-                .copy-link {
-                    border-radius: 4px;
-                    border-style: none;
-                    background-color: darkblue;
-                    color: white;
-                    cursor: pointer;
-                }
-                .copy-link .material-symbols-outlined {
-                    vertical-align: sub;
-                }
-                .copy-link .copy-link-text {
-                    vertical-align: super;
-                }
-                </style>
                 {{ boxedSections.openSection() }}
                 <form id="addUserForm">
                     <label for="username">Temporärer Nutzername:</label>
@@ -148,21 +72,6 @@
                 </script>
                 {% endif %}
                 {% if Settings.VIEW_MEMBERS in session.settings %}
-                <style>
-                #userList {
-                    text-align: left;
-                }
-                #userList ul {
-                    margin: 0;
-                    padding-left: 24px;
-                }
-                #userList th {
-                    text-align: left;
-                }
-                #userList .settings-list {
-                    width: min-content;
-                }
-                </style>
                 {{ boxedSections.openSection() }}
                 <div id="userList">
                     ...

@@ -3,6 +3,7 @@
     <head>
         <title>Home</title>
         <link rel="manifest" href="manifest" />
+        <link rel="stylesheet" href="{{ url_for('get_style_home') }}" />
         {% if session and session.username == "KingLele" %}
         <link rel="stylesheet" href="https://leanderkafemann.github.io/bueroWebsite/styling/forms.css" />
         {% endif %}
@@ -14,42 +15,13 @@
                 {% if not session %}
                 {% include 'login.html' %}  
                 {% else %}
+                {% if session.username == "KingLele" %}
                 <style>
-                    {% if session.username == "KingLele" %}
                     html {
                         font-family: Verdana, sans-serif;
                     }
-                    {% endif %}
-                    .login_button {
-                        text-decoration: none;
-                        color: black;
-                        background: none;
-                        border-style: solid;
-                        border-radius: 4px;
-                        border-color: darkgray;
-                        border-width: 2px;
-                        cursor: pointer;
-                        font-size: 16px;
-                        font-family: serif;
-                        padding: 1px;
-                        line-height: 18px;
-                        user-select: none;
-                    }
-                    #home-content {
-                        text-align: center;
-                        border-style: solid;
-                        border-width: 2px;
-                        border-radius: 4px;
-                        border-color: darkgray;
-                    }
-                    #home-content * {
-                        margin: 4px;
-                    }
-                    #container {
-                        display: grid;
-                        justify-content: center;
-                    }
                 </style>
+                {% endif %}
                 <p>Eingeloggt als {{ session.username }}.</p>
                 <button class="login_button" id="logout-button">Ausloggen</button>
                 <a href="{{ url_for('control_panel') }}"><button class="login_button" type="button">Kontrollpanel</button></a>
