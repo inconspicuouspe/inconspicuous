@@ -24,6 +24,7 @@ function userListSuccess(data){
         currentLine.classList.add("username-"+username);
         currentLine.querySelector(".username-column").textContent = username;
         currentLine.querySelector(".pgroup-column").textContent = pgroup !== -1 ? pgroup : "?";
+        currentLine.querySelector(".status-column").textContent = unfilled ? "Eingeladen" : "Mitglied";
         const settingsList = currentLine.querySelector(".settings-column .settings-list");
         if (settings === -1){
             const settingsColumn = currentLine.querySelector(".settings-column");
