@@ -1,35 +1,38 @@
 {% macro sectionHead() -%}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 <style>
-.boxed-section {
-    border-style: solid;
-    border-color: darkgray;
-    border-radius: 8px;
-    border-width: 2px;
-    max-width: fit-content;
-}
-.boxed-section .boxed-content {
-    margin: 4px;
-}
-.boxed-section-button {
-    border: none;
-    background: inherit;
-    height: min-content;
-    display: flex;
-    align-items: center;
-    user-select: none;
-    cursor: pointer;
-}
-.boxed-section-button .material-symbols-outlined {
-    aspect-ratio: 1/1;
-}
-.material-symbols-outlined {
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24
-}
+    html {
+        font-family: Verdana, sans-serif;
+    }
+    .boxed-section {
+        border-style: solid;
+        border-color: darkgray;
+        border-radius: 8px;
+        border-width: 2px;
+        max-width: fit-content;
+    }
+    .boxed-section .boxed-content {
+        margin: 4px;
+    }
+    .boxed-section-button {
+        border: none;
+        background: inherit;
+        height: min-content;
+        display: flex;
+        align-items: center;
+        user-select: none;
+        cursor: pointer;
+    }
+    .boxed-section-button .material-symbols-outlined {
+        aspect-ratio: 1/1;
+    }
+    .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
 </style>
 <script>
 boxedSectionOpenButtonsClicked = [];

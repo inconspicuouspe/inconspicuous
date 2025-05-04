@@ -13,20 +13,23 @@
                 {% include 'login.html' %}  
                 {% else %}
                 <style>
-                #home-content {
-                    text-align: center;
-                    border-style: solid;
-                    border-width: 2px;
-                    border-radius: 4px;
-                    border-color: darkgray;
-                }
-                #home-content * {
-                    margin: 4px;
-                }
-                #container {
-                    display: grid;
-                    justify-content: center;
-                }
+                    html {
+                        font-family: Verdana, sans-serif;
+                    }
+                    #home-content {
+                        text-align: center;
+                        border-style: solid;
+                        border-width: 2px;
+                        border-radius: 4px;
+                        border-color: darkgray;
+                    }
+                    #home-content * {
+                        margin: 4px;
+                    }
+                    #container {
+                        display: grid;
+                        justify-content: center;
+                    }
                 </style>
                 <p>Eingeloggt als {{ session.username }}.</p>
                 <button id="logout-button" class="login_button">Ausloggen</button>
