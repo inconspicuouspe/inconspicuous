@@ -10,141 +10,161 @@
         <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
     </head>
     <body>
-        <a href="{{ url_for('home') }}"><button type="button">Zurück zum Hauptmenu</button></a>
-        <script>
-            const ownSettings = {{ session.settings.value }};
-            const ownPgroup = {{ session.permission_group }};
-            const settingsValues = { {% for setting in Settings.__members__.values() %}
-                setting_{{ setting.name }}: {{ setting.value }},{% endfor %}
-            };
-            const settingsNames = { {% for setting in Settings.__members__.values() %}
-                setting_{{ setting.name }}: "{{ setting.get_translated_name() }}",{% endfor %}
-            };
-        </script>
-        {% if Settings._CREATE_MEMBERS in session.settings %}
-        
-        <style>
-        input {
-            border-color: darkgray;
-            border-style: solid;
-            border-width: 1px;
-            border-radius: 4px;
-            margin-top: 2px;
-            margin-bottom: 2px;
-        }
-        input:focus {
-            outline: none;
-            border-color: black;
-        }
+        <div id="container">
+            <div id="home-content">
+                <style>
+                #home-content {
+                    text-align: center;
+                    border-style: solid;
+                    border-width: 2px;
+                    border-radius: 4px;
+                    border-color: darkgray;
+                }
+                #home-content * {
+                    margin: 4px;
+                }
+                #container {
+                    display: grid;
+                    justify-content: center;
+                }
+                </style>
+                <a href="{{ url_for('home') }}"><button type="button">Zurück zum Hauptmenu</button></a>
+                <script>
+                    const ownSettings = {{ session.settings.value }};
+                    const ownPgroup = {{ session.permission_group }};
+                    const settingsValues = { {% for setting in Settings.__members__.values() %}
+                        setting_{{ setting.name }}: {{ setting.value }},{% endfor %}
+                    };
+                    const settingsNames = { {% for setting in Settings.__members__.values() %}
+                        setting_{{ setting.name }}: "{{ setting.get_translated_name() }}",{% endfor %}
+                    };
+                </script>
+                {% if Settings._CREATE_MEMBERS in session.settings %}
+                
+                <style>
+                input {
+                    border-color: darkgray;
+                    border-style: solid;
+                    border-width: 1px;
+                    border-radius: 4px;
+                    margin-top: 2px;
+                    margin-bottom: 2px;
+                }
+                input:focus {
+                    outline: none;
+                    border-color: black;
+                }
 
-        .settings-box label {
-            border-width:1px;
-            border-style: solid;
-            border-color: lightgray;
-            border-radius: 4px;
-            padding:5px;
-            display: block;
-            user-select: none;
-        }
+                .settings-box label {
+                    border-width:1px;
+                    border-style: solid;
+                    border-color: lightgray;
+                    border-radius: 4px;
+                    padding:5px;
+                    display: block;
+                    user-select: none;
+                }
 
-        .settings-box label:hover {
-            background:#eee;
-            cursor:pointer;
-        }
+                .settings-box label:hover {
+                    background:#eee;
+                    cursor:pointer;
+                }
 
-        .copy-link {
-            border-radius: 4px;
-            border-style: none;
-            background-color: darkblue;
-            color: white;
-            cursor: pointer;
-        }
-        .copy-link .material-symbols-outlined {
-            vertical-align: sub;
-        }
-        .copy-link .copy-link-text {
-            vertical-align: super;
-        }
-        </style>
-        {{ boxedSections.openSection() }}
-        <form id="addUserForm">
-            <label for="username">Temporärer Nutzername:</label>
-            <input type="text" id="username" name="username" required>
-            <br>
-            <label for="pgroup">Berechtigungsgruppe:</label>
-            <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" max="{{ session.permission_group - 1 }}" required>
-            <br>
-            <label>Einstellungen/Berechtigungen:</label>
-            {{ boxedSections.openSection() }}
-            <div class="settings-box">
-            {% for setting in Settings.__members__.values() %}
-                {% if setting in session.settings and not setting.name.startswith("_") and setting.name != "NONE" %}
-                <label>
-                    <input name="setting_{{ setting.name }}" id="setting_{{ setting.name }}" type="checkbox">
-                    {{ setting.get_translated_name() }}
-                </label>
-                {% endif %}
-            {% endfor %}
-            </div>
-            {{ boxedSections.closeSection() }}
-            <br>
-            <button type="submit">Erstellen</button>
-            <div class="message" style="display: none;">
-                <p></p>
-                <button class="copy-link" onclick="copyAddUserMessageLink(event);" style="display: none;" type="button">
-                    <span class="material-symbols-outlined">
-                        content_copy
-                    </span>
-                    <span class="copy-link-text">Copy link</span>
-                </button>
-            </div>
-        </form>
-        {{ boxedSections.closeSection("Nutzer hinzufügen") }}
-        <script>
-            {% include 'addUserForm.js' %}
-        </script>
-        {% endif %}
-        {% if Settings.VIEW_MEMBERS in session.settings %}
-        <style>
-            #userList ul {
-                margin: 0;
-                padding-left: 24px;
-            }
-            #userList th {
-                text-align: left;
-            }
-        </style>
-        {{ boxedSections.openSection() }}
-        <div id="userList">
-            ...
-            <table style="display: none;"><tbody>
-                <tr>
-                    <th>Nutzername</th>
-                    <th>Berechtigungsgruppe</th>
-                    <th>Einstellungen/Berechtigungen</th>
-                    <th>Optionen</th>
-                </tr>
-            </tbody></table>
-        </div>
-        {{ boxedSections.closeSection("Nutzerliste", "userListLoad") }}
-        <template id="user-table-line-template">
-            <tr>
-                <td class="username-column"></td>
-                <td class="pgroup-column"></td>
-                <td class="settings-column">
+                .copy-link {
+                    border-radius: 4px;
+                    border-style: none;
+                    background-color: darkblue;
+                    color: white;
+                    cursor: pointer;
+                }
+                .copy-link .material-symbols-outlined {
+                    vertical-align: sub;
+                }
+                .copy-link .copy-link-text {
+                    vertical-align: super;
+                }
+                </style>
+                {{ boxedSections.openSection() }}
+                <form id="addUserForm">
+                    <label for="username">Temporärer Nutzername:</label>
+                    <input type="text" id="username" name="username" required>
+                    <br>
+                    <label for="pgroup">Berechtigungsgruppe:</label>
+                    <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" max="{{ session.permission_group - 1 }}" required>
+                    <br>
+                    <label>Einstellungen/Berechtigungen:</label>
                     {{ boxedSections.openSection() }}
-                    <ul class="settings-list"></ul>
+                    <div class="settings-box">
+                    {% for setting in Settings.__members__.values() %}
+                        {% if setting in session.settings and not setting.name.startswith("_") and setting.name != "NONE" %}
+                        <label>
+                            <input name="setting_{{ setting.name }}" id="setting_{{ setting.name }}" type="checkbox">
+                            {{ setting.get_translated_name() }}
+                        </label>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
                     {{ boxedSections.closeSection() }}
-                </td>
-                <td class="options-column"></td>
-            </tr>
-        </template>
-        <template id="user-table-option-button-template">
-            <button type="button" class="user-table-option-button"></button>
-        </template>
-        <script>
-            {% include 'userList.js' %}
-        </script>
-        {% endif %}
+                    <br>
+                    <button type="submit">Erstellen</button>
+                    <div class="message" style="display: none;">
+                        <p></p>
+                        <button class="copy-link" onclick="copyAddUserMessageLink(event);" style="display: none;" type="button">
+                            <span class="material-symbols-outlined">
+                                content_copy
+                            </span>
+                            <span class="copy-link-text">Copy link</span>
+                        </button>
+                    </div>
+                </form>
+                {{ boxedSections.closeSection("Nutzer hinzufügen") }}
+                <script>
+                    {% include 'addUserForm.js' %}
+                </script>
+                {% endif %}
+                {% if Settings.VIEW_MEMBERS in session.settings %}
+                <style>
+                    #userList ul {
+                        margin: 0;
+                        padding-left: 24px;
+                    }
+                    #userList th {
+                        text-align: left;
+                    }
+                </style>
+                {{ boxedSections.openSection() }}
+                <div id="userList">
+                    ...
+                    <table style="display: none;"><tbody>
+                        <tr>
+                            <th>Nutzername</th>
+                            <th>Berechtigungsgruppe</th>
+                            <th>Einstellungen/Berechtigungen</th>
+                            <th>Optionen</th>
+                        </tr>
+                    </tbody></table>
+                </div>
+                {{ boxedSections.closeSection("Nutzerliste", "userListLoad") }}
+                <template id="user-table-line-template">
+                    <tr>
+                        <td class="username-column"></td>
+                        <td class="pgroup-column"></td>
+                        <td class="settings-column">
+                            {{ boxedSections.openSection() }}
+                            <ul class="settings-list"></ul>
+                            {{ boxedSections.closeSection() }}
+                        </td>
+                        <td class="options-column"></td>
+                    </tr>
+                </template>
+                <template id="user-table-option-button-template">
+                    <button type="button" class="user-table-option-button"></button>
+                </template>
+                <script>
+                    {% include 'userList.js' %}
+                </script>
+                {% endif %}
+            </div>
+        <div>
     </body>
 </html>

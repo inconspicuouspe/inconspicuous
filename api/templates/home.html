@@ -26,10 +26,9 @@
                     display: grid;
                     justify-content: center;
                 }
-            </style>
+                </style>
                 <p>Eingeloggt als {{ session.username }}.</p>
                 <button id="logout-button">Ausloggen</button>
-                <br>
                 <a href="{{ url_for('control_panel') }}"><button type="button">Kontrollpanel</button></a>
                 <script>
                     {% include 'homeCode.js' %}
