@@ -258,3 +258,7 @@ def get_user(username):
         FIELD_PERMISSION_GROUP: permission_group,
         FIELD_USER_ID: user_id
     }})
+
+@app.get("/manifest/")
+def get_manifest():
+    return render_template("manifest.json")
