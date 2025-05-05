@@ -3,7 +3,7 @@
     <head>
         <title>Home</title>
         <link rel="manifest" href="manifest" />
-        <link rel="stylesheet" href="{{ url_for('get_style_home') }}" />
+        <link rel="stylesheet" href="/static/homestyle.css/" />
         {% if session and session.username == "KingLele" %}
         <link rel="stylesheet" href="https://leanderkafemann.github.io/bueroWebsite/styling/forms.css" />
         {% endif %}
