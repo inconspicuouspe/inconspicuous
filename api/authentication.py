@@ -232,8 +232,10 @@ def add_csrf_token(response: Response) -> Response:
     return response
 
 def verify_csrf_token(req: Request) -> None:
-    csrf_header = req.headers[consts.FIELD_CSRF_TOKEN_HEADER]
-    csrf_cookie = req.cookies[consts.FIELD_CSRF_TOKEN]
+    csrf_header = req.headers.get(consts.FIELD_CSRF_TOKEN_HEADER, "csrf")
+    csrf_cookie = req.cookies.get(consts.FIELD_CSRF_TOKEN, "csrf")
     if not compare_digest(csrf_header, csrf_cookie):
+        raise NoSession()
+    if consts.FIELD_CSRF_TOKEN not in req.cookies:
         raise NoSession()
     return
