@@ -53,7 +53,8 @@ addUserButton.addEventListener("submit", (event) => {
     fetch("{{ url_for('add_user') }}", {
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            '{{ consts.FIELD_CSRF_TOKEN_HEADER }}': getCookie("{{ consts.FIELD_CSRF_TOKEN }}")
         },
         method: "POST",
         body: JSON.stringify({

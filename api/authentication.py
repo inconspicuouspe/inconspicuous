@@ -22,7 +22,7 @@ from .exceptions import (
     UsernameInvalidCharacters,
     InvalidCredentials,
     NoSession,
-    CannotBeNamedAnonymous
+    CannotBeNamedAnonymous,
 )
 
 @dataclass(frozen=True)
@@ -225,3 +225,15 @@ def extract_session_or_empty(database: _database.Database, request: Request) -> 
         return extract_session(database, request)
     except NoSession:
         return Session.create_empty_session()
+
+
+def add_csrf_token(response: Response) -> Response:
+    response.set_cookie(consts.FIELD_CSRF_TOKEN, secrets.token_urlsafe(128), max_age=consts.COOKIE_AGE * 2)
+    return response
+
+def verify_csrf_token(req: Request) -> None:
+    csrf_header = req.headers[consts.FIELD_CSRF_TOKEN_HEADER]
+    csrf_cookie = req.cookies[consts.FIELD_CSRF_TOKEN]
+    if not compare_digest(csrf_header, csrf_cookie):
+        raise NoSession()
+    return

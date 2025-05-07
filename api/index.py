@@ -1,6 +1,7 @@
 from os import environ
 from json import loads
 from traceback import format_exc
+from secrets import token_urlsafe
 from flask import (
     Flask,
     request,
@@ -10,7 +11,8 @@ from flask import (
     Request,
     jsonify,
     url_for,
-    send_from_directory
+    send_from_directory,
+    Response
 )
 from user_agents import parse
 from .database import MongoDB
@@ -27,7 +29,9 @@ from .authentication import (
     username_constraints,
     remove_unfilled_user,
     set_permission_group,
-    set_settings
+    set_settings,
+    add_csrf_token,
+    verify_csrf_token
 )
 from .exceptions import (
     MyError,
@@ -44,8 +48,11 @@ from .consts import (
     FIELD_SUCCESS,
     FIELD_REASON,
     FIELD_DATA,
-    FIELD_USER_ID
+    FIELD_USER_ID,
+    FIELD_CSRF_TOKEN,
+    COOKIE_AGE
 )
+
 
 MONGO_DB_CONNECTION_URI = environ["MONGO_DB_CONNECTION_URI"]
 MONGO_DB_PASSWORD = environ["MONGO_DB_PASSWORD"]
@@ -64,7 +71,10 @@ def session_name(__request: Request) -> str:
 @app.get("/")
 def home():
     session = extract_session_or_empty(db, request)
-    return render_template("home.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts)
+    response = make_response(render_template("home.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts))
+    if FIELD_CSRF_TOKEN not in request.cookies:
+        return add_csrf_token(response)
+    return response
 
 @app.get("/control_panel/")
 def control_panel():
@@ -81,11 +91,10 @@ def login():
     try:
         session_data = auth_login(db, username, password, session_name(request))
     except MyError as exc:
-        print(format_exc())
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     response = jsonify({FIELD_SUCCESS: True})
     response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data, max_age=86400*30)
-    return response
+    return add_csrf_token(response)
 
 @app.get("/register/")
 def registration():
@@ -102,11 +111,15 @@ def register():
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     response = jsonify({FIELD_SUCCESS: True})
-    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data, max_age=86400*30)
-    return response
+    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data, max_age=COOKIE_AGE)
+    return add_csrf_token(response)
 
 @app.post("/logout/")
 def logout():
+    try:
+        verify_csrf_token(request)
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     return auth_logout(db, jsonify({FIELD_SUCCESS: True}), request)
 
 @app.post("/add_user/")
@@ -116,6 +129,7 @@ def add_user():
     permission_group = form_data[FIELD_PERMISSION_GROUP]
     settings = Settings(form_data[FIELD_SETTINGS])
     try:
+        verify_csrf_token(request)
         session = extract_session(db, request)
         if Settings._CREATE_MEMBERS not in session.settings:
             raise Unauthorized()
@@ -159,6 +173,7 @@ def remove_user():
     form_data = request.json
     username = form_data[FIELD_USERNAME]
     try:
+        verify_csrf_token(request)
         session = extract_session(db, request)
         if Settings._UNINVITE_MEMBERS not in session.settings:
             raise Unauthorized()
@@ -172,6 +187,7 @@ def deactivate_user():
     form_data = request.json
     username = form_data[FIELD_USERNAME]
     try:
+        verify_csrf_token(request)
         session = extract_session(db, request)
         if Settings._DISABLE_MEMBERS not in session.settings:
             raise Unauthorized()
@@ -205,6 +221,7 @@ def edit_user_permission_group():
     username = form_data[FIELD_USERNAME]
     new_permission_group = form_data[FIELD_PERMISSION_GROUP]
     try:
+        verify_csrf_token(request)
         session = extract_session(db, request)
         if Settings._EDIT_MEMBER_SETTINGS not in session.settings:
             raise Unauthorized()
@@ -224,6 +241,7 @@ def edit_user_settings():
     username = form_data[FIELD_USERNAME]
     new_settings = form_data[FIELD_SETTINGS]
     try:
+        verify_csrf_token(request)
         session = extract_session(db, request)
         if Settings._EDIT_MEMBER_SETTINGS not in session.settings:
             raise Unauthorized()
@@ -264,14 +282,6 @@ def get_user(username):
 def get_manifest():
     return render_template("manifest.json")
 
-@app.get("/controlpanelstyle.css/")
-def get_style_control_panel():
-    return send_from_directory("static", "controlpanelstyle.css")
-
-@app.get("/homestyle.css/")
-def get_style_home():
-    return send_from_directory("static", "homestyle.css")
-
-@app.get("/registerstyle.css/")
-def get_style_register():
-    return send_from_directory("static", "registerstyle.css")
+@app.get("/github_oauth_callback/")
+def github_oauth_callback():
+    return ""

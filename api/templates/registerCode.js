@@ -4,6 +4,7 @@ const usernameBox = document.querySelector("#username");
 const passwordBox = document.querySelector("#password");
 const messageBox = document.querySelector("#message");
 const userSlot = new URLSearchParams(location.search).get("user_slot");
+
 function signupSuccess(data) {
     const success = data.{{ consts.FIELD_SUCCESS }};
     if (success) {
@@ -51,7 +52,8 @@ form.addEventListener("submit", (event) => {
     fetch("{{ url_for('register') }}", {
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            '{{ consts.FIELD_CSRF_TOKEN_HEADER }}': getCookie("{{ consts.FIELD_CSRF_TOKEN }}")
         },
         method: "POST",
         body: JSON.stringify({ {{ consts.FIELD_USERNAME }}: usernameBox.value, {{ consts.FIELD_PASSWORD }}: passwordBox.value, {{ consts.FIELD_USER_SLOT }}: userSlot })
