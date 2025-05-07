@@ -27,3 +27,31 @@
     display: grid;
     justify-content: center;
 }
+
+input {
+    border-color: darkgray;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+.login-box {
+    display: flex;
+    justify-content: center;
+}
+#login-content {
+    padding: 8px;
+    width: min-content;
+    justify-self: right;
+}
+#login-content h2 {
+    margin: 0;
+}
+#login-content form {
+    margin: 0;
+}
+#login-content p {
+    margin-top: 16px;
+    margin-bottom: 0;
+}
