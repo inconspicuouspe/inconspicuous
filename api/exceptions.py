@@ -39,3 +39,6 @@ class Unauthorized(MyError):
 
 class Unimplemented(MyError):
     identifier = "UNIMPLEMENTED"
+
+class NoCSRFToken(MyError):
+    identifier = "NOCSRFTOKEN"

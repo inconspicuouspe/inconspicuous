@@ -36,7 +36,7 @@ from .authentication import (
 from .exceptions import (
     MyError,
     Unauthorized,
-    Unimplemented
+    NoCSRFToken
 )
 from . import exceptions, consts
 from .consts import (
@@ -73,7 +73,7 @@ def home():
     session = extract_session_or_empty(db, request)
     response = make_response(render_template("home.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts))
     if FIELD_CSRF_TOKEN not in request.cookies:
-        return add_csrf_token(response)
+        return add_csrf_token(redirect("?"))
     return response
 
 @app.get("/control_panel/")

@@ -23,6 +23,7 @@ from .exceptions import (
     InvalidCredentials,
     NoSession,
     CannotBeNamedAnonymous,
+    NoCSRFToken
 )
 
 @dataclass(frozen=True)
@@ -216,7 +217,7 @@ def logout(database: _database.Database, response: Response, request: Request) -
 
 def extract_session(database: _database.Database, request: Request) -> Session:
     if not request.cookies.get(consts.FIELD_CSRF_TOKEN):
-        raise NoSession()
+        raise NoCSRFToken()
     session_data = SessionData.from_request(request)
     if session_data is None:
         raise NoSession()
@@ -225,9 +226,8 @@ def extract_session(database: _database.Database, request: Request) -> Session:
 def extract_session_or_empty(database: _database.Database, request: Request) -> Session:
     try:
         return extract_session(database, request)
-    except NoSession:
+    except (NoSession, NoCSRFToken):
         return Session.create_empty_session()
-
 
 def add_csrf_token(response: Response) -> Response:
     response.set_cookie(consts.FIELD_CSRF_TOKEN, secrets.token_urlsafe(128), max_age=consts.COOKIE_AGE * 2)
