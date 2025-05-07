@@ -3,9 +3,9 @@
     <head>
         <title>Home</title>
         <link rel="manifest" href="manifest" />
-        <link rel="stylesheet" href="{{ url_for('get_style_home') }}" />
+        <link rel="stylesheet" href="/static/homestyle.css/" />
         {% if session and session.username == "KingLele" %}
-        <link rel="stylesheet" href="https://leanderkafemann.github.io/bueroWebsite/styling/forms.css" />
+        <link rel="stylesheet" href="https://leanderkafemann.github.io/bueroWebsite/styling/forms.css" /> <!--different login text box styling-->
         {% endif %}
         <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
     </head>
