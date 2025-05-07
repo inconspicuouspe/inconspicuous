@@ -73,7 +73,7 @@ def home():
     session = extract_session_or_empty(db, request)
     response = make_response(render_template("home.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts))
     if FIELD_CSRF_TOKEN not in request.cookies:
-        return add_csrf_token(redirect("?"))
+        return add_csrf_token(response)
     return response
 
 @app.get("/control_panel/")
@@ -81,7 +81,10 @@ def control_panel():
     session = extract_session_or_empty(db, request)
     if not session:
         return redirect(url_for("home"))
-    return render_template("controlPanel.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts)
+    response = make_response(render_template("controlPanel.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts))
+    if FIELD_CSRF_TOKEN not in request.cookies:
+        return add_csrf_token(response)
+    return response
 
 @app.post("/login/")
 def login():
