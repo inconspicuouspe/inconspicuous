@@ -1,15 +1,17 @@
 {% import 'boxedSections.html' as boxedSections %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>
+<head>
+    <title>
         Kontrollpanel
-        </title>
-        <link rel="stylesheet" href="/static/controlpanelstyle.css/" />
-        {{ boxedSections.sectionHead() }}
-        <link rel="manifest" href="manifest" />
-        <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
-    </head>
+    </title>
+    <link rel="stylesheet" href="/static/controlpanelstyle.css/" />
+    {{ boxedSections.sectionHead() }}
+    <link rel="manifest" href="manifest" />
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
+    <!--use original login_button style instead of fake remake-->
+    <link rel="stylesheet" href="https://leanderkafemann.github.io/bueroWebsite/styling/forms.css" />
+</head>
     <body>
         <div id="container">
             <div id="home-content">
