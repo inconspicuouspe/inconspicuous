@@ -20,7 +20,7 @@
                     }
                 </style>
                 {% endif %}
-                <a href="{{ url_for('home') }}"><button class="login_button" type="button">Zurück zum Hauptmenu</button></a>
+                <a href="{{ url_for('home') }}"><button class="login_button" type="button">Zurück zum Hauptmenü</button></a>
                 <script>
                     const ownSettings = {{ session.settings.value }};
                     const ownPgroup = {{ session.permission_group }};
@@ -47,7 +47,7 @@
                     {% for setting in Settings.__members__.values() %}
                         {% if setting in session.settings and not setting.name.startswith("_") and setting.name != "NONE" %}
                         <label>
-                            <input name="setting_{{ setting.name }}" id="setting_{{ setting.name }}" type="checkbox">
+                            <input name="setting_{{ setting.name }}" id="setting_{{ setting.name }}" type="checkbox" style="margin-bottom: 2px;">
                             {{ setting.get_translated_name() }}
                         </label>
                         {% endif %}
