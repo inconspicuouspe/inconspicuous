@@ -7,7 +7,9 @@ from dataclasses import dataclass
 from hmac import compare_digest
 from enum import Flag, auto
 from datetime import datetime
+from urllib.parse import urlparse
 import secrets, uuid, sys, logging
+import webauthn
 from cachetools import LRUCache, cached, TTLCache
 from flask import Response, Request
 from . import database as _database
@@ -65,6 +67,12 @@ class Session:
     
     def __bool__(self) -> bool:
         return self.username != ANONYMOUS_USERNAME
+    
+    def get_user_profile(self, database: _database.Database) -> _database.UserProfile:
+        user_profile = database.get_user_profile(self.username)
+        if user_profile is None:
+            raise NoSession()
+        return user_profile
 
 class Settings(Flag):
     NONE = 0
@@ -239,3 +247,18 @@ def verify_csrf_token(req: Request) -> None:
     if consts.FIELD_CSRF_TOKEN not in req.cookies:
         raise NoSession()
     return
+
+def extract_hostname(request: Request):
+    return str(urlparse(request.base_url).hostname)
+
+def prepare_credential_creation(user: _database.UserProfile, request: Request):
+    return webauthn.generate_registration_options(
+        rp_id=extract_hostname(request),
+        rp_name="Inconspicuous",
+        user_id=user.user_id.encode(),
+        user_name=user.username,
+    )
+
+@cached(TTLCache(1024, 600))
+def access_credentials(user: _database.UserProfile, request: Request):
+    return prepare_credential_creation(user, request)

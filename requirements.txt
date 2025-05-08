@@ -5,3 +5,4 @@ pyyaml
 ua-parser
 user-agents
 pymongo[srv]
+webauthn

@@ -15,6 +15,7 @@ from flask import (
     Response
 )
 from user_agents import parse
+from webauthn import options_to_json
 from .database import MongoDB
 from .authentication import login as auth_login
 from .authentication import sign_up as auth_sign_up
@@ -31,7 +32,8 @@ from .authentication import (
     set_permission_group,
     set_settings,
     add_csrf_token,
-    verify_csrf_token
+    verify_csrf_token,
+    access_credentials
 )
 from .exceptions import (
     MyError,
@@ -287,4 +289,14 @@ def get_manifest():
 
 @app.get("/github_oauth_callback/")
 def github_oauth_callback():
-    return ""
+    return "Not implemented"
+
+@app.get("/webauth/")
+def access_webauth():
+    try:
+        session = extract_session(db, request)
+        user_profile = session.get_user_profile()
+        credentials = access_credentials(user_profile, request)
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: loads(options_to_json(credentials))})

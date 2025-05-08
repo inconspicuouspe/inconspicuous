@@ -3,7 +3,7 @@ const form = document.querySelector("#login-content form");
 const usernameBox = document.querySelector("#username");
 const passwordBox = document.querySelector("#password");
 const messageBox = document.querySelector("#message");
-
+const { startRegistration, startAuthentication } = SimpleWebAuthnBrowser;
 function loginSuccess(data) {
     const success = data.{{ consts.FIELD_SUCCESS }};
     if (success) {
