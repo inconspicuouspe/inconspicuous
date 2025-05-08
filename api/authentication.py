@@ -12,6 +12,8 @@ import secrets, uuid, sys, logging
 import webauthn
 from cachetools import LRUCache, cached, TTLCache
 from flask import Response, Request
+import webauthn
+from webauthn.helpers.structs import PublicKeyCredentialCreationOptions
 from . import database as _database
 from . import consts
 from .exceptions import (
@@ -251,7 +253,7 @@ def verify_csrf_token(req: Request) -> None:
 def extract_hostname(request: Request):
     return str(urlparse(request.base_url).hostname)
 
-def prepare_credential_creation(user: _database.UserProfile, request: Request):
+def prepare_credential_creation(user: _database.UserProfile, request: Request) -> PublicKeyCredentialCreationOptions:
     return webauthn.generate_registration_options(
         rp_id=extract_hostname(request),
         rp_name="Inconspicuous",
@@ -259,6 +261,12 @@ def prepare_credential_creation(user: _database.UserProfile, request: Request):
         user_name=user.username,
     )
 
-@cached(TTLCache(1024, 600))
-def access_credentials(user: _database.UserProfile, request: Request):
-    return prepare_credential_creation(user, request)
+access_credentials_cache: TTLCache[str, PublicKeyCredentialCreationOptions] = TTLCache(1024, 600)
+
+def access_credentials(user: _database.UserProfile, request: Request) -> PublicKeyCredentialCreationOptions:
+    if user.user_id in access_credentials_cache:
+        data = access_credentials_cache[user.user_id]
+    else:
+        data = prepare_credential_creation(user, request)
+        access_credentials_cache[user.user_id] = data
+    return data
