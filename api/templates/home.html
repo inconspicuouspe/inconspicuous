@@ -22,7 +22,7 @@
                 <p>Eingeloggt als {{ session.username }}.</p>
                 <button class="login_button" id="logout-button">Ausloggen</button>
                 <a class="login_button" href="{{ url_for('control_panel') }}">Kontrollpanel</a>
-                <a class="login_button" href="https://leanderkafemann.github.io/LK-Regeln/">Abstimmungsregeln</a>
+                <button class="login_button" onclick="window.location='https://leanderkafemann.github.io/LK-Regeln/'">Abstimmungsregeln</button>
                 <script>
                     {% include 'homeCode.js' %}
                 </script>
