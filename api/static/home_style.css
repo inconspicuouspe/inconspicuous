@@ -53,7 +53,7 @@ input {
 #login-content {
     padding: 8px;
     width: min-content;
-    justify-self: right;
+    justify-self: center;
 }
 #login-content h2 {
     margin: 0;
