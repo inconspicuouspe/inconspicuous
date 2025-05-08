@@ -25,8 +25,13 @@
                 {% endif %}
                 <p>Eingeloggt als {{ session.username }}.</p>
                 <button class="login_button" id="logout-button">Ausloggen</button>
-                <a href="{{ url_for('control_panel') }}"><button class="login_button" type="button">Kontrollpanel</button></a>
-                <a class="login_button" href="https://leanderkafemann.github.io/LK-Regeln/">Abstimmungsregeln</a>
+                <script>
+                    function goToControlPanel() {
+                        window.location = "{{ url_for('control_panel') }}";
+                    }
+                </script>
+                <button class="login_button" type="button" onclick="goToControlPanel()">Kontrollpanel</button>
+                <button class="login_button" onclick="window.location = 'https://leanderkafemann.github.io/LK-Regeln/';">Abstimmungsregeln</button>
                 <script>
                     {% include 'homeCode.js' %}
                 </script>
