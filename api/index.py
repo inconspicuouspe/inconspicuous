@@ -295,7 +295,7 @@ def github_oauth_callback():
 def access_webauth():
     try:
         session = extract_session(db, request)
-        user_profile = session.get_user_profile()
+        user_profile = session.get_user_profile(db)
         credentials = access_credentials(user_profile, request)
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
