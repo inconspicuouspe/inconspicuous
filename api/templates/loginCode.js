@@ -40,7 +40,7 @@ form.addEventListener("submit", (event) => {
 testButton.addEventListener("click", async (event) => {
     options = JSON.parse(prompt());
     try {
-        attResp = await startRegistration(options);
+        attResp = await startAuthentication(options);
         console.log(attResp);
     }
     catch (err) {
