@@ -21,8 +21,13 @@
                 </style>
                 <p>Eingeloggt als {{ session.username }}.</p>
                 <button class="login_button" id="logout-button">Ausloggen</button>
-                <a class="login_button" href="{{ url_for('control_panel') }}">Kontrollpanel</a>
-                <a class="login_button" href="https://leanderkafemann.github.io/LK-Regeln/">Abstimmungsregeln</a>
+                <script>
+                    function goToControlPanel() {
+                        window.location.href = "{{ url_for('control_panel') }}";
+                    }
+                </script>
+                <button class="login_button" onclick="goToControlPanel()">Kontrollpanel</button>
+                <button class="login_button" onclick="window.location='https://leanderkafemann.github.io/LK-Regeln/'">Abstimmungsregeln</button>
                 <script>
                     {% include 'homeCode.js' %}
                 </script>
@@ -32,7 +37,7 @@
         {% if session %}
         <div id="img-container">
             <details>
-                <summary>Abteilungs-Übersicht</summary>
+                <summary style="text-align: center;">Abteilungs-Übersicht</summary>
                 <img src="/static/images/amtsübersicht.png" alt="Amtsübersicht.png">
             </details>
         </div>
