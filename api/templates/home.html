@@ -14,12 +14,22 @@
         <div id="container">
             <div id="home-content">
                 {% if not session %}
-                {% include 'login.html' %}  
+                {% include 'login.html' %}
                 {% else %}
                 <p>Eingeloggt als {{ session.username }}.</p>
                 <button class="login_button" id="logout-button">Ausloggen</button>
+                {% if session.username == "KingLele" %}
+                <script>
+                    function goToControlPanel() {
+                        window.location.href = "{{ url_for('control_panel') }}";
+                    }
+                </script>
+                <button class="login_button" onclick="goToControlPanel()">Kontrollpanel</button>
+                <button class="login_button" onclick="window.location='https://leanderkafemann.github.io/LK-Regeln/'">Abstimmungsregeln</button>
+                {% else %}
                 <a class="login_button" href="{{ url_for('control_panel') }}">Kontrollpanel</a>
                 <a class="login_button" href="https://leanderkafemann.github.io/LK-Regeln/">Abstimmungsregeln</a>
+                {% endif %}
                 <script>
                     {% include 'homeCode.js' %}
                 </script>
