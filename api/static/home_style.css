@@ -27,6 +27,10 @@
     display: grid;
     justify-content: center;
 }
+#img-container {
+    display: grid;
+    justify-content: center;
+}
 
 input {
     border-color: darkgray;
