@@ -3,7 +3,7 @@ const form = document.querySelector("#login-content form");
 const usernameBox = document.querySelector("#username");
 const passwordBox = document.querySelector("#password");
 const messageBox = document.querySelector("#message");
-const testButton = document.querySelector(".test-button");
+{# const testButton = document.querySelector(".test-button"); #}
 const { startRegistration, startAuthentication } = SimpleWebAuthnBrowser;
 function loginSuccess(data) {
     const success = data.{{ consts.FIELD_SUCCESS }};
@@ -37,7 +37,7 @@ form.addEventListener("submit", (event) => {
         body: JSON.stringify({ {{ consts.FIELD_USERNAME }}: usernameBox.value, {{ consts.FIELD_PASSWORD }}: passwordBox.value })
     }).then((response) => response.json()).then(loginSuccess);
 }, true);
-testButton.addEventListener("click", async (event) => {
+{# testButton.addEventListener("click", async (event) => {
     options = JSON.parse(prompt());
     try {
         attResp = await startAuthentication(options);
@@ -47,4 +47,4 @@ testButton.addEventListener("click", async (event) => {
         alert(err);
     }
 
-})
+}) #}
