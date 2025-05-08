@@ -1,4 +1,9 @@
+.login_button:hover {
+    background-color: rgb(230, 230, 230);
+}
+
 .login_button {
+    transition: background-color 0.5s;
     text-decoration: none;
     color: black;
     background: none;
