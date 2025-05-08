@@ -39,6 +39,10 @@ input {
     border-radius: 4px;
     margin-top: 2px;
     margin-bottom: 2px;
+    width: 80%;
+}
+input :hover {
+    width: 95%;
 }
 .login-box {
     display: flex;
