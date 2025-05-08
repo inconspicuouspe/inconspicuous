@@ -16,14 +16,9 @@
                 {% if not session %}
                 {% include 'login.html' %}  
                 {% else %}
-                <style>
-                    html {
-                        font-family: Verdana, sans-serif;
-                    }
-                </style>
                 <p>Eingeloggt als {{ session.username }}.</p>
                 <button class="login_button" id="logout-button">Ausloggen</button>
-                <a class="login_button" href="{{ url_for('control_panel') }})">Kontrollpanel</a>
+                <a class="login_button" href="{{ url_for('control_panel') }}">Kontrollpanel</a>
                 <a class="login_button" href="https://leanderkafemann.github.io/LK-Regeln/">Abstimmungsregeln</a>
                 <script>
                     {% include 'homeCode.js' %}
