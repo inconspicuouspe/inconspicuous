@@ -269,4 +269,5 @@ def access_credentials(user: _database.UserProfile, request: Request) -> PublicK
     else:
         data = prepare_credential_creation(user, request)
         access_credentials_cache[user.user_id] = data
+    print(access_credentials_cache)
     return data
