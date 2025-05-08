@@ -8,12 +8,17 @@ from hmac import compare_digest
 from enum import Flag, auto
 from datetime import datetime
 from urllib.parse import urlparse
-import secrets, uuid, sys, logging
+import json
+import base64
+import secrets
+import uuid
+import sys
 import webauthn
 from cachetools import LRUCache, cached, TTLCache
 from flask import Response, Request
 import webauthn
-from webauthn.helpers.structs import PublicKeyCredentialCreationOptions
+from webauthn.helpers.structs import PublicKeyCredentialCreationOptions, RegistrationCredential, PublicKeyCredentialRequestOptions, AuthenticationCredential
+from webauthn.helpers.exceptions import InvalidRegistrationResponse
 from . import database as _database
 from . import consts
 from .exceptions import (
@@ -27,7 +32,7 @@ from .exceptions import (
     InvalidCredentials,
     NoSession,
     CannotBeNamedAnonymous,
-    NoCSRFToken
+    Unauthorized
 )
 
 @dataclass(frozen=True)
@@ -76,6 +81,40 @@ class Session:
             raise NoSession()
         return user_profile
 
+@dataclass(frozen=True)
+class WebAuthnCredential:
+    credential_public_key: bytes
+    credential_id: bytes
+    def to_string(self) -> str:
+        data = {
+            consts.FIELD_PUBLIC_KEY: self.credential_public_key,
+            consts.FIELD_CRED_ID: self.credential_id
+        }
+        json_encoded = json.dumps(data).encode()
+        return base64.b64encode(json_encoded).decode()
+    
+    @classmethod
+    def from_string(cls, string: str) -> Self:
+        json_decoded = base64.b64decode(string.encode()).decode()
+        data = json.loads(json_decoded)
+        return cls(credential_public_key=data[consts.FIELD_PUBLIC_KEY], credential_id=data[consts.FIELD_CRED_ID])
+    
+    def save_to_database(self, database: _database.Database, session: Session):
+        database.create_authkey(self.to_string(), self.credential_id, session.username, session.session_name)
+    
+    @classmethod
+    def get_from_id(cls, database: _database.Database, credential_id: bytes):
+        data = database.find_credential_by_id(credential_id)
+        if not data:
+            raise NoSession()
+        return cls.from_string(data)
+    
+    def get_user_profile(self, database: _database.Database) -> _database.UserProfile:
+        user = database.get_user_profile_by_credential_id(self.credential_id)
+        if not user:
+            raise NoSession()
+        return user
+    
 class Settings(Flag):
     NONE = 0
     VIEW_MEMBERS = auto()
@@ -257,16 +296,72 @@ def prepare_credential_creation(user: _database.UserProfile, request: Request) -
     return webauthn.generate_registration_options(
         rp_id=extract_hostname(request),
         rp_name="Inconspicuous",
-        user_id=user.user_id.encode(),
+        user_id=str(uuid.uuid4()).encode(),
         user_name=user.username,
     )
 
-access_credentials_cache: TTLCache[str, PublicKeyCredentialCreationOptions] = TTLCache(1024, 600)
+access_creation_credentials_cache: TTLCache[str, PublicKeyCredentialCreationOptions] = TTLCache(1024, 600)
 
-def access_credentials(user: _database.UserProfile, request: Request) -> PublicKeyCredentialCreationOptions:
-    if user.user_id in access_credentials_cache:
-        data = access_credentials_cache[user.user_id]
+def access_creation_credentials(user: _database.UserProfile, request: Request) -> PublicKeyCredentialCreationOptions:
+    if user.username in access_creation_credentials_cache:
+        data = access_creation_credentials_cache[user.username]
     else:
         data = prepare_credential_creation(user, request)
-        access_credentials_cache[user.user_id] = data
+        access_creation_credentials_cache[user.username] = data
     return data
+
+def verify_and_save_credential(database: _database.Database, user: _database.UserProfile, session: Session, request: Request, registration_credential: RegistrationCredential):
+    expected_challenge = access_creation_credentials(user, request)
+    try:
+        auth_verification = webauthn.verify_registration_response(
+            credential=registration_credential,
+            expected_challenge=expected_challenge.challenge,
+            expected_origin=f"https://{extract_hostname(request)}",
+            expected_rp_id=extract_hostname(request),
+        )
+    except InvalidRegistrationResponse:
+        raise NoSession()
+    credential = WebAuthnCredential(
+        credential_public_key=auth_verification.credential_public_key,
+        credential_id=auth_verification.credential_id,
+    )
+    credential.save_to_database(database, session)
+
+def prepare_login_creation(request: Request) -> PublicKeyCredentialRequestOptions:
+    authentication_options = webauthn.generate_authentication_options(
+        rp_id=extract_hostname(request)
+    )
+    return authentication_options
+
+access_login_credentials_cache: TTLCache[str, PublicKeyCredentialRequestOptions] = TTLCache(1024, 600)
+
+def access_login_credentials(request: Request) -> PublicKeyCredentialRequestOptions:
+    csrf_token = request.cookies.get(consts.FIELD_CSRF_TOKEN)
+    if not csrf_token:
+        raise NoSession()
+    if csrf_token in access_login_credentials_cache:
+        data = access_login_credentials_cache[csrf_token]
+    else:
+        data = prepare_login_creation(request)
+        access_login_credentials_cache[csrf_token] = data
+    return data
+
+def delete_current_login_credentials(request: Request) -> None:
+    csrf_token = request.cookies.get(consts.FIELD_CSRF_TOKEN)
+    if csrf_token and csrf_token in access_login_credentials_cache:
+        access_login_credentials_cache.pop(csrf_token)
+
+def login_by_credential(database: _database.Database, authentication_credential: AuthenticationCredential, session_name: str, request: Request) -> SessionData:
+    expected_challenge = access_login_credentials(request)
+    stored_credential = WebAuthnCredential.get_from_id(database, webauthn.base64url_to_bytes(authentication_credential.id))
+    webauthn.verify_authentication_response(
+        credential=authentication_credential,
+        expected_challenge=expected_challenge.challenge,
+        expected_origin=f"https://{extract_hostname(request)}",
+        expected_rp_id=extract_hostname(request),
+        credential_public_key=stored_credential.credential_public_key,
+        credential_current_sign_count=0
+    )
+    delete_current_login_credentials(request)
+    user = stored_credential.get_user_profile(database)
+    return make_session(database, user.username, session_name)

@@ -89,6 +89,18 @@ class Database(ABC, Hashable):
     @abstractmethod
     def disable_user(self, username: str) -> Optional[str]:
         pass
+    
+    @abstractmethod
+    def create_authkey(self, data: str, credential_id: bytes, username: str, session_name: str) -> None:
+        pass
+    
+    @abstractmethod
+    def find_credential_by_id(self, credential_id: bytes) -> Optional[str]:
+        pass
+    
+    @abstractmethod
+    def get_user_profile_by_credential_id(self, credential_id: bytes) -> Optional[UserProfile]:
+        pass
 
 class MongoDB(Database):
     client: MongoClient
@@ -99,6 +111,7 @@ class MongoDB(Database):
         self.db = self.client[db]
         self.users = self.db.users
         self.sessions = self.db.sessions
+        self.authkeys = self.db.authkeys
 
     @staticmethod
     def connect(uri: str) -> MongoClient:
@@ -216,4 +229,33 @@ class MongoDB(Database):
         document = self.users.find_one_and_update({FIELD_LOOKUP_USERNAME: username.lower(), FIELD_UNFILLED: False}, {"$set": {FIELD_UNFILLED: True, FIELD_USER_SLOT: user_id}, "$unset": {FIELD_LOGIN_DATA: ""}})
         if document is not None:
             self.sessions.delete_many({FIELD_LOOKUP_USERNAME: username.lower()})
+            self.authkeys.delete_many({FIELD_LOOKUP_USERNAME: username.lower()})
         return user_id if document is not None else None
+    
+    def create_authkey(self, data, credential_id, username, session_name):
+        self.authkeys.insert_one({
+            FIELD_CRED_ID: credential_id,
+            FIELD_DATA: data,
+            FIELD_LOOKUP_USERNAME: username.lower(),
+            FIELD_USERNAME: username,
+            FIELD_CREATION_TIME: datetime.now(),
+            FIELD_SESSION_NAME: session_name
+        })
+        authkeys = list(self.authkeys.find({FIELD_LOOKUP_USERNAME: username.lower()}).sort(FIELD_CREATION_TIME, DESCENDING).limit(MAX_SESSIONS + 1))
+        if len(authkeys) == MAX_SESSIONS + 1:
+            self.authkeys.delete_many({"_id": {"$not": {"$in": [sess["_id"] for sess in authkeys[:MAX_SESSIONS]]}}, FIELD_LOOKUP_USERNAME: username.lower()})
+    
+    def find_credential_by_id(self, credential_id):
+        document = self.authkeys.find_one({FIELD_CRED_ID: credential_id})
+        if not document:
+            return None
+        return document.get(FIELD_DATA)
+    
+    def get_user_profile_by_credential_id(self, credential_id):
+        document = self.authkeys.find_one({FIELD_CRED_ID: credential_id})
+        if not document:
+            return None
+        username = document.get(FIELD_USERNAME)
+        if not username:
+            return None
+        return self.get_user_profile(username)

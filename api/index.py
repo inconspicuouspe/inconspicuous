@@ -16,6 +16,7 @@ from flask import (
 )
 from user_agents import parse
 from webauthn import options_to_json
+from webauthn.helpers import parse_registration_credential_json, parse_authentication_credential_json
 from .database import MongoDB
 from .authentication import login as auth_login
 from .authentication import sign_up as auth_sign_up
@@ -33,7 +34,10 @@ from .authentication import (
     set_settings,
     add_csrf_token,
     verify_csrf_token,
-    access_credentials
+    access_creation_credentials,
+    verify_and_save_credential,
+    access_login_credentials,
+    login_by_credential
 )
 from .exceptions import (
     MyError,
@@ -98,7 +102,7 @@ def login():
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     response = jsonify({FIELD_SUCCESS: True})
-    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data, max_age=86400*30)
+    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data, max_age=COOKIE_AGE)
     return add_csrf_token(response)
 
 @app.get("/register/")
@@ -291,12 +295,46 @@ def get_manifest():
 def github_oauth_callback():
     return "Not implemented"
 
-@app.get("/webauth/")
-def access_webauth():
+@app.get("/webauth/creation_credentials/")
+def access_webauth_creator():
     try:
         session = extract_session(db, request)
         user_profile = session.get_user_profile(db)
-        credentials = access_credentials(user_profile, request)
+        credentials = access_creation_credentials(user_profile, request)
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     return jsonify({FIELD_SUCCESS: True, FIELD_DATA: loads(options_to_json(credentials))})
+
+@app.post("/webauth/create_credentials/")
+def create_webauth():
+    form_data = request.json
+    try:
+        session = extract_session(db, request)
+        user_profile = session.get_user_profile(db)
+        credential = parse_registration_credential_json(form_data)
+        verify_and_save_credential(db, user_profile, session, request, credential)
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    return jsonify({FIELD_SUCCESS: True})
+
+@app.get("/webauth/login_credentials/")
+def access_webauth_login():
+    try:
+        session = extract_session(db, request)
+        user_profile = session.get_user_profile(db)
+        credentials = access_login_credentials(request)
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    return jsonify({FIELD_SUCCESS: True, FIELD_DATA: loads(options_to_json(credentials))})
+
+@app.post("/webauth/login/")
+def login_via_passkey():
+    form_data = request.json
+    try:
+        credential = parse_registration_credential_json(form_data)
+        session_data = login_by_credential(db, credential, session_name(request), request)
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    response = jsonify({FIELD_SUCCESS: True})
+    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data, max_age=COOKIE_AGE)
+    return add_csrf_token(response)
