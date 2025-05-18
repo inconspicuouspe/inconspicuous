@@ -5,6 +5,8 @@
         --text-color: #ddd;
         --hr-color: #444;
         --button-text-color: #222;
+        --button-background-color: #87a9ff;
+        --button-background-color-hover: #6789df;
     }
 }
 @media (prefers-color-scheme: light) {
@@ -14,6 +16,8 @@
         --text-color: #222;
         --hr-color: #ddd;
         --button-text-color: #222;
+        --button-background-color: #87a9ff;
+        --button-background-color-hover: #6789df;
     }
 }
 body {
@@ -28,7 +32,7 @@ hr {
 }
 
 .login_button:hover {
-    background-color: #6789df;
+    background-color: var(--button-background-color-hover);
 }
 span.material-symbols-outlined {
     vertical-align: bottom;
@@ -36,11 +40,11 @@ span.material-symbols-outlined {
 }
 
 .login_button {
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     color: var(--button-text-color);
     transition: background-color 0.5s;
     text-decoration: none;
-    background-color: #87a9ff;
+    background-color: var(--button-background-color);
     border-style: none;
     border-radius: 17px;
     cursor: pointer;
