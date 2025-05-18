@@ -9,6 +9,10 @@
         {% endif %}
         <link rel="icon" type="image/x-icon" href="/static/images/favicon192.png">
         <script src="/static/common.js/"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Roboto:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
     </head>
     <body>
         <div id="container">
@@ -17,7 +21,8 @@
                 {% include 'login.html' %}
                 {% else %}
                 <p>Eingeloggt als {{ session.username }}.</p>
-                <button class="login_button" id="logout-button">Ausloggen</button>
+                <hr>
+                <button class="login_button" id="logout-button">Ausloggen <span class="material-symbols-outlined">logout</span></button>
                 {% if session.username == "KingLele" %}
                 <script>
                     function goToControlPanel() {

@@ -1,32 +1,67 @@
+@media (prefers-color-scheme: dark) {
+    body {
+        --main-background-color: #181818;
+        --sec-background-color: #1e1e1e;
+        --text-color: #ddd;
+        --hr-color: #444;
+        --button-text-color: #222;
+        --button-background-color: #87a9ff;
+        --button-background-color-hover: #6789df;
+    }
+}
+@media (prefers-color-scheme: light) {
+    body {
+        --main-background-color: #f1f1f1;
+        --sec-background-color: #eaeaea;
+        --text-color: #222;
+        --hr-color: #ddd;
+        --button-text-color: #222;
+        --button-background-color: #87a9ff;
+        --button-background-color-hover: #6789df;
+    }
+}
+body {
+    font-family: Roboto;
+    background-color: var(--main-background-color);
+    color: var(--text-color);
+}
+
+hr {
+    border-color: var(--hr-color);
+    color: var(--hr-color);
+}
+
 .login_button:hover {
-    background-color: rgb(230, 230, 230);
+    background-color: var(--button-background-color-hover);
+}
+span.material-symbols-outlined {
+    vertical-align: bottom;
+    font-size: large;
 }
 
 .login_button {
+    font-family: Roboto, sans-serif;
+    color: var(--button-text-color);
     transition: background-color 0.5s;
     text-decoration: none;
-    color: black;
-    background: none;
-    border-style: solid;
-    border-radius: 4px;
-    border-color: darkgray;
-    border-width: 2px;
+    background-color: var(--button-background-color);
+    border-style: none;
+    border-radius: 17px;
     cursor: pointer;
     font-size: 16px;
-    font-family: initial;
-    padding: 1px;
+    padding: 8px;
     line-height: 18px;
     user-select: none;
 }
 #home-content {
     text-align: center;
-    border-style: solid;
-    border-width: 2px;
-    border-radius: 4px;
-    border-color: darkgray;
+    border-style: none;
+    padding: 8px;
+    border-radius: 16px;
+    background-color: var(--sec-background-color);
 }
 #home-content>* {
-    margin: 4px;
+    margin: 8px;
 }
 #container {
     display: grid;
@@ -64,4 +99,10 @@ input {
 #login-content p {
     margin-top: 16px;
     margin-bottom: 0;
+}
+#img-container {
+    margin: 16px;
+}
+#img-container summary {
+    cursor: pointer;
 }
