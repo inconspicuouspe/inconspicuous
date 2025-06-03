@@ -1,4 +1,4 @@
-from os import environ
+from os import environ, getenv
 from json import loads
 from traceback import format_exc
 from secrets import token_urlsafe
@@ -14,11 +14,13 @@ from flask import (
     send_from_directory,
     Response
 )
-from user_agents import parse
+from user_agents import parse # type: ignore
 from webauthn import options_to_json
 from webauthn.helpers import parse_registration_credential_json, parse_authentication_credential_json
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
 from .database import MongoDB
 from .authentication import login as auth_login
+from .authentication import old_login as old_auth_login
 from .authentication import sign_up as auth_sign_up
 from .authentication import logout as auth_logout
 from .authentication import create_user_slot as auth_create_user_slot
@@ -37,12 +39,15 @@ from .authentication import (
     access_creation_credentials,
     verify_and_save_credential,
     access_login_credentials,
-    login_by_credential
+    login_by_credential,
+    access_login_type,
+    rsa_key_from_data,
+    decrypt_rsa,
+    LoginType
 )
 from .exceptions import (
     MyError,
-    Unauthorized,
-    NoCSRFToken
+    Unauthorized
 )
 from . import exceptions, consts
 from .consts import (
@@ -56,6 +61,7 @@ from .consts import (
     FIELD_DATA,
     FIELD_USER_ID,
     FIELD_CSRF_TOKEN,
+    FIELD_HASHED_PASSWORD,
     COOKIE_AGE
 )
 
@@ -63,6 +69,9 @@ from .consts import (
 MONGO_DB_CONNECTION_URI = environ["MONGO_DB_CONNECTION_URI"]
 MONGO_DB_PASSWORD = environ["MONGO_DB_PASSWORD"]
 MONGO_DB_USERNAME = environ["MONGO_DB_USERNAME"]
+RSA_KEY = str(getenv("RSA_KEY")).encode()
+
+rsa_key = rsa_key_from_data(RSA_KEY)
 
 db = MongoDB(MONGO_DB_CONNECTION_URI, MONGO_DB_USERNAME, MONGO_DB_PASSWORD)
 
@@ -77,7 +86,7 @@ def session_name(__request: Request) -> str:
 @app.get("/")
 def home():
     session = extract_session_or_empty(db, request)
-    response = make_response(render_template("home.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts))
+    response = make_response(render_template("home.html", exceptions=exceptions, session=session, Settings=Settings, consts=consts, LoginType=LoginType))
     if FIELD_CSRF_TOKEN not in request.cookies:
         return add_csrf_token(response)
     return response
@@ -96,13 +105,38 @@ def control_panel():
 def login():
     login_data = request.json
     username = login_data[FIELD_USERNAME]
-    password = login_data[FIELD_PASSWORD]
+    password = decrypt_rsa(login_data[FIELD_PASSWORD], rsa_key)
     try:
         session_data = auth_login(db, username, password, session_name(request))
     except MyError as exc:
         return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
     response = jsonify({FIELD_SUCCESS: True})
     response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data, max_age=COOKIE_AGE)
+    return add_csrf_token(response)
+
+@app.post("/old_login/")
+def old_login():
+    login_data = request.json
+    username = login_data[FIELD_USERNAME]
+    password = login_data[FIELD_PASSWORD]
+    extra_password = login_data[FIELD_HASHED_PASSWORD]
+    try:
+        session_data = old_auth_login(db, username, password, session_name(request), extra_password)
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    response = jsonify({FIELD_SUCCESS: True})
+    response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data, max_age=COOKIE_AGE)
+    return add_csrf_token(response)
+
+@app.get("/login/login_type/")
+def get_login_type():
+    login_data = request.json
+    username = login_data[FIELD_USERNAME]
+    try:
+        login_type = access_login_type(db, username)
+    except MyError as exc:
+        return jsonify({FIELD_SUCCESS: False, FIELD_REASON: exc.identifier})
+    response = jsonify({FIELD_SUCCESS: True, FIELD_DATA: login_type.value})
     return add_csrf_token(response)
 
 @app.get("/register/")

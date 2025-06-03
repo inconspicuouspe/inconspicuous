@@ -3,11 +3,12 @@ from hashlib import sha3_512
 from io import BytesIO
 from typing import Optional, Self
 from base64 import urlsafe_b64encode, urlsafe_b64decode
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from hmac import compare_digest
-from enum import Flag, auto
+from enum import Flag, auto, Enum
 from datetime import datetime
 from urllib.parse import urlparse
+import os
 import json
 import base64
 import secrets
@@ -16,9 +17,14 @@ import sys
 import webauthn
 from cachetools import LRUCache, cached, TTLCache
 from flask import Response, Request
-import webauthn
 from webauthn.helpers.structs import PublicKeyCredentialCreationOptions, RegistrationCredential, PublicKeyCredentialRequestOptions, AuthenticationCredential
 from webauthn.helpers.exceptions import InvalidRegistrationResponse
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives.hashes import SHA3_512
+from cryptography.hazmat.primitives import serialization, hashes
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.asymmetric import padding
 from . import database as _database
 from . import consts
 from .exceptions import (
@@ -32,13 +38,21 @@ from .exceptions import (
     InvalidCredentials,
     NoSession,
     CannotBeNamedAnonymous,
-    Unauthorized
+    NeedsNotOldLogin,
+    NeedsOldLogin
 )
+
+AUTH_SALT = str(os.getenv("AUTH_SALT"))
+
+class LoginType(Enum):
+    WEAK = 0
+    SHA3_512_PBKDF2HMAC_100000 = 1
 
 @dataclass(frozen=True)
 class LoginData:
     data: str
     login_token: str
+    login_type: LoginType = field(default=LoginType.WEAK)
 
 @dataclass(frozen=True)
 class SessionData:
@@ -169,7 +183,16 @@ def password_constraints(password: str):
     if len(password) > PASSWORD_MAX_LENGTH:
         raise PasswordTooLong(f"Password must be between {PASSWORD_MIN_LENGTH} and {PASSWORD_MAX_LENGTH} characters long.")
 
-def create_login_data(username: str, password: str, login_token: Optional[str] = None) -> LoginData:
+def superhash(data: bytes, salt: bytes) -> bytes:
+    kdf = PBKDF2HMAC(
+        SHA3_512(),
+        64,
+        salt,
+        iterations=100000
+    )
+    return kdf.derive(data)
+
+def weak_create_login_data(username: str, password: str, login_token: Optional[str] = None) -> LoginData:
     unhashed_data = BytesIO()
     unhashed_data.write(len(username).to_bytes(1))
     unhashed_data.write(username.encode("utf-8"))
@@ -178,13 +201,30 @@ def create_login_data(username: str, password: str, login_token: Optional[str] =
     login_token = login_token or str(uuid.uuid4())
     unhashed_data.write(login_token.encode("utf-8"))
     hashed_data = sha3_512(unhashed_data.getbuffer()).digest()
-    return LoginData(encode_b64(hashed_data).decode("utf-8"), login_token)
+    return LoginData(encode_b64(hashed_data).decode("utf-8"), login_token, LoginType.WEAK)
+
+def create_login_data(username: str, password: str, login_token: Optional[str] = None) -> LoginData:
+    unhashed_data = BytesIO()
+    unhashed_data.write(len(username).to_bytes(1))
+    unhashed_data.write(username.encode("utf-8"))
+    unhashed_data.write(len(password).to_bytes(2))
+    unhashed_data.write(password.encode("utf-8"))
+    login_token = login_token or str(uuid.uuid4())
+    unhashed_data.write(login_token.encode("utf-8"))
+    unhashed_data.write(len(AUTH_SALT).to_bytes(8))
+    unhashed_data.write(AUTH_SALT.encode("utf-8"))
+    hashed_data = sha3_512(unhashed_data.getbuffer()).digest()
+    base64_hashed_data = encode_b64(hashed_data)
+    superhashed = superhash(base64_hashed_data, login_token.encode("utf-8"))
+    encoded_superhash = encode_b64(superhashed).decode("utf-8")
+    return LoginData(encoded_superhash, login_token, LoginType.SHA3_512_PBKDF2HMAC_100000)
 
 def lookup_user_login_data(database: _database.Database, username: str) -> LoginData:
     data = database.get_login_data_by_username(username)
     if data is None:
         raise NotFoundError()
-    return LoginData(*data)
+    login_data, login_token, login_type_raw = data
+    return LoginData(login_data, login_token, LoginType(login_type_raw))
 
 def create_session_data() -> SessionData:
     return SessionData(secrets.token_urlsafe(256))
@@ -199,7 +239,7 @@ def make_user(database: _database.Database, username: str, password: str, sessio
     if database.has_username(username, except_user_id=user_slot):
         raise AlreadyExistsError()
     login_data = create_login_data(username, password)
-    database.create_user(username, login_data.data, login_data.login_token, user_slot)
+    database.create_user(username, login_data.data, login_data.login_token, login_data.login_type.value, user_slot)
     return make_session(database, username, session_name)
 
 def make_session(database: _database.Database, username: str, session_name: str) -> SessionData:
@@ -233,10 +273,35 @@ def check_session(database: _database.Database, session_data: SessionData) -> st
     user = lookup_user_by_session_data(database, session_data.data)
     return user
 
+def migrate_user_login_data(database: _database.Database, username: str, password: str):
+    corrected_username = database.get_correctly_cased_username(username)
+    if not corrected_username:
+        raise NotFoundError()
+    generated_login_data = create_login_data(corrected_username, password)
+    database.migrate_login_data(username, generated_login_data.data, generated_login_data.login_token, generated_login_data.login_type.value)
+
+def old_login(database: _database.Database, username: str, password: str, session_name: str, extra_password: Optional[str] = None) -> SessionData:
+    if not database.has_username(username):
+        raise NotFoundError()
+    user_login_data = lookup_user_login_data(database, username)
+    if user_login_data.login_type != LoginType.WEAK:
+        raise NeedsNotOldLogin()
+    corrected_username = database.get_correctly_cased_username(username)
+    if corrected_username is None:
+        raise NotFoundError()
+    generated_login_data = weak_create_login_data(corrected_username, password, user_login_data.login_token)
+    success = compare_digest(user_login_data.data, generated_login_data.data)
+    if not success:
+        raise InvalidCredentials()
+    migrate_user_login_data(database, username, extra_password or password)
+    return make_session(database, corrected_username, session_name)
+
 def login(database: _database.Database, username: str, password: str, session_name: str) -> SessionData:
     if not database.has_username(username):
         raise NotFoundError()
     user_login_data = lookup_user_login_data(database, username)
+    if user_login_data.login_type != LoginType.SHA3_512_PBKDF2HMAC_100000:
+        raise NeedsOldLogin()
     corrected_username = database.get_correctly_cased_username(username)
     if corrected_username is None:
         raise NotFoundError()
@@ -365,3 +430,28 @@ def login_by_credential(database: _database.Database, authentication_credential:
     delete_current_login_credentials(request)
     user = stored_credential.get_user_profile(database)
     return make_session(database, user.username, session_name)
+
+def access_login_type(database: _database.Database, username: str) -> LoginType:
+    login_data = lookup_user_login_data(database, username)
+    return login_data.login_type
+
+def rsa_key_from_data(data: bytes) -> RSAPrivateKey:
+    key = serialization.load_pem_private_key(
+        data,
+        password=None,
+        backend=default_backend()
+    )
+    assert isinstance(key, RSAPrivateKey)
+    return key
+
+def decrypt_rsa(data: str, private_key: RSAPrivateKey) -> str:
+    ciphertext = base64.b64decode(data)
+    plaintext = private_key.decrypt(
+        ciphertext,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return base64.b64decode(plaintext).decode()

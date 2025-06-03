@@ -31,7 +31,7 @@ class Database(ABC, Hashable):
         pass
 
     @abstractmethod
-    def get_login_data_by_username(self, username: str) -> Optional[tuple[str, str]]:
+    def get_login_data_by_username(self, username: str) -> Optional[tuple[str, str, int]]:
         pass
 
     @abstractmethod
@@ -39,7 +39,7 @@ class Database(ABC, Hashable):
         pass
 
     @abstractmethod
-    def create_user(self, username: str, login_data: str, login_token: str, user_slot: str) -> None:
+    def create_user(self, username: str, login_data: str, login_token: str, login_type: int, user_slot: str) -> None:
         pass
 
     @abstractmethod
@@ -101,6 +101,10 @@ class Database(ABC, Hashable):
     @abstractmethod
     def get_user_profile_by_credential_id(self, credential_id: bytes) -> Optional[UserProfile]:
         pass
+    
+    @abstractmethod
+    def migrate_login_data(self, username: str, login_data: str, login_token: str, login_type: int) -> None:
+        pass
 
 class MongoDB(Database):
     client: MongoClient
@@ -124,7 +128,7 @@ class MongoDB(Database):
         self.users.insert_one({FIELD_USER_ID: user_id, FIELD_USERNAME: temp_name, FIELD_LOOKUP_USERNAME: temp_name.lower(), FIELD_UNFILLED: True, FIELD_SETTINGS: slot_settings, FIELD_PERMISSION_GROUP: permission_group})
         return user_id
     
-    def create_user(self, username, login_data, login_token, user_slot):
+    def create_user(self, username, login_data, login_token, login_type, user_slot):
         user_slot_data = self.users.find_one({FIELD_USER_SLOT: user_slot})
         if not user_slot_data:
             raise NotFoundError()
@@ -136,6 +140,7 @@ class MongoDB(Database):
                 FIELD_USERNAME: username,
                 FIELD_LOGIN_DATA: login_data,
                 FIELD_LOGIN_TOKEN: login_token,
+                FIELD_LOGIN_TYPE: login_type,
                 FIELD_LOOKUP_USERNAME: username.lower()
             }
         })
@@ -150,9 +155,10 @@ class MongoDB(Database):
             return None
         login_data = user_data[FIELD_LOGIN_DATA]
         login_token = user_data[FIELD_LOGIN_TOKEN]
+        login_type = user_data.get(FIELD_LOGIN_TYPE, 0)
         assert isinstance(login_data, str)
         assert isinstance(login_token, str)
-        return (login_data, login_token)
+        return (login_data, login_token, login_type)
 
     def has_username(self, username, *, except_user_id = None):
         user = self.users.find_one({FIELD_LOOKUP_USERNAME: username.lower(), FIELD_USER_SLOT: {"$ne": except_user_id}})
@@ -259,3 +265,12 @@ class MongoDB(Database):
         if not username:
             return None
         return self.get_user_profile(username)
+    
+    def migrate_login_data(self, username, login_data, login_token, login_type):
+        self.users.update_one({FIELD_LOOKUP_USERNAME: username.lower()}, {"$set":
+            {
+                FIELD_LOGIN_DATA: login_data,
+                FIELD_LOGIN_TOKEN: login_token,
+                FIELD_LOGIN_TYPE: login_type
+            }
+        })
