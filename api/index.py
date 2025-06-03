@@ -119,7 +119,7 @@ def old_login():
     login_data = request.json
     username = login_data[FIELD_USERNAME]
     password = login_data[FIELD_PASSWORD]
-    extra_password = login_data[FIELD_HASHED_PASSWORD]
+    extra_password = decrypt_rsa(login_data[FIELD_HASHED_PASSWORD], rsa_key)
     try:
         session_data = old_auth_login(db, username, password, session_name(request), extra_password)
     except MyError as exc:

@@ -102,7 +102,7 @@ form.addEventListener("submit", (event) => {
         if (json_data.{{ consts.FIELD_DATA }} === {{ LoginType.WEAK.value }}) {
             getSecretPasswordData().then(sendOldLoginRequest);
         }
-        else if (json_data.{{ consts.FIELD_DATA }} == {{ LoginType.SHA3_512_PBKDF2HMAC_100000.value }}) {
+        else if (json_data.{{ consts.FIELD_DATA }} === {{ LoginType.SHA3_512_PBKDF2HMAC_100000.value }}) {
             getSecretPasswordData().then(sendLoginRequest);
         }
     })
