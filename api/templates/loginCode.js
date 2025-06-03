@@ -99,10 +99,10 @@ form.addEventListener("submit", (event) => {
         method: "POST",
         body: JSON.stringify({ {{ consts.FIELD_USERNAME }}: usernameBox.value })
     }).then((response) => response.json()).then((json_data) => {
-        if (json_data.{{ consts.FIELD_DATA }} === {{ LoginType.WEAK }}) {
+        if (json_data.{{ consts.FIELD_DATA }} === {{ LoginType.WEAK.value }}) {
             getSecretPasswordData().then(sendOldLoginRequest);
         }
-        else if (json_data.{{ consts.FIELD_DATA }} == {{ LoginType.SHA3_512_PBKDF2HMAC_100000 }}) {
+        else if (json_data.{{ consts.FIELD_DATA }} == {{ LoginType.SHA3_512_PBKDF2HMAC_100000.value }}) {
             getSecretPasswordData().then(sendLoginRequest);
         }
     })
