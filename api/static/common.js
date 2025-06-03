@@ -23,7 +23,7 @@ async function importPublicKey(pem) {
         ["encrypt"]
     );
 }
-const currentPublicKey = await importPublicKey(`-----BEGIN PUBLIC KEY-----
+importPublicKey(`-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvxSfp7aa57u8Y+sNpvKe
 StxvO2TwGjjniyU9es/wEeyr3nsER5jOJHaRm+zaCshclYGXmxpaUlxvrmN9BF/R
 TyvIkZPTMNCsP8IHIypSvAutyGDIYEWWgTluKAAq9HqjPsw3XmRD0rS2osVK4VvE
@@ -32,7 +32,7 @@ BRN98R7pVHbAoJVHIC4qEipyO8jETGASK7LUK3M0aIkPfjzgzew0saF89tBdjPvC
 BO0NUOfHuFOhfTtK394RgFFuLQpDCf+tIWn/ve2yilVu9QBivPbxnV+oNrm1RFkZ
 0wIDAQAB
 -----END PUBLIC KEY-----
-`);
+`).then((key) => { window.currentPublicKey = key; });
 async function encryptWithPublicKey(publicKey, message) {
     const encoder = new TextEncoder();
     const encoded = encoder.encode(message);
