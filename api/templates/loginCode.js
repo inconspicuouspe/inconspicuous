@@ -96,7 +96,7 @@ form.addEventListener("submit", (event) => {
             'Content-Type': 'application/json',
             '{{ consts.FIELD_CSRF_TOKEN_HEADER }}': getCookie("{{ consts.FIELD_CSRF_TOKEN }}")
         },
-        method: "GET",
+        method: "POST",
         body: JSON.stringify({ {{ consts.FIELD_USERNAME }}: usernameBox.value })
     }).then((response) => response.json()).then((json_data) => {
         if (json_data.{{ consts.FIELD_DATA }} === {{ LoginType.WEAK }}) {

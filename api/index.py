@@ -128,7 +128,7 @@ def old_login():
     response.set_cookie(SESSION_DATA_COOKIE_NAME, session_data.data, max_age=COOKIE_AGE)
     return add_csrf_token(response)
 
-@app.get("/login/login_type/")
+@app.post("/login/login_type/")
 def get_login_type():
     login_data = request.json
     username = login_data[FIELD_USERNAME]
