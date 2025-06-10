@@ -26,10 +26,6 @@ body {
     color: var(--text-color);
 }
 
-.login_button:hover {
-    background-color: var(--button-background-color-hover);
-}
-
 .login_button {
     font-family: Roboto, sans-serif;
     color: var(--button-text-color);
@@ -37,13 +33,20 @@ body {
     text-decoration: none;
     background-color: var(--button-background-color);
     border: black solid 1px;
-    border-radius: 17px;
+    border-radius: 16px;
     cursor: pointer;
     font-size: 16px;
     padding: 8px;
     line-height: 18px;
     user-select: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
+
+    .login_button:hover {
+        background-color: var(--button-background-color-hover);
+    }
+
 #home-content {
     text-align: center;
     border-style: solid;
