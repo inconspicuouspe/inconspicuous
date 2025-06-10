@@ -52,7 +52,7 @@ div.boxed-section {
     line-height: 18px;
     user-select: none;
     margin-top: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     margin-left: 3px;
     box-shadow: 0 2px 4px #bbb;
 }
@@ -64,8 +64,8 @@ div.boxed-section {
     }
 
 div.loginButtonContainer {
-    margin-top: 5px;
-    margin-bottom: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 #home-content {
