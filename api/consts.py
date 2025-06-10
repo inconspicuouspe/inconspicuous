@@ -17,6 +17,8 @@ FIELD_PASSWORD = "password"
 FIELD_USER_SLOT = "user_id"
 FIELD_CSRF_TOKEN = "csrftoken"
 FIELD_CSRF_TOKEN_HEADER = "X-CSRFTOKEN"
+FIELD_LOGIN_TYPE = "login_type"
+FIELD_HASHED_PASSWORD = "password_hash"
 
 FIELD_PUBLIC_KEY = "public_key"
 FIELD_CRED_ID = "id"

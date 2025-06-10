@@ -42,3 +42,9 @@ class Unimplemented(MyError):
 
 class NoCSRFToken(MyError):
     identifier = "NOCSRFTOKEN"
+
+class NeedsNotOldLogin(MyError):
+    identifier = "NEEDS_NEWER_LOGIN"
+
+class NeedsOldLogin(MyError):
+    identifier = "NEEDS_OLD_LOGIN"
