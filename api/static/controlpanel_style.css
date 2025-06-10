@@ -30,6 +30,7 @@ body {
     font-family: Roboto, sans-serif;
     color: var(--button-text-color);
     transition: background-color 0.5s;
+    transition-duration: 0.5s;
     text-decoration: none;
     background-color: var(--button-background-color);
     border: black solid 1px;
@@ -41,9 +42,12 @@ body {
     user-select: none;
     margin-top: 5px;
     margin-bottom: 5px;
+    box-shadow: 0 2px 4px #bbb;
 }
 
     .login_button:hover {
+        box-shadow: 0 3px 6px #bbb;
+        transform: scale(1.02);
         background-color: var(--button-background-color-hover);
     }
 
@@ -53,16 +57,22 @@ body {
     border-width: 2px;
     border-radius: 4px;
     border-color: darkgray;
+    box-shadow: 0 2px 4px #bbb;
 }
-#home-content>* {
-    margin: 8px;
-}
+
+    #home-content>* {
+        margin: 8px;
+    }
+
+    #home-content:hover {
+        box-shadow: 0 4px 8px #bbb;
+    }
+
 #container {
     display: grid;
     justify-content: center;
+    box-shadow: 0 2px 4px #bbb;
 }
-
-
 
 #addUserForm {
     text-align: left;
@@ -111,7 +121,17 @@ input:focus {
     vertical-align: super;
 }
 
+img {
+    width: 50%;
+    box-shadow: 0 4px 8px #bbb;
+    border-radius: 16px;
+    transition-duration: 0.7s;
+}
 
+    img:hover {
+        box-shadow: 0 6px 12px #bbb;
+        transform: scale(1.01);
+    }
 
 #userList {
     text-align: left;
