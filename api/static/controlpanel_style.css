@@ -63,6 +63,11 @@ div.boxed-section {
         background-color: var(--button-background-color-hover);
     }
 
+div.loginButtonContainer {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
 #home-content {
     text-align: center;
     border-style: solid;
