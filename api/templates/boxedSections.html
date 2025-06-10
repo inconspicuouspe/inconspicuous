@@ -1,14 +1,6 @@
 {% macro sectionHead() -%}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-{% if session and session.username == "KingLele" %}
-<link rel="stylesheet" href="https://leanderkafemann.github.io/bueroWebsite/styling/forms.css" />
-{% endif %}
 <style>
-    {% if session and session.username == "KingLele" %}
-    html {
-        font-family: Verdana, sans-serif;
-    }
-    {% endif %}
     .boxed-section {
         border-style: solid;
         border-color: darkgray;
