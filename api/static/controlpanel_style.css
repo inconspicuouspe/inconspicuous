@@ -9,6 +9,7 @@
         --button-background-color-hover: #6789df;
     }
 }
+
 @media (prefers-color-scheme: light) {
     body {
         --main-background-color: #f1f1f1;
@@ -20,6 +21,7 @@
         --button-background-color-hover: #6789df;
     }
 }
+
 body {
     font-family: Roboto;
     background-color: var(--main-background-color);
@@ -112,10 +114,10 @@ input {
     user-select: none;
 }
 
-.settings-box label:hover {
-    background:#eee;
-    cursor:pointer;
-}
+    .settings-box label:hover {
+        background:#eee;
+        cursor:pointer;
+    }
 
 .copy-link {
     border-radius: 4px;
@@ -147,6 +149,7 @@ img {
 #userList {
     text-align: left;
 }
+
 #userList ul {
     margin: 0;
     padding-left: 24px;
@@ -154,6 +157,7 @@ img {
 #userList th {
     text-align: left;
 }
+
 #userList .settings-list {
     width: min-content;
 }
