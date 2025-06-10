@@ -9,6 +9,7 @@
         --button-background-color-hover: #6789df;
     }
 }
+
 @media (prefers-color-scheme: light) {
     body {
         --main-background-color: #f1f1f1;
@@ -20,11 +21,22 @@
         --button-background-color-hover: #6789df;
     }
 }
+
 body {
     font-family: Roboto;
     background-color: var(--main-background-color);
     color: var(--text-color);
 }
+
+div.boxed-section {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px #bbb;
+    margin-top: 10px;
+}
+
+    div.boxed-section:hover {
+        box-shadow: 0 4px 8px #bbb;
+    }
 
 .login_button {
     font-family: Roboto, sans-serif;
@@ -40,7 +52,8 @@ body {
     line-height: 18px;
     user-select: none;
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    margin-left: 3px;
     box-shadow: 0 2px 4px #bbb;
 }
 
@@ -49,6 +62,11 @@ body {
         transform: scale(1.02);
         background-color: var(--button-background-color-hover);
     }
+
+div.loginButtonContainer {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
 
 #home-content {
     text-align: center;
@@ -70,7 +88,6 @@ body {
 #container {
     display: grid;
     justify-content: center;
-    box-shadow: 0 2px 4px #bbb;
 }
 
 #addUserForm {
@@ -102,10 +119,10 @@ input {
     user-select: none;
 }
 
-.settings-box label:hover {
-    background:#eee;
-    cursor:pointer;
-}
+    .settings-box label:hover {
+        background:#eee;
+        cursor:pointer;
+    }
 
 .copy-link {
     border-radius: 4px;
@@ -137,6 +154,7 @@ img {
 #userList {
     text-align: left;
 }
+
 #userList ul {
     margin: 0;
     padding-left: 24px;
@@ -144,6 +162,7 @@ img {
 #userList th {
     text-align: left;
 }
+
 #userList .settings-list {
     width: min-content;
 }
