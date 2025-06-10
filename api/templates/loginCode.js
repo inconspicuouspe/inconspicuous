@@ -64,7 +64,7 @@ function loginSuccess(data) {
                 messageBox.textContent = "Konnte nicht eingeloggt werden.";
         }
     }
-    messageBox.style.visibility = "visible";
+    messageBox.style.display = "inherit";
 }
 function sendOldLoginRequest(data) {
     fetch("{{ url_for('old_login') }}", {
