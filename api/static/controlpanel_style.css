@@ -29,8 +29,7 @@ body {
 .login_button {
     font-family: Roboto, sans-serif;
     color: var(--button-text-color);
-    transition: background-color 0.5s;
-    transition-duration: 0.5s;
+    transition: all 0.5s;
     text-decoration: none;
     background-color: var(--button-background-color);
     border: black solid 1px;
@@ -127,6 +126,7 @@ img {
     box-shadow: 0 4px 8px #bbb;
     border-radius: 16px;
     transition-duration: 0.7s;
+    margin: 5px;
 }
 
     img:hover {
