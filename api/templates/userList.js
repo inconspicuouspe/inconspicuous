@@ -68,7 +68,7 @@ function userListSuccess(data){
             if (unfilled) {
                 disableButton.style.display = "none";
             }
-            currentLine.querySelector(".options-column").appendChild(disableButton);
+            currentLine.querySelector(".options-column .options-column-content").appendChild(disableButton);
             {% endif %}
             {% if Settings._UNINVITE_MEMBERS in session.settings %}
             const deleteButton = createUserListButton();
@@ -96,7 +96,7 @@ function userListSuccess(data){
             if (!unfilled) {
                 deleteButton.style.display = "none";
             }
-            currentLine.querySelector(".options-column").appendChild(deleteButton);
+            currentLine.querySelector(".options-column .options-column-content").appendChild(deleteButton);
             {% endif %}
         }
         userListTable.appendChild(currentLine);

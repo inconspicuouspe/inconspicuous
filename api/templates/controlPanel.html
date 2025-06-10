@@ -90,7 +90,11 @@
                             {{ boxedSections.closeSection() }}
                         </td>
                         <td class="status-column"></td>
-                        <td class="options-column"></td>
+                        <td class="options-column">
+                            {{ boxedSections.openSection() }}
+                            <div class="options-column-content"></div>
+                            {{ boxedSections.closeSection() }}
+                        </td>
                     </tr>
                 </template>
                 <template id="user-table-option-button-template">
