@@ -42,6 +42,6 @@ jobs:
             }
 
       - name: Auto-merge PR
-        if: steps.check_github_dir.outputs.should_merge == 'false' or !(github.event.pull_request.base.ref == 'dev' && github.event.pull_request.user.login == 'LeanderKafemann')
+        if: steps.check_github_dir.outputs.should_merge == 'false' || !(github.event.pull_request.base.ref == 'dev' && github.event.pull_request.user.login == 'LeanderKafemann')
         run: |
           exit 1
