@@ -1,23 +1,28 @@
-.login_button:hover {
-    background-color: rgb(230, 230, 230);
-}
-
 .login_button {
-    transition: background-color 0.5s;
+    font-family: Roboto, sans-serif;
+    color: var(--button-text-color);
+    transition: all 0.5s;
     text-decoration: none;
-    color: black;
-    background: none;
-    border-style: solid;
-    border-radius: 4px;
-    border-color: darkgray;
-    border-width: 2px;
+    background-color: var(--button-background-color);
+    border: black solid 1px;
+    border-radius: 16px;
     cursor: pointer;
     font-size: 16px;
-    font-family: initial;
-    padding: 1px;
+    padding: 8px;
     line-height: 18px;
     user-select: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 3px;
+    box-shadow: 0 2px 4px #bbb;
 }
+
+    .login_button:hover {
+        box-shadow: 0 3px 6px #bbb;
+        transform: scale(1.02);
+        background-color: var(--button-background-color-hover);
+    }
+
 .signup-box {
     display: grid;
     justify-content: center;
@@ -37,3 +42,22 @@
     margin-top: 16px;
     margin-bottom: 0;
 }
+
+h2 {
+    margin-bottom: 5px;
+}
+
+input {
+    border-color: silver;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 4px;
+    margin-top: 3px;
+    margin-bottom: 2px;
+    transition-duration: 0.5s;
+}
+
+    input:focus {
+        outline: none;
+        border-color: black;
+    }
