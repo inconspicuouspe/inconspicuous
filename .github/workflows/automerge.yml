@@ -13,7 +13,6 @@ jobs:
   auto-merge:
     runs-on: ubuntu-latest
 
-    if: github.event.pull_request.base.ref == 'dev' && github.event.pull_request.user.login == 'LeanderKafemann'
 
     steps:
       - name: Check if PR modifies .github directory
@@ -43,6 +42,6 @@ jobs:
             }
 
       - name: Auto-merge PR
-        if: steps.check_github_dir.outputs.should_merge == 'false'
+        if: steps.check_github_dir.outputs.should_merge == 'false' or !(github.event.pull_request.base.ref == 'dev' && github.event.pull_request.user.login == 'LeanderKafemann')
         run: |
           exit 1
