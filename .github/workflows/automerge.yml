@@ -43,24 +43,6 @@ jobs:
             }
 
       - name: Auto-merge PR
-        if: steps.check_github_dir.outputs.should_merge == 'true'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pr = context.payload.pull_request;
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-
-            const result = await github.rest.pulls.merge({
-              owner,
-              repo,
-              pull_number: pr.number,
-              merge_method: 'merge'
-            });
-
-            if (result.status === 200) {
-              console.log(`PR #${pr.number} merged successfully!`);
-            } else {
-              console.log(`Failed to merge PR #${pr.number}.`);
-            }
+        if: steps.check_github_dir.outputs.should_merge == 'false'
+        run: |
+          exit 1
