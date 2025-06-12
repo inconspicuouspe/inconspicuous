@@ -67,14 +67,24 @@ span.material-symbols-outlined {
     padding: 8px;
     border-radius: 16px;
     background-color: var(--sec-background-color);
+    box-shadow: 0 2px 4px #bbb;
+    transition: all 0.3s;
 }
-#home-content>* {
-    margin: 8px;
-}
+
+    #home-content>* {
+        margin: 8px;
+    }
+
+    #home-content:hover {
+        box-shadow: 0 3px 8px #bbb;
+        transform: scale(1.01);
+    }
+
 #container {
     display: grid;
     justify-content: center;
 }
+
 #img-container {
     display: grid;
     justify-content: center;
