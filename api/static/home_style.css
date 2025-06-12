@@ -100,9 +100,23 @@ input {
     margin-top: 16px;
     margin-bottom: 0;
 }
+
 #img-container {
     margin: 16px;
 }
-#img-container summary {
-    cursor: pointer;
+    #img-container summary {
+        cursor: pointer;
+    }
+
+img {
+    width: 50%;
+    box-shadow: 0 4px 8px #bbb;
+    border-radius: 16px;
+    transition-duration: 0.7s;
+    margin: 5px;
 }
+
+    img:hover {
+        box-shadow: 0 6px 12px #bbb;
+        transform: scale(1.01);
+    }
