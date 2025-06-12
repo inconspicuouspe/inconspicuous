@@ -31,9 +31,6 @@ hr {
     color: var(--hr-color);
 }
 
-.login_button:hover {
-    background-color: var(--button-background-color-hover);
-}
 span.material-symbols-outlined {
     vertical-align: bottom;
     font-size: large;
@@ -42,31 +39,52 @@ span.material-symbols-outlined {
 .login_button {
     font-family: Roboto, sans-serif;
     color: var(--button-text-color);
-    transition: background-color 0.5s;
+    transition: all 0.5s;
     text-decoration: none;
     background-color: var(--button-background-color);
-    border-style: none;
-    border-radius: 17px;
+    border: black solid 1px;
+    border-radius: 16px;
     cursor: pointer;
     font-size: 16px;
     padding: 8px;
     line-height: 18px;
     user-select: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 3px;
+    box-shadow: 0 2px 4px #bbb;
 }
+
+    .login_button:hover {
+        box-shadow: 0 3px 6px #bbb;
+        transform: scale(1.02);
+        background-color: var(--button-background-color-hover);
+    }
+
 #home-content {
     text-align: center;
     border-style: none;
     padding: 8px;
     border-radius: 16px;
     background-color: var(--sec-background-color);
+    box-shadow: 0 2px 4px #bbb;
+    transition: all 0.3s;
 }
-#home-content>* {
-    margin: 8px;
-}
+
+    #home-content>* {
+        margin: 8px;
+    }
+
+    #home-content:hover {
+        box-shadow: 0 3px 8px #bbb;
+        transform: scale(1.01);
+    }
+
 #container {
     display: grid;
     justify-content: center;
 }
+
 #img-container {
     display: grid;
     justify-content: center;
