@@ -14,14 +14,7 @@
     <body>
         <div id="container">
             <div id="home-content">
-                {% if session.username == "KingLele" %}
-                <style>
-                    html {
-                        font-family: Verdana, sans-serif;
-                    }
-                </style>
-                {% endif %}
-                <div><a href="{{ url_for('home') }}" class="login_button">Zurück zum Hauptmenü</a></div>
+                <div class="loginButtonContainer"><a href="{{ url_for('home') }}" class="login_button">Zurück zum Hauptmenü</a></div>
                 <script>
                     const ownSettings = {{ session.settings.value }};
                     const ownPgroup = {{ session.permission_group }};
