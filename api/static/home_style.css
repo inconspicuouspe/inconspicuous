@@ -39,7 +39,7 @@ span.material-symbols-outlined {
 }
 
 .login-button {
-    font-family: Roboto, sans-serif;
+    font-family: var(--document-font);
     color: var(--button-text-color);
     transition: all 0.5s;
     text-decoration: none;
@@ -61,7 +61,6 @@ span.material-symbols-outlined {
     /*! box-shadow: 0 3px 6px #bbb; */
     /*! transform: scale(1.02); */
     background-color: var(--button-background-color-hover);
-    font-family: var(--document-font);
 }
 
 #home-content {
