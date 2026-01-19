@@ -171,13 +171,3 @@ img {
     width: min-content;
 }
 
-.boxed-section-button {
-    border: none;
-    background: inherit;
-    height: min-content;
-    display: flex;
-    align-items: center;
-    user-select: none;
-    cursor: pointer;
-    margin-right: 5px;
-}

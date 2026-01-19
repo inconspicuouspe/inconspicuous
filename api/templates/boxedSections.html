@@ -19,9 +19,11 @@
         align-items: center;
         user-select: none;
         cursor: pointer;
+        margin-right: 8px;
     }
     .boxed-section-button .material-symbols-outlined {
         aspect-ratio: 1/1;
+        margin-left: 4px;
     }
     .material-symbols-outlined {
         font-variation-settings:
@@ -59,7 +61,7 @@ function handleBoxedSectionCloserButton(event) {
 <div class="boxed-content"> 
 {%- endmacro %}
 
-{% macro closeSection(title="", onFirstOpen="") -%}
+{% macro closeSection(title="", onFirstOpen="", onBeforeReload="") -%}
 </div>
 </div>
 <div class="boxed-section-button">
