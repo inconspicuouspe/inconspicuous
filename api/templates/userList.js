@@ -113,6 +113,8 @@ function userListRefresh() {
     for (const elm of document.querySelectorAll(".user-row")) {
         elm.remove();
     }
+    const userListTable = userListDiv.querySelector("tbody");
+    userListTable.parentNode.style.display = "none";
     userListDiv.prepend("...");
     userListLoad();
 }
