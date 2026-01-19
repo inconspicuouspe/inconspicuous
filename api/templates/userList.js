@@ -17,7 +17,10 @@ function userListSuccess(data){
     userListDiv.firstChild.remove();
     for (const user of data.{{ consts.FIELD_DATA }}) {
         const username = user.{{ consts.FIELD_USERNAME }};
-        const pgroup = user.{{ consts.FIELD_PERMISSION_GROUP }};
+        let pgroup = user.{{ consts.FIELD_PERMISSION_GROUP }};
+        if (pgroup == "???") {
+            pgroup = ">={{ session.permission_group }}";
+        }
         const settings = user.{{ consts.FIELD_SETTINGS }};
         const unfilled = user.{{ consts.FIELD_USER_ID }} === "???";
         const currentLine = createUserListLine();
