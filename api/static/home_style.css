@@ -49,7 +49,7 @@ span.material-symbols-outlined {
     cursor: pointer;
     font-size: 16px;
     padding: 8px;
-    line-height: 16px;
+    line-height: 19.2px;
     user-select: none;
     margin-top: 8px;
     margin-bottom: 5px;
@@ -118,17 +118,21 @@ box {
     display: flex;
     justify-content: center;
 }
+
 #login-content {
     padding: 8px;
     width: min-content;
     justify-self: center;
 }
+
 #login-content h2 {
     margin-top: 0;
 }
+
 #login-content form {
     margin: 0;
 }
+
 #login-content p {
     margin-top: 16px;
     margin-bottom: 0;
