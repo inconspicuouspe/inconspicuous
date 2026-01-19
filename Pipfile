@@ -4,6 +4,15 @@ verify_ssl = true
 name = "pypi"
  
 [packages]
+requests = "*"
+Flask = "*"
+cachetools = "*"
+pyyaml = "*"
+ua-parser = "*"
+user-agents = "*"
+pymongo = { version = "*", extras = ["srv"] }
+webauthn = "*"
+cryptography = "*"
 
 [requires]
 python_version = "3.11"
