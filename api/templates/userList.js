@@ -17,19 +17,19 @@ function userListSuccess(data){
     userListDiv.firstChild.remove();
     for (const user of data.{{ consts.FIELD_DATA }}) {
         const username = user.{{ consts.FIELD_USERNAME }};
-        let pgroup = user.{{ consts.FIELD_PERMISSION_GROUP }};
+        const pgroup = user.{{ consts.FIELD_PERMISSION_GROUP }};
         const settings = user.{{ consts.FIELD_SETTINGS }};
         const unfilled = user.{{ consts.FIELD_USER_ID }} === "???";
         const currentLine = createUserListLine();
         currentLine.classList.add("username-"+username);
         currentLine.querySelector(".username-column").textContent = username;
-        currentLine.querySelector(".pgroup-column").textContent = pgroup !== -1 ? pgroup : "?";
+        currentLine.querySelector(".pgroup-column").textContent = pgroup !== -1 ? pgroup : "≥{{ session.permission_group }}";
         currentLine.querySelector(".status-column").textContent = unfilled ? "Eingeladen" : "Mitglied";
         const settingsList = currentLine.querySelector(".settings-column .settings-list");
         if (settings === -1){
             const settingsColumn = currentLine.querySelector(".settings-column");
             settingsColumn.firstElementChild.remove();
-            settingsColumn.textContent = ">={{ session.permission_group }}";
+            settingsColumn.textContent = "?";
         } else {
             for (const name in settingsValues) {
                 if (!name.startsWith("setting__") && name !== "setting_NONE" && (settingsValues[name] & settings) === settingsValues[name]) {
