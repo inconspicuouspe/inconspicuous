@@ -7,6 +7,7 @@
         --button-text-color: #222;
         --button-background-color: #87a9ff;
         --button-background-color-hover: #6789df;
+        --selector-background-color-hover: #222222;
     }
 }
 
@@ -19,6 +20,7 @@
         --button-text-color: #222;
         --button-background-color: #87a9ff;
         --button-background-color-hover: #6789df;
+        --selector-background-color-hover: #eeeeee;
     }
 }
 
@@ -121,10 +123,11 @@ input:focus {
     padding:5px;
     display: block;
     user-select: none;
+    transition: all 0.5s;
 }
 
 .settings-box label:hover {
-    background:#eee;
+    background: var(--selector-background-color-hover);
     cursor:pointer;
 }
 
