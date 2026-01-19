@@ -18,9 +18,6 @@ function userListSuccess(data){
     for (const user of data.{{ consts.FIELD_DATA }}) {
         const username = user.{{ consts.FIELD_USERNAME }};
         let pgroup = user.{{ consts.FIELD_PERMISSION_GROUP }};
-        if (pgroup == "???") {
-            pgroup = ">={{ session.permission_group }}";
-        }
         const settings = user.{{ consts.FIELD_SETTINGS }};
         const unfilled = user.{{ consts.FIELD_USER_ID }} === "???";
         const currentLine = createUserListLine();
@@ -32,7 +29,7 @@ function userListSuccess(data){
         if (settings === -1){
             const settingsColumn = currentLine.querySelector(".settings-column");
             settingsColumn.firstElementChild.remove();
-            settingsColumn.textContent = "?";
+            settingsColumn.textContent = ">={{ session.permission_group }}";
         } else {
             for (const name in settingsValues) {
                 if (!name.startsWith("setting__") && name !== "setting_NONE" && (settingsValues[name] & settings) === settingsValues[name]) {
