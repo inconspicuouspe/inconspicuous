@@ -22,7 +22,8 @@
 }
 
 body {
-    font-family: 'Google Sans', sans-serif;
+    --document-font: 'Google Sans', sans-serif;
+    font-family: var(--document-font);
     background-color: var(--main-background-color);
     color: var(--text-color);
 }
@@ -37,7 +38,7 @@ span.material-symbols-outlined {
     font-size: large;
 }
 
-.login_button {
+.login-button {
     font-family: Roboto, sans-serif;
     color: var(--button-text-color);
     transition: all 0.5s;
@@ -56,10 +57,11 @@ span.material-symbols-outlined {
     /*! box-shadow: 0 2px 4px #bbb; */
 }
 
-.login_button:hover {
+.login-button:hover {
     /*! box-shadow: 0 3px 6px #bbb; */
     /*! transform: scale(1.02); */
     background-color: var(--button-background-color-hover);
+    font-family: var(--document-font);
 }
 
 #home-content {
@@ -104,6 +106,7 @@ input {
     padding-left: 8px;
     padding-right: 8px;
     margin-bottom: 12px;
+    font-family: var(--document-font);
 }
 
 input:focus {
