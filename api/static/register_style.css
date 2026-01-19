@@ -14,14 +14,14 @@
     margin-top: 5px;
     margin-bottom: 5px;
     margin-left: 3px;
-    box-shadow: 0 2px 4px #bbb;
+    /* box-shadow: 0 2px 4px #bbb; */
 }
 
-    .login_button:hover {
-        box-shadow: 0 3px 6px #bbb;
-        transform: scale(1.02);
-        background-color: var(--button-background-color-hover);
-    }
+.login_button:hover {
+    /* box-shadow: 0 3px 6px #bbb; */
+    /* transform: scale(1.02); */
+    background-color: var(--button-background-color-hover);
+}
 
 .signup-box {
     display: grid;
@@ -57,7 +57,7 @@ input {
     transition-duration: 0.5s;
 }
 
-    input:focus {
-        outline: none;
-        border-color: black;
-    }
+input:focus {
+    outline: none;
+    border-color: black;
+}
