@@ -22,7 +22,7 @@
 }
 
 body {
-    font-family: Roboto;
+    font-family: 'Google Sans', sans-serif;
     background-color: var(--main-background-color);
     color: var(--text-color);
 }
@@ -48,19 +48,19 @@ span.material-symbols-outlined {
     cursor: pointer;
     font-size: 16px;
     padding: 8px;
-    line-height: 18px;
+    line-height: 16px;
     user-select: none;
-    margin-top: 5px;
+    margin-top: 8px;
     margin-bottom: 5px;
     margin-left: 3px;
-    box-shadow: 0 2px 4px #bbb;
+    /*! box-shadow: 0 2px 4px #bbb; */
 }
 
-    .login_button:hover {
-        box-shadow: 0 3px 6px #bbb;
-        transform: scale(1.02);
-        background-color: var(--button-background-color-hover);
-    }
+.login_button:hover {
+    /*! box-shadow: 0 3px 6px #bbb; */
+    /*! transform: scale(1.02); */
+    background-color: var(--button-background-color-hover);
+}
 
 #home-content {
     text-align: center;
@@ -68,18 +68,18 @@ span.material-symbols-outlined {
     padding: 8px;
     border-radius: 16px;
     background-color: var(--sec-background-color);
-    box-shadow: 0 2px 4px #bbb;
-    transition: all 0.3s;
+    /*! box-shadow: 0 2px 4px #bbb; */
+    /*! transition: all 0.3s; */
 }
 
-    #home-content>* {
-        margin: 8px;
-    }
+#home-content>* {
+    margin: 8px;
+}
 
-    #home-content:hover {
-        box-shadow: 0 3px 8px #bbb;
-        transform: scale(1.01);
-    }
+/* #home-content:hover {
+    ! box-shadow: 0 3px 8px #bbb;
+    ! transform: scale(1.01);
+} */
 
 #container {
     display: grid;
@@ -93,19 +93,23 @@ span.material-symbols-outlined {
 }
 
 input {
-    border-color: silver;
-    border-style: solid;
-    border-width: 3px;
-    border-radius: 4px;
+    /*! border-color: none; */
+    border-style: none;
+    /*! border-width: 3px; */
+    border-radius: 12px;
     margin-top: 3px;
     margin-bottom: 2px;
     transition-duration: 0.5s;
+    height: 24px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-bottom: 12px;
 }
 
-    input:focus {
-        outline: none;
-        border-color: black;
-    }
+input:focus {
+    outline: none;
+    border-color: black;
+}
     
 box {
     display: flex;
@@ -117,7 +121,7 @@ box {
     justify-self: center;
 }
 #login-content h2 {
-    margin: 0;
+    margin-top: 0;
 }
 #login-content form {
     margin: 0;
@@ -130,9 +134,10 @@ box {
 #img-container {
     margin: 16px;
 }
-    #img-container summary {
-        cursor: pointer;
-    }
+
+#img-container summary {
+    cursor: pointer;
+}
 
 img {
     width: 50%;
@@ -142,7 +147,7 @@ img {
     margin: 5px;
 }
 
-    img:hover {
-        box-shadow: 0 6px 12px #bbb;
-        transform: scale(1.01);
-    }
+img:hover {
+    box-shadow: 0 6px 12px #bbb;
+    /*transform: scale(1.01);*/
+}
