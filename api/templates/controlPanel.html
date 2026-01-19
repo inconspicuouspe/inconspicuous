@@ -67,7 +67,7 @@
                 </script>
                 {% endif %}
                 {% if Settings.VIEW_MEMBERS in session.settings %}
-                {{ boxedSections.openSection() }}
+                {{ boxedSections.openSection("userListRefresh") }}
                 <div id="userList">
                     ...
                     <table style="display: none;"><tbody>
@@ -82,7 +82,7 @@
                 </div>
                 {{ boxedSections.closeSection("Nutzerliste", "userListLoad") }}
                 <template id="user-table-line-template">
-                    <tr>
+                    <tr class="user-row">
                         <td class="username-column"></td>
                         <td class="pgroup-column"></td>
                         <td class="settings-column">

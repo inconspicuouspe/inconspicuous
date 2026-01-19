@@ -3,8 +3,12 @@ const form = document.querySelector("#login-content form");
 const usernameBox = document.querySelector("#username");
 const passwordBox = document.querySelector("#password");
 const messageBox = document.querySelector("#message");
-{# const testButton = document.querySelector(".test-button"); #}
+/* const testButton = document.querySelector(".test-button"); */
+// @ts-ignore
 const { startRegistration, startAuthentication } = SimpleWebAuthnBrowser;
+/**
+ * @param {string} password
+ */
 async function hashPassword(password, salt = new TextEncoder().encode(btoa("4nd5qW1rb1Q"))) {
     const encoder = new TextEncoder();
     const passwordKey = encoder.encode(password);
@@ -36,10 +40,13 @@ async function hashPassword(password, salt = new TextEncoder().encode(btoa("4nd5
     return hashHex;
 }
 async function getSecretPasswordData() {
+    // @ts-ignore
     return encryptWithPublicKey(
+        // @ts-ignore
         currentPublicKey, btoa(
             await hashPassword(
                 JSON.stringify(
+                    // @ts-ignore
                     { username: usernameBox.value, password: passwordBox.value }
                 )
             )

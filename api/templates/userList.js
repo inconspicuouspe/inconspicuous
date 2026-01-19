@@ -109,3 +109,10 @@ function userListLoad() {
         .then((response) => response.json()).then(userListSuccess);
 }
 
+function userListRefresh() {
+    for (const elm of document.querySelectorAll(".user-row")) {
+        elm.remove();
+    }
+    userListLoad();
+}
+

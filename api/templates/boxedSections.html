@@ -47,27 +47,36 @@ function handleBoxedSectionCloserButton(event) {
     event.target.parentNode.parentNode.style.display = "none";
     event.target.parentNode.parentNode.parentNode.lastElementChild.style.display = "";
 }
+function handleBoxedSectionReloaderButton(event, onReload) {
+    onReload();
+}
 </script>
 {%- endmacro %}
 
-{% macro openSection() -%}
+{% macro openSection(onReload="") -%}
 <div class="boxed-section">
 <div class="boxed-section-closeable" style="display: none;">
 <div class="boxed-section-button">
     <span onclick="handleBoxedSectionCloserButton(event);" class="material-symbols-outlined">
         keyboard_arrow_up
     </span>
+    {% if onReload %}
+    <span onclick="handleBoxedSectionReloaderButton(event, {{ onReload }});" class="material-symbols-outlined">
+        refresh
+    </span>
+    {% endif %}
 </div>
 <div class="boxed-content"> 
 {%- endmacro %}
 
-{% macro closeSection(title="", onFirstOpen="", onBeforeReload="") -%}
+{% macro closeSection(title="", onFirstOpen="",) -%}
 </div>
 </div>
 <div class="boxed-section-button">
     <span onclick="handleBoxedSectionOpenerButton(event{% if onFirstOpen %}, {{ onFirstOpen }}{% endif %});" class="material-symbols-outlined">
         keyboard_arrow_down
     </span>
+    
     {{ title }}
 </div>
 </div>
