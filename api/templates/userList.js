@@ -113,6 +113,7 @@ function userListRefresh() {
     for (const elm of document.querySelectorAll(".user-row")) {
         elm.remove();
     }
+    userListDiv.append("...");
     userListLoad();
 }
 
