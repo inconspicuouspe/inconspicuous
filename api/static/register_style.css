@@ -21,8 +21,15 @@
     }
 }
 
-.login_button {
-    font-family: Roboto, sans-serif;
+body {
+    --document-font: 'Google Sans', sans-serif;
+    font-family: var(--document-font);
+    background-color: var(--main-background-color);
+    color: var(--text-color);
+}
+
+.login-button {
+    font-family: var(--document-font);
     color: var(--button-text-color);
     transition: all 0.5s;
     text-decoration: none;
@@ -32,18 +39,18 @@
     cursor: pointer;
     font-size: 16px;
     padding: 8px;
-    line-height: 18px;
+    line-height: 19.2px;
     user-select: none;
-    margin-top: 5px;
+    margin-top: 8px;
     margin-bottom: 5px;
     margin-left: 3px;
     box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
-    /* box-shadow: 0 2px 4px #bbb; */
+    /*! box-shadow: 0 2px 4px #bbb; */
 }
 
-.login_button:hover {
-    /* box-shadow: 0 3px 6px #bbb; */
-    /* transform: scale(1.02); */
+.login-button:hover {
+    /*! box-shadow: 0 3px 6px #bbb; */
+    /*! transform: scale(1.02); */
     background-color: var(--button-background-color-hover);
 }
 
