@@ -44,7 +44,7 @@ span.material-symbols-outlined {
     transition: all 0.5s;
     text-decoration: none;
     background-color: var(--button-background-color);
-    border: black solid 1px;
+    border: none;
     border-radius: 16px;
     cursor: pointer;
     font-size: 16px;
