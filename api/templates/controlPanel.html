@@ -31,9 +31,11 @@
                 {{ boxedSections.openSection() }}
                 <form id="addUserForm">
                     <label for="username">Temporärer Nutzername:</label>
+                    <br>
                     <input type="text" id="username" name="username" required>
                     <br>
                     <label for="pgroup">Berechtigungsgruppe:</label>
+                    <br>
                     <input type="number" id="pgroup" name="pgroup" value="{{ session.permission_group - 1 }}" max="{{ session.permission_group - 1 }}" required>
                     <br>
                     <label>Optionen:</label>
