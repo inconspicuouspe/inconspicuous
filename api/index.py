@@ -36,6 +36,7 @@ from .authentication import (
     set_settings,
     add_csrf_token,
     verify_csrf_token,
+    get_user_profile,
     access_creation_credentials,
     verify_and_save_credential,
     access_login_credentials,
@@ -234,7 +235,7 @@ def deactivate_user():
         session = extract_session(db, request)
         if Settings._DISABLE_MEMBERS not in session.settings:
             raise Unauthorized()
-        user_profile = db.get_user_profile(username)
+        user_profile = get_user_profile(db,username)
         if user_profile.permission_group >= session.permission_group:
             raise Unauthorized()
         user_slot = auth_disable_user(db, username)
@@ -248,7 +249,7 @@ def get_user_id(username):
         session = extract_session(db, request)
         if Settings.VIEW_MEMBERS not in session.settings:
             raise Unauthorized()
-        user_profile = db.get_user_profile(username)
+        user_profile = get_user_profile(db,username)
         if user_profile.unfilled and Settings._RETRIEVE_INVITATION not in session.settings:
             raise Unauthorized()
         if user_profile.unfilled and (user_profile.permission_group >= session.permission_group or user_profile.settings not in session.settings):
@@ -268,7 +269,7 @@ def edit_user_permission_group():
         session = extract_session(db, request)
         if Settings._EDIT_MEMBER_SETTINGS not in session.settings:
             raise Unauthorized()
-        user_profile = db.get_user_profile(username)
+        user_profile = get_user_profile(db,username)
         if user_profile.permission_group >= session.permission_group:
             raise Unauthorized()
         if new_permission_group >= session.permission_group:
@@ -288,7 +289,7 @@ def edit_user_settings():
         session = extract_session(db, request)
         if Settings._EDIT_MEMBER_SETTINGS not in session.settings:
             raise Unauthorized()
-        user_profile = db.get_user_profile(username)
+        user_profile = get_user_profile(db,username)
         if user_profile.permission_group >= session.permission_group:
             raise Unauthorized()
         set_settings(db, username, Settings(new_settings))
@@ -302,7 +303,7 @@ def get_user(username):
         session = extract_session(db, request)
         if Settings.VIEW_MEMBERS not in session.settings:
             raise Unauthorized()
-        user_profile = db.get_user_profile(username)
+        user_profile = get_user_profile(db,username)
         if user_profile.unfilled and Settings._VIEW_INVITED_MEMBERS not in session.settings:
             raise Unauthorized()
         if Settings._VIEW_MEMBER_SETTINGS not in session.settings or user_profile.permission_group > session.permission_group:

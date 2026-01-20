@@ -357,6 +357,12 @@ def verify_csrf_token(req: Request) -> None:
 def extract_hostname(request: Request):
     return str(urlparse(request.base_url).hostname)
 
+def get_user_profile(database: _database.Database, username: str) -> _database.UserProfile:
+    user_profile = database.get_user_profile(username)
+    if user_profile is None:
+        raise NotFoundError()
+    return user_profile
+
 def prepare_credential_creation(user: _database.UserProfile, request: Request) -> PublicKeyCredentialCreationOptions:
     return webauthn.generate_registration_options(
         rp_id=extract_hostname(request),

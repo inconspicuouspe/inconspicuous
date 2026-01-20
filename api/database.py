@@ -220,6 +220,8 @@ class MongoDB(Database):
     
     def get_user_profile(self, username):
         document = self.users.find_one({FIELD_LOOKUP_USERNAME: username.lower()})
+        if document is None:
+            return None
         return UserProfile(document.get(FIELD_USERNAME, "???"), document.get(FIELD_USER_ID, "???"), authentication.Settings(document.get(FIELD_SETTINGS, 0)), document.get(FIELD_PERMISSION_GROUP), document.get(FIELD_UNFILLED))
     
     def set_permission_group(self, username, permission_group):
