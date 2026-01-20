@@ -48,7 +48,8 @@ from .authentication import (
 )
 from .exceptions import (
     MyError,
-    Unauthorized
+    Unauthorized,
+    NotFoundError
 )
 from . import exceptions, consts
 from .consts import (
@@ -305,7 +306,7 @@ def get_user(username):
             raise Unauthorized()
         user_profile = get_user_profile(db,username)
         if user_profile.unfilled and Settings._VIEW_INVITED_MEMBERS not in session.settings:
-            raise Unauthorized()
+            raise NotFoundError()
         if Settings._VIEW_MEMBER_SETTINGS not in session.settings or user_profile.permission_group > session.permission_group:
             permission_group = -1
             settings_value = -1
