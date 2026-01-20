@@ -136,6 +136,10 @@ input:focus {
     cursor:pointer;
 }
 
+.settings-box label>* {
+    vertical-align: middle;
+}
+
 .copy-link {
     border-radius: 4px;
     border-style: none;
