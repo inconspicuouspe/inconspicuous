@@ -94,18 +94,17 @@ span.material-symbols-outlined {
 }
 
 input {
+    font-family: var(--document-font);
+    height: 24px;
     /*! border-color: none; */
     border-style: none;
     /*! border-width: 3px; */
     border-radius: 12px;
     margin-top: 3px;
-    margin-bottom: 2px;
-    transition-duration: 0.5s;
-    height: 24px;
+    margin-bottom: 12px;
     padding-left: 8px;
     padding-right: 8px;
-    margin-bottom: 12px;
-    font-family: var(--document-font);
+    transition-duration: 0.5s;
 }
 
 input:focus {
