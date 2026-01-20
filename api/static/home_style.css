@@ -54,6 +54,7 @@ span.material-symbols-outlined {
     margin-top: 8px;
     margin-bottom: 5px;
     margin-left: 3px;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
     /*! box-shadow: 0 2px 4px #bbb; */
 }
 
@@ -69,6 +70,7 @@ span.material-symbols-outlined {
     padding: 8px;
     border-radius: 16px;
     background-color: var(--sec-background-color);
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
     /*! box-shadow: 0 2px 4px #bbb; */
     /*! transition: all 0.3s; */
 }
@@ -105,6 +107,7 @@ input {
     padding-left: 8px;
     padding-right: 8px;
     transition-duration: 0.5s;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
 }
 
 input:focus {
